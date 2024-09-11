@@ -1,8 +1,65 @@
 export const fakeData = {
-    stocks: {
-        values: [500, 600, 650]
-    },
-    immo:{
-        values: [750, 500, 600]
-    }
+    valuesDates: ['2024-09-01', '2024-09-03', '2024-09-08', '2024-09-11'],
+    products: [
+        {
+            name: 'stocks',
+            values: [1000, 1200, 900, 1100],
+            income: {
+                everyDays: 0,
+                val: 0
+            },
+            fees: {
+                everyDays: 90,
+                val: 10
+            }
+        },
+        {
+            name: 'immo',
+            values: [2000, 1800, 2050, 2100],
+            income: {
+                everyDays: 30,
+                val: 200
+            },
+            fees: {
+                everyDays: 30,
+                val: 30
+            }
+        },
+        {
+            name: 'food',
+            values: [],
+            income: {
+                everyDays: 0,
+                val: 0
+            },
+            fees: {
+                everyDays: 1,
+                val: 10
+            }
+        },
+        {
+            name: 'job',
+            values: [],
+            income: {
+                everyDays: 30,
+                val: 2000
+            },
+            fees: {
+                everyDays: 0,
+                val: 0
+            }
+        },
+        {
+            name: 'rent',
+            values: [],
+            income:{
+                everyDays: 0,
+                val: 0,
+            },
+            fees: {
+                everyDays: 30,
+                val: 500
+            }
+        }
+    ]
 };

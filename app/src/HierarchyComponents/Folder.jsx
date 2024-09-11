@@ -1,11 +1,11 @@
 import React from 'react';
 
-function Hierarchy() {
+function Folder() {
   return (
-    <div class="container">
+    <div className="container">
       <h1>Hierarchy</h1>
     </div>
   );
 }
 
-export default Hierarchy;
+export default Folder;

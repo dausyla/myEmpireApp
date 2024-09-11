@@ -4,6 +4,14 @@
     padding:0;
     /* Full viewport height */
     display: flex;
+    flex-wrap: nowrap;
+}
+
+.chart-size {
+    height: 50vh;
+    width: 100%;
+    display: flex;
+    position: relative;
 }
 
 .flex-fill {
@@ -17,5 +25,5 @@
 
 .chart {
     background-color: rgb(40, 40, 40);
-    color: white;
+    color: white
 }
