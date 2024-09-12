@@ -8,6 +8,7 @@ import { fakeData } from './Data';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { Container, Row, Col } from "reactstrap";
+import SplitPane from './SplitPane';
 
 function makeDataVisible(data) {
     for (let i in data.products) {
@@ -28,20 +29,26 @@ function App() {
     }
 
     return (
-        <Container fluid>
-            <Row className="full-size">
-                <Col xs={3} className="navtab">
+        <Container fluid style={{padding:0}}>
+            <SplitPane minSize={15} maxSize={40} defaultSize={20}>
+                <div>
                     <NavTab data={Data} updateData={updateData} />
-                </Col>
-                <Col className="chart">
+                </div>
+                <div>
                     <Row className="chart-size">
                         <ValuesChart data={Data} />
                     </Row>
                     <Row className="chart-size">
                         <IncomeChart data={Data} />
                     </Row>
+                </div>
+            </SplitPane>
+            {/* <Row className="full-size">
+                <Col xs={3} className="navtab">
                 </Col>
-            </Row>
+                <Col className="chart">
+                </Col>
+            </Row> */}
         </Container>
     );
 }
