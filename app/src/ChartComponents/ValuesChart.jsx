@@ -2,7 +2,6 @@ import {React, useState} from 'react';
 import { Line } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, TimeScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import { fakeData } from '../Data';
 
 ChartJS.register(
   CategoryScale,
@@ -43,10 +42,10 @@ function formatData(_data) {
     // Number of dates we have data of  
     const listSize = _data.valuesDates.length;
 
-    // sort the values of the latest data in ASC order
-    _data.products.sort((a,b) => b.values[listSize - 1] - a.values[listSize - 1]);
     // Filter the valueless products
-    const filteredProducts = _data.products.filter(item => item.values.length !== 0);
+    const filteredProducts = _data.products.filter(item => item.visible && item.values.length !== 0);
+    // sort the values of the latest data in ASC order
+    filteredProducts.sort((a,b) => b.values[listSize - 1] - a.values[listSize - 1]);
 
     // Build the data
     const data = {
@@ -59,15 +58,13 @@ function formatData(_data) {
             fill: true
         }}),
     }
-    const [finalData, setFinalData] = useState(data);
-    return finalData
+    return data;
 }
 
-function ValuesChart() {
-    const data = formatData(fakeData);
+function ValuesChart(props) {
     return (
         <div className="container">
-            <Line data={data} options={options} />
+            <Line data={formatData(props.data)} options={options} />
         </div>
     );
 }

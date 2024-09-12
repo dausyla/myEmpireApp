@@ -2,7 +2,6 @@ import {React, useState} from 'react';
 import { Chart as MixedChart } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, TimeScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import { fakeData } from '../Data';
 
 ChartJS.register(
   CategoryScale,
@@ -40,15 +39,13 @@ const options = {
 }
 
 function formatData(_data) {
-    const filteredIncome = _data.products.filter(item => item.income.val !== 0 || item.fees.val !== 0);
+    const filteredIncome = _data.products.filter(item => item.visible && (item.income.val !== 0 || item.fees.val !== 0));
     const weeklyIncome = filteredIncome.map(item => {return {
         name: item.name,
         income: item.income.everyDays !== 0 ? item.income.val * 7 / item.income.everyDays : 0,
         fees: item.fees.everyDays !== 0 ? -item.fees.val * 7 / item.fees.everyDays : 0,
     }});
-    console.log(weeklyIncome);
     weeklyIncome.sort((a,b) => b.income + b.fees - a.income - a.fees);
-    console.log(weeklyIncome);
     
     const labels = weeklyIncome.map(item => item.name);
     const incomes = weeklyIncome.map(item => item.income);
@@ -89,15 +86,13 @@ function formatData(_data) {
     ]
     }
 
-    const [finalData, setFinalData] = useState(data);
-    return finalData
+    return data;
 }
 
-function IncomeChart() {
-    const data = formatData(fakeData);
+function IncomeChart(props) {
     return (
         <div className="container">
-            <MixedChart data={data} options={options} />
+            <MixedChart data={formatData(props.data)} options={options} />
         </div>
     );
 }

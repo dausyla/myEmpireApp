@@ -21,6 +21,22 @@
 .hierarchy {
     background-color: rgb(90, 90, 90);
     color:white;
+    padding: 0;
+}
+
+.product:hover {
+    background-color: rgb(40, 40, 40);
+}
+
+.product {
+    padding-bottom: 0.5vh;
+    font-size: medium;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+p{
+    padding:0;
+    margin: 0;
 }
 
 .chart {
