@@ -3,6 +3,8 @@ import { Chart as MixedChart } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, TimeScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 
+import { Container } from 'reactstrap';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -57,7 +59,7 @@ function formatData(_data) {
         sumList.push(sum);
     }
 
-    const data = {
+    return {
         labels: labels,
         datasets: [{
             type: 'bar',
@@ -85,15 +87,13 @@ function formatData(_data) {
         }
     ]
     }
-
-    return data;
 }
 
 function IncomeChart(props) {
     return (
-        <div className="container">
+        <Container>
             <MixedChart data={formatData(props.data)} options={options} />
-        </div>
+        </Container>
     );
 }
 

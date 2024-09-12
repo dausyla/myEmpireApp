@@ -1,12 +1,16 @@
-// src/App.jsx
-import React, {useState} from 'react';
-import Hierarchy from './NavTab/Hierarchy';
+import React, { useState } from 'react';
+import NavTab from './NavTab/NavTab';
 import ValuesChart from './ChartComponents/ValuesChart';
 import IncomeChart from './ChartComponents/IncomeChart';
 import { fakeData } from './Data';
 
-function makeDataVisible(data){
-    for (let i in data.products){
+//BootStrap
+import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
+import { Container, Row, Col } from "reactstrap";
+
+function makeDataVisible(data) {
+    for (let i in data.products) {
         data.products[i].visible = true;
     }
 }
@@ -17,7 +21,7 @@ function App() {
 
     const [Data, SetData] = useState(fakeData);
 
-    function updateProduct(updatedProduct){
+    function updateProduct(updatedProduct) {
         const updatedProducts = Data.products.map(p => p.name === updatedProduct.name ? updatedProduct : p);
         SetData({
             ...Data,
@@ -25,26 +29,29 @@ function App() {
         });
     }
 
-    const hierarchy = (<Hierarchy data={Data} updateProduct={updateProduct}/>);
-    const valuesChart = (<ValuesChart data={Data}/>);
-    const incomeChart = (<IncomeChart data={Data}/>);
+    function updateWholeData(){
+        Data.valuesDates = [...Data.valuesDates]; // Mark Dates as changed
+        Data.products = [...Data.products]; // Mark products as changed
+        SetData({...Data}); // Set the new Data
+        console.log(Data);
+    }
 
     return (
-        <div className="container-fluid">
-            <div className="row full-size">
-                <div className="col-3 hierarchy">
-                    {hierarchy}
-                </div>
-                <div className="col chart">
-                    <div className='row chart-size'>
-                        {valuesChart}
-                    </div>
-                    <div className='row chart-size'>
-                        {incomeChart}
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Container fluid>
+            <Row className="full-size">
+                <Col xs={3} className="navtab">
+                    <NavTab data={Data} updateProduct={updateProduct} updateWholeData={updateWholeData}/>
+                </Col>
+                <Col className="chart">
+                    <Row className="chart-size">
+                        <ValuesChart data={Data} />
+                    </Row>
+                    <Row className="chart-size">
+                        <IncomeChart data={Data} />
+                    </Row>
+                </Col>
+            </Row>
+        </Container>
     );
 }
 

@@ -2,6 +2,7 @@ import {React, useState} from 'react';
 import { Line } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, TimeScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import { Container } from 'reactstrap';
 
 ChartJS.register(
   CategoryScale,
@@ -63,9 +64,9 @@ function formatData(_data) {
 
 function ValuesChart(props) {
     return (
-        <div className="container">
+        <Container>
             <Line data={formatData(props.data)} options={options} />
-        </div>
+        </Container>
     );
 }
 

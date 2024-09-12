@@ -1,17 +1,25 @@
 import React from 'react';
-import Folder from './Folder';
 import Product from './Product';
-import { fakeData } from '../Data';
+import { Container } from 'reactstrap';
 
 function Hierarchy(props) {
     const products = props.data.products;
 
-    const hierarchy = products.map(item => <Product product={item} key={item.name} updateProduct={props.updateProduct}/>)
+    function deleteProduct(name){
+        const productIndex = products.findIndex(p => p.name == name);
+        products.splice(productIndex, 1);
+        props.updateWholeData();
+    }
+
+    const hierarchy = products.map(item => <Product product={item} key={item.name}
+        updateProduct={props.updateProduct} deleteProduct={deleteProduct}/>);
+
+    const test= 0;
 
     return (
-        <div className="container-fluid hierarchy">
+        <Container className='hierarchy'>
             {hierarchy}
-        </div>
+        </Container>
     );
 }
 
