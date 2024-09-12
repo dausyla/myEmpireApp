@@ -10,35 +10,27 @@ function EditIncome(props) {
     const products = props.data.products;
     
     function onIncomeValueChange(event){
-        // Get the Product
         const product = products.find(item => item.name == event.target.name);
-        // Get new Memory address
-        const newProduct = {...product}
-        newProduct.income.val = event.target.value;
-        // Change Income Value
-        // Send the update to the App
-        props.updateProduct(newProduct);
+        product.income.val = event.target.value;
+        props.updateData();
     }
 
     function onIncomeDaysChange(event){
         const product = products.find(item => item.name == event.target.name);
-        const newProduct = {...product}
-        newProduct.income.everyDays = event.target.value;
-        props.updateProduct(newProduct);
+        product.income.everyDays = event.target.value;
+        props.updateData();
     }
 
     function onFeesValueChange(event){
         const product = products.find(item => item.name == event.target.name);
-        const newProduct = {...product}
-        newProduct.fees.val = event.target.value;
-        props.updateProduct(newProduct);
+        product.fees.val = event.target.value;
+        props.updateData();
     }
 
     function onFeesDaysChange(event){
         const product = products.find(item => item.name == event.target.name);
-        const newProduct = {...product}
-        newProduct.fees.everyDays = event.target.value;
-        props.updateProduct(newProduct);
+        product.fees.everyDays = event.target.value;
+        props.updateData();
     }
 
     // Build the whole form for one product

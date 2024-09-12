@@ -1,24 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Product from './Product';
-import { Container } from 'reactstrap';
+import { Col, Container, Input, Row, Button } from 'reactstrap';
+
+function createProduct(name) {
+    return {
+        visible: true,
+        name: name,
+        values: [],
+        income: {
+            everyDays: 0,
+            val: 0
+        },
+        fees: {
+            everyDays: 0,
+            val: 0
+        }
+    }
+}
 
 function Hierarchy(props) {
     const products = props.data.products;
 
-    function deleteProduct(name){
-        const productIndex = products.findIndex(p => p.name == name);
-        products.splice(productIndex, 1);
-        props.updateWholeData();
+    const hierarchy = products.map(item => <Product product={item} key={item.name}
+        updateData={props.updateData} updateProduct={props.updateProduct}/>
+    );
+
+    const [addProductDisabled, setAddProductDisabled] = useState(true);
+    function verifyNewProductName(event) {
+        const name = document.getElementById('add-player-input').value;
+        if (props.data.products.find(p => p.name == name)) {
+            setAddProductDisabled(true);
+        } else if (name.length === 0) {
+            setAddProductDisabled(true);
+        } else {
+            setAddProductDisabled(false);
+        }
     }
 
-    const hierarchy = products.map(item => <Product product={item} key={item.name}
-        updateProduct={props.updateProduct} deleteProduct={deleteProduct}/>);
+    function addProduct(){
+        const input = document.getElementById('add-player-input');
+        const name = input.value;
+        input.value = '';
+        const prod = createProduct(name);
+        props.updateProduct(name, prod); // Will create and save the Data
+    }
 
-    const test= 0;
+    const addProductHTML = <Row>
+        <Input id="add-player-input" name="add-player-input" placeholder="New Product Name" onChange={verifyNewProductName} />
+        <Button disabled={addProductDisabled} onClick={addProduct}>+</Button>
+    </Row>
 
     return (
         <Container className='hierarchy'>
             {hierarchy}
+            {addProductHTML}
         </Container>
     );
 }

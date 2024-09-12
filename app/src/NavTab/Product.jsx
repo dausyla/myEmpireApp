@@ -7,11 +7,8 @@ function Product(props) {
 
     // Function that switch isOpen value.
     function toggleVisible(){
-        const updatedProduct = {
-            ...product,
-            visible: !product.visible
-        };
-        props.updateProduct(updatedProduct);
+        product.visible = !product.visible;
+        props.updateData();
     }
 
     const strikeStyle = {
@@ -19,7 +16,7 @@ function Product(props) {
     }
 
     function tryDeleteProduct(){
-        props.deleteProduct(product.name);
+        props.updateProduct(product.name, null);
     }
 
     const buttons = (

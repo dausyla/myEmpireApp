@@ -21,26 +21,17 @@ function App() {
 
     const [Data, SetData] = useState(fakeData);
 
-    function updateProduct(updatedProduct) {
-        const updatedProducts = Data.products.map(p => p.name === updatedProduct.name ? updatedProduct : p);
-        SetData({
-            ...Data,
-            products: updatedProducts
-        });
-    }
-
-    function updateWholeData(){
-        Data.valuesDates = [...Data.valuesDates]; // Mark Dates as changed
-        Data.products = [...Data.products]; // Mark products as changed
-        SetData({...Data}); // Set the new Data
-        console.log(Data);
+    function updateData(){
+        // Create a whole new object
+        const newData = JSON.parse(JSON.stringify(Data));
+        SetData(newData);
     }
 
     return (
         <Container fluid>
             <Row className="full-size">
                 <Col xs={3} className="navtab">
-                    <NavTab data={Data} updateProduct={updateProduct} updateWholeData={updateWholeData}/>
+                    <NavTab data={Data} updateData={updateData} />
                 </Col>
                 <Col className="chart">
                     <Row className="chart-size">

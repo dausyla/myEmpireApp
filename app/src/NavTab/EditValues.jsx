@@ -6,79 +6,52 @@ function dateToString(date){
     return date.toISOString().split('T')[0];
 }
 
-function getDateIndex(date, data){
-    for (let i in data.valuesDates){
-        if (data.valuesDates[i] == date){
-            return i;
-        }
-    }
-    return -1;
-}
-
-function getProductFromName(products, name){
-    return products.find(item => item.name == name);
-}
-
-function onlyZeros(list){
-    for (let i in list){
-        if (list[i] !== 0){
-            return false;
-        }
-    }
-    return true;
-}
-
 function EditValues(props) {
-    // Current date React variable
-    const [currentDate, setCurrentDate] = useState(new Date())
+    // Get some variables (cleaner)
+    const products = props.data.products;
+    const dates = props.data.valuesDates;
 
-    // Update the Date
+    // Set the Current Date Variable and related functions
+    const [currentDate, setCurrentDate] = useState(new Date())
     function setToToday(){
         const newDate = new Date();
         setCurrentDate(newDate);
     }
-    // Update the Date
     function updateDate(event){
         const newDate = new Date(event.target.value);
         setCurrentDate(newDate);
     }
+    const dateIndex = dates.findIndex(d => d == dateToString(currentDate));
 
     // Update the product Value at this date (triggered in EditProductValue.jsx)
-    function updateProductValue(name, newValueString){
-        const updatedProduct = {
-            ...getProductFromName(props.data.products, name)
-        };
+    function updateProductValue(name, newValue){
+        const product = products.find(p => p.name == name);
         // If first value entered, fill the list with 0
-        if (updatedProduct.values.length === 0){
-            updatedProduct.values = props.data.valuesDates.map(item => 0);
+        if (product.values.length === 0){
+            product.values = dates.map(item => 0);
         }
-        // If the value is a correct number: update the list
-        const newValue = parseFloat(newValueString);
-        updatedProduct.values[dateIndex] = isNaN(newValue) ? 0 : newValue;
+        product.values[dateIndex] = newValue == '' ? 0 : parseFloat(newValue);
         // If there are no values for the product, reset the list to []
-        if (onlyZeros(updatedProduct.values)){
-            updatedProduct.values = [];
+        if (product.values.find(v => v !== 0) === -1){
+            product.values = [];
         }
-        props.updateProduct(updatedProduct);
+        props.updateData();
     }
 
-
-    // Get the values of product at this date
-    const dateIndex = getDateIndex(dateToString(currentDate), props.data);
-    const productsValues = dateIndex !== -1 ? props.data.products.map(item => {
+    // Prepare the products
+    const preparedProducts = dateIndex !== -1 ? products.map(item => {
         return {
             name: item.name,
             value: item.values.length > 0 ? item.values[dateIndex] : 0
         }
     }) : [];
     // Convert it in HTML
-    const productsHTML = productsValues.map(item => <EditProductValue key={`${item.name}_${dateIndex}`} product={item} updateProductValue={updateProductValue}/>);
+    const productsHTML = preparedProducts.map(p => <EditProductValue key={`${p.name}_${dateIndex}`} product={p} updateProductValue={updateProductValue}/>);
 
-    // Init all the data to a current date without data
+    // Init all the data to a current date
     function addDataToCurrentDate(){
         let i = 0;
         const date = dateToString(currentDate);
-        const dates = props.data.valuesDates
         while(i < dates.length && dates[i] < date){
             i++;
         }
@@ -86,18 +59,18 @@ function EditValues(props) {
         if (dates.length > 1){
             // take the previous value unless it's 0 => take the next one
             const indexToTake = i > 0 ? i - 1 : 0;
-            props.data.products.forEach(product => {
-                if (product.values.length > 0){
-                    product.values.splice(i, 0, product.values[indexToTake]);
+            products.forEach(p => {
+                if (p.values.length > 0){
+                    p.values.splice(i, 0, p.values[indexToTake]);
                 }
             });
         }
         else{
-            props.data.products.forEach(product => { 
-                product.values = [Math.floor(Math.random() * 500 + 500)]; // set a random value between 500 and 1000
+            products.forEach(p => { 
+                p.values = [Math.floor(Math.random() * 500 + 500)]; // set a random value between 500 and 1000
             });
         }
-        props.updateWholeData();
+        props.updateData();
     }
 
     // button If the date is not registered yet
@@ -109,11 +82,11 @@ function EditValues(props) {
 
     // Delete a date
     function deleteDate(){
-        props.data.valuesDates.splice(dateIndex, 1);
-        props.data.products.forEach(product => {
-            product.values.splice(dateIndex, 1);
+        dates.splice(dateIndex, 1);
+        products.forEach(p => {
+            p.values.splice(dateIndex, 1);
         });
-        props.updateWholeData();
+        props.updateData();
     }
 
     // Delete date button if the date exists

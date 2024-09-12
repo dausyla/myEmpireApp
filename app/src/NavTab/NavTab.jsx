@@ -5,6 +5,26 @@ import EditValues from './EditValues';
 import EditIncome from './EditIncome';
 
 function NavTab(props) {
+    const products = props.data.products;
+
+    function updateProduct(name, updatedProduct){
+        const prodIndex = products.findIndex(item => item.name == name);
+        // If the name is not found, add the product
+        if (prodIndex === -1){
+            products.push(updatedProduct);
+        }
+        // If updatedProduct is null, delete the matching product
+        else if (!updatedProduct){
+            products.splice(prodIndex, 1);
+        }
+        // Otherwise replace the old product with the updated one
+        else{
+            products[prodIndex] = updatedProduct;
+        }
+        // Save
+        props.updateData();
+    }
+
     const [activeTab, setActiveTab] = useState('hierarchy');
     return (
         <Container>
@@ -27,13 +47,13 @@ function NavTab(props) {
             </Nav>
             <TabContent activeTab={activeTab}>
                 <TabPane tabId="hierarchy">
-                    <Hierarchy data={props.data} updateProduct={props.updateProduct} updateWholeData={props.updateWholeData} />
+                    <Hierarchy data={props.data} updateProduct={updateProduct} updateData={props.updateData} />
                 </TabPane>
                 <TabPane tabId="values">
-                    <EditValues data={props.data} updateProduct={props.updateProduct} updateWholeData={props.updateWholeData}/>
+                    <EditValues data={props.data} updateProduct={updateProduct} updateData={props.updateData}/>
                 </TabPane>
                 <TabPane tabId="income">
-                    <EditIncome data={props.data} updateProduct={props.updateProduct}/>
+                    <EditIncome data={props.data} updateData={props.updateData}/>
                 </TabPane>
             </TabContent>
         </Container>
