@@ -18,6 +18,26 @@ ChartJS.register(
   Filler
 );
 
+function numberToEur(num){
+    const eur = Math.round(num * 100) / 100.0;
+    return eur + '€';
+}
+function sumFooterToolip(tooltipItems) {
+    const income = tooltipItems[0].parsed.y;
+    const fees = tooltipItems[1].parsed.y;
+    const diff = income + fees;
+    return 'Diff: ' + numberToEur(diff);
+}
+function labelTooltip(tooltipItem){
+    const label = tooltipItem.dataset.label;
+    const val = tooltipItem.parsed.y;
+    if (val === 0){
+        return '';
+    }
+    const eur = numberToEur(val);
+    return `${label}: ${eur}`;
+}
+
 const options = {
     scales: {
         x: {
@@ -35,11 +55,17 @@ const options = {
     responsive: true,
     plugins: {
         tooltip: {
+            callbacks:{
+                footer: sumFooterToolip,
+                label: labelTooltip
+            }
+        },
+        legend:{
+            onClick: () => {}
         }
     },
     maintainAspectRatio: false
 }
-
 function formatData(_data) {
     const filteredIncome = _data.products.filter(item => item.visible && (item.income.val !== 0 || item.fees.val !== 0));
     const weeklyIncome = filteredIncome.map(item => {return {
@@ -52,11 +78,11 @@ function formatData(_data) {
     const labels = weeklyIncome.map(item => item.name);
     const incomes = weeklyIncome.map(item => item.income);
     const fees = weeklyIncome.map(item => item.fees);
-    let sum = 0;
-    const sumList = [];
+    let total = 0;
+    const totalList = [];
     for (let i in incomes){
-        sum += incomes[i] + fees[i];
-        sumList.push(sum);
+        total += incomes[i] + fees[i];
+        totalList.push(total);
     }
 
     return {
@@ -79,8 +105,8 @@ function formatData(_data) {
             fill: true
         },{
             type: 'line',
-            data: sumList,
-            label: 'Sum',
+            data: totalList,
+            label: 'Total',
             borderColor: '#3030aa',
             backgroundColor: '#303040',
             fill: true

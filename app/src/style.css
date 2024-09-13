@@ -33,6 +33,41 @@
     background-color: var(--light-grey);
 }
 
+.custom-nav-items{
+    background-color: var(--med-grey);
+    border: 0;
+    border-bottom: 2px var(--dark-grey) solid;
+}
+
+.custom-nav-items .nav-link{
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-radius: 0;
+    color:white; 
+    background-color: var(--med-grey);
+    border: 2px var(--dark-grey) solid;
+    border-left: 0;
+    margin-bottom:-2px;
+}
+.custom-nav-items:hover .nav-link:hover{
+    cursor: pointer;
+    border: 2px var(--dark-grey) solid;
+    border-bottom: 2px var(--med-grey) solid;
+    border-left: 0;
+    background-color: var(--light-grey);
+    color: white;    
+}
+
+.custom-nav-items .nav-link.active{
+    border: 2px var(--dark-grey) solid;
+    border-left: 0;
+    border-bottom: 2px var(--light-grey) solid;
+    background-color: var(--light-grey);
+    color: white;    
+}
+
 .chart{
     background-color: var(--dark-grey);
 }
@@ -59,7 +94,7 @@
     border-left: var(--light-grey) solid;
 }
 
-.form-control:focus, .btn:focus{
+.form-control:focus{
     color:white;
     border-radius: 0;
     background-color: var(--med-grey);
@@ -72,92 +107,3 @@
 .form-control::placeholder, .btn::placeholder{
     color:white;
 }
-
-/*
-.date-form {
-    width: auto;
-    padding:2px;
-    margin: 2px;
-    border: 0;
-    border-radius: 0;
-    background-color: rgb(40, 40, 40);
-    color: white    ;
-
-}
-
-.navtab{
-    padding:0;
-}
-
-.custom-nav{
-    border-bottom: 2px solid rgb(40, 40, 40);
-}
-
-.custom-nav .nav-link{
-    background-color: rgb(90, 90, 90);
-    color: white;
-    border:0;
-    border-bottom: 2px solid rgb(40, 40, 40);
-    border-radius: 0;
-    padding:0;
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-.custom-nav .nav-link:hover{
-    cursor: pointer;
-    background-color: rgb(60, 60, 60);
-    color: white;
-    border:0;
-    border-bottom: 2px solid rgb(40, 40, 40);
-}
-
-.custom-nav .nav-link.active{
-    background-color: rgb(40, 40, 40);
-    color: white;
-    border:0;
-    border-bottom: 2px solid rgb(40, 40, 40);
-}
-
-.full-size {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-wrap: nowrap;
-}
-
-.chart-size {
-    height: 50vh;
-    width: 100%;
-    display: flex;
-    position: relative;
-}
-
-.flex-fill {
-    flex: 1;
-}
-
-.navtab {
-    background-color: rgb(90, 90, 90);
-    color:white;
-}
-
-.product:hover {
-    background-color: rgb(40, 40, 40);
-}
-
-.product {
-    font-size: medium;
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
-}
-
-p {
-    margin: 0;
-    padding: 0.3vh;
-    padding-left: 1vh;
-}
-
-.charts {
-    background-color: rgb(40, 40, 40);
-    color: white
-} */
