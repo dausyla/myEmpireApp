@@ -38,7 +38,7 @@ function EditIncome(props) {
         return (
             <FormGroup className=''>
                 <Row>
-                    <Col>
+                    <Col md={5} className='col'>
                         <Container className='flex'>
                             {buildLabel("Income:", `income-value`)}
                             <Input id={`${product.name}-income-value`} name={product.name}
@@ -55,7 +55,7 @@ function EditIncome(props) {
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
+                    <Col md={5} className='col'>
                         <Container className='flex'>
                             {buildLabel("Fees:", `fees-value`)}
                             <Input id={`${product.name}-fees-value`} name={product.name}
@@ -76,7 +76,7 @@ function EditIncome(props) {
     }
 
     const productsHTML = products.map(product => (
-        <FormGroup key={product.name}>
+        <FormGroup key={product.name} className='med-grey-hover'>
             <Row>
                 {buildLabel(product.name, "name")}
             </Row>
