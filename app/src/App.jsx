@@ -29,19 +29,13 @@ function App() {
     }
 
     return (
-        <Container fluid style={{padding:0}}>
-            <SplitPane minSize={15} maxSize={40} defaultSize={20}>
-                <div>
-                    <NavTab data={Data} updateData={updateData} />
-                </div>
-                <div>
-                    <Row className="chart-size">
+        <div className='screen-size'>
+            <SplitPane minSize={15} maxSize={70} defaultSize={20}>
+                <NavTab data={Data} updateData={updateData} />
+                <SplitPane horizontal={true}>
                         <ValuesChart data={Data} />
-                    </Row>
-                    <Row className="chart-size">
                         <IncomeChart data={Data} />
-                    </Row>
-                </div>
+                </SplitPane>
             </SplitPane>
             {/* <Row className="full-size">
                 <Col xs={3} className="navtab">
@@ -49,7 +43,7 @@ function App() {
                 <Col className="chart">
                 </Col>
             </Row> */}
-        </Container>
+        </div>
     );
 }
 

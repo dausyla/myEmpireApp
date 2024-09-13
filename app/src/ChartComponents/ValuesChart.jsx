@@ -64,7 +64,7 @@ function formatData(_data) {
 
 function ValuesChart(props) {
     return (
-        <Container>
+        <Container className='full-size chart'>
             <Line data={formatData(props.data)} options={options} />
         </Container>
     );

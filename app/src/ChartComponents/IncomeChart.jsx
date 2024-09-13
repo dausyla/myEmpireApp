@@ -91,7 +91,7 @@ function formatData(_data) {
 
 function IncomeChart(props) {
     return (
-        <Container>
+        <Container className='full-size chart'>
             <MixedChart data={formatData(props.data)} options={options} />
         </Container>
     );

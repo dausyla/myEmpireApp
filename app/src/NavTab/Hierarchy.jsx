@@ -46,8 +46,12 @@ function Hierarchy(props) {
     }
 
     const addProductHTML = <Row>
-        <Input id="add-player-input" name="add-player-input" placeholder="New Product Name" onChange={verifyNewProductName} />
-        <Button disabled={addProductDisabled} onClick={addProduct}>+</Button>
+        <Col>
+            <Input id="add-player-input" name="add-player-input" placeholder="New Product Name" onChange={verifyNewProductName} />
+        </Col>
+        <Col>
+            <Button disabled={addProductDisabled} onClick={addProduct}>+</Button>
+        </Col>
     </Row>
 
     return (

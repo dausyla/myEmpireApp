@@ -100,8 +100,8 @@ function EditValues(props) {
         <Form>
             <FormGroup>
                 <Row>
-                    <Col>
-                        <Input className='date-form' id="date" name="date" value={dateToString(currentDate)} type="date" onChange={updateDate} />
+                    <Col md={8} className='col'> {/* md sets the class as col-md-8 so need to add the class col*/}
+                        <Input className='input-date' id="date" name="date" value={dateToString(currentDate)} type="date" onChange={updateDate} />
                     </Col>
                     <Col>
                         <Button onClick={setToToday}>Today</Button>

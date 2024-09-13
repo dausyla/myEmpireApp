@@ -32,17 +32,13 @@ function SplitPane(props) {
         }
     };
 
+    const dividerSize = '0.3rem';
     const dividerStyle = {
         backgroundColor: '#000',
         cursor: isHorizontal ? 'ns-resize' : 'ew-resize',
         zIndex: 1,
-        width: isHorizontal ? '100%' : '5px',
-        height: !isHorizontal ? '100%' : '5px'
-    }
-    if (isHorizontal) {
-        dividerStyle.height = '5px';
-    } else {
-        dividerStyle.width = '5px';
+        width: isHorizontal ? '100%' : dividerSize,
+        height: !isHorizontal ? '100%' : dividerSize
     }
 
     return (
@@ -53,11 +49,12 @@ function SplitPane(props) {
             onMouseUp={handleMouseUp}
             style={{
                 display: 'flex', flexDirection: isHorizontal ? 'column' : 'row',
-                height: '100vh', width: '100vw'
+                height: '100%', width: '100%'
             }}
         >
             <div style={{
-                width: isHorizontal ? '100%' : `${size}%`, height: isHorizontal ? `${size}%` : '100%',
+                width: isHorizontal ? '100%' : `calc(${size}% - ${dividerSize})`,
+                height: !isHorizontal ? '100%' : `calc(${size}% - ${dividerSize})`,
                 padding:0, boxSizing: 'border-box'
             }}>
                 {child1}
@@ -68,7 +65,8 @@ function SplitPane(props) {
                 style={dividerStyle}
             />
             <div style={{
-                width: isHorizontal ? '100%' : `${100 - size}%`, height: isHorizontal ? `${100 - size}%` : '100%',
+                width: isHorizontal ? '100%' : `${100 - size}%`,
+                height: !isHorizontal ? '100%' : `${100 - size}%`,
                 padding:0, boxSizing: 'border-box'
             }}>
                 {child2}
