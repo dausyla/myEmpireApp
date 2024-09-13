@@ -31,11 +31,13 @@ function sumFooterToolip(tooltipItems) {
 function labelTooltip(tooltipItem){
     const label = tooltipItem.dataset.label;
     const val = tooltipItem.parsed.y;
-    if (val === 0){
-        return '';
-    }
     const eur = numberToEur(val);
     return `${label}: ${eur}`;
+}
+
+function getWeeklyIncome(income){
+    const str = `${income.val}`;
+    return !/^-?\d+$/.test(str) || income.everyDays === 0 ? 0 : income.val * 7 / income.everyDays;
 }
 
 const options = {
@@ -70,8 +72,8 @@ function formatData(_data) {
     const filteredIncome = _data.products.filter(item => item.visible && (item.income.val !== 0 || item.fees.val !== 0));
     const weeklyIncome = filteredIncome.map(item => {return {
         name: item.name,
-        income: item.income.everyDays !== 0 ? item.income.val * 7 / item.income.everyDays : 0,
-        fees: item.fees.everyDays !== 0 ? -item.fees.val * 7 / item.fees.everyDays : 0,
+        income: getWeeklyIncome(item.income),
+        fees: - getWeeklyIncome(item.fees)
     }});
     weeklyIncome.sort((a,b) => b.income + b.fees - a.income - a.fees);
     

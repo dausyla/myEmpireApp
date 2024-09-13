@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Hierarchy from './Hierarchy';
+import Hierarchy from './Hierarchy/Hierarchy';
 import { Container, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
-import EditValues from './EditValues';
-import EditIncome from './EditIncome';
+import EditValues from './Value/EditValues';
+import EditIncome from './Income/EditIncome';
 
 function NavTab(props) {
     const products = props.data.products;

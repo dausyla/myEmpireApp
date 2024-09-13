@@ -5,8 +5,8 @@ export const fakeData = {
             name: 'stocks',
             values: [1000, 1200, 900, 1100],
             income: {
-                everyDays: 0,
-                val: 0
+                everyDays: 1,
+                val: 1
             },
             fees: {
                 everyDays: 90,

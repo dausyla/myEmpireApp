@@ -32,7 +32,7 @@ function EditValues(props) {
         }
         product.values[dateIndex] = newValue == '' ? 0 : parseFloat(newValue);
         // If there are no values for the product, reset the list to []
-        if (product.values.find(v => v !== 0) === -1){
+        if (product.values.findIndex(v => v !== 0) === -1){
             product.values = [];
         }
         props.updateData();
@@ -42,7 +42,7 @@ function EditValues(props) {
     const preparedProducts = dateIndex !== -1 ? products.map(item => {
         return {
             name: item.name,
-            value: item.values.length > 0 ? item.values[dateIndex] : 0
+            value: item.values.length > 0 ? item.values[dateIndex] : ''
         }
     }) : [];
     // Convert it in HTML

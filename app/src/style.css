@@ -119,6 +119,13 @@
     color: var(--light-grey);
 }
 
+.incorrect-input{
+    border-color: red;
+}
+.incorrect-input:focus {
+    border-color: red;
+}
+
 .color-input{
     width: 1.2rem;
     height: 1.2rem;

@@ -106,7 +106,7 @@ function formatData(_data) {
                 data: p.values,
                 label: p.name,
                 borderColor: p.color,
-                backgroundColor: p.color + '30',
+                backgroundColor: p.color + '50',
                 fill: '-1'
             }
         }),
