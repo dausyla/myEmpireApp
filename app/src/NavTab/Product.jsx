@@ -26,7 +26,7 @@ function Product(props) {
         </Container>)
 
     return (
-        <Container className='product flex'>
+        <Container className='flex med-grey-hover'>
             <p className='item-name'>{
                 product.visible ?
                     product.name :

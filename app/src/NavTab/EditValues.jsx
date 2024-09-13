@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, FormGroup, Label, Input, Button, Col, Row } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, Col, Row, Container } from 'reactstrap';
 import EditProductValue from './EditProductValue';
 
 function dateToString(date){
@@ -88,7 +88,6 @@ function EditValues(props) {
         });
         props.updateData();
     }
-
     // Delete date button if the date exists
     const deleteDateButton = (
         <Button onClick={deleteDate}>
@@ -97,26 +96,17 @@ function EditValues(props) {
     );
 
     return (
-        <Form>
-            <FormGroup>
-                <Row>
-                    <Col md={8} className='col'> {/* md sets the class as col-md-8 so need to add the class col*/}
-                        <Input className='input-date' id="date" name="date" value={dateToString(currentDate)} type="date" onChange={updateDate} />
-                    </Col>
-                    <Col>
-                        <Button onClick={setToToday}>Today</Button>
-                    </Col>
-                </Row>
-            </FormGroup>
+        <Container>
+            <Container className="flex">
+                <Input className='input-date' id="date" name="date" value={dateToString(currentDate)} type="date" onChange={updateDate} />
+                <Button onClick={setToToday}>Today</Button>
+            </Container>
             {
                 dateIndex !== -1 ?
-                    <FormGroup>
-                        {productsHTML}
-                        {deleteDateButton}
-                    </FormGroup> :
-                    addDateForm
+                    <Container> {deleteDateButton} {productsHTML} </Container> :
+                    <Container> {addDateForm} </Container>
             }
-        </Form>
+        </Container>
     );
 }
 

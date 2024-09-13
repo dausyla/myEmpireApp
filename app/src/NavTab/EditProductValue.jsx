@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Row, Col, Container } from 'reactstrap';
 
 function EditProductValue(props) {
     const product = props.product;
@@ -11,16 +11,12 @@ function EditProductValue(props) {
     }
 
     return (
-            <Row>
-                <Col md={4}>
-                    <Label for={product.name}>
-                        {product.name}:
-                    </Label>
-                </Col>
-                <Col md={8}>
-                    <Input id="value" name="value" defaultValue={product.value} type="number" onChange={valueChanged} />
-                </Col>
-            </Row>
+        <Container className='flex med-grey-hover'>
+            <Label for={product.name} className='item-name'>
+                {product.name}:
+            </Label>
+            <Input id="value" name="value" defaultValue={product.value} onChange={valueChanged} className='on-right right-input med-grey-focus' />
+        </Container>
     );
 }
 
