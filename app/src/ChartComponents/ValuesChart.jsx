@@ -71,6 +71,9 @@ const options = {
     },
     responsive: true,
     plugins: {
+        filler: {
+            propagate: false
+        },
         tooltip: {
             callbacks:{
                 footer: sumFooterToolip,
@@ -98,16 +101,18 @@ function formatData(_data) {
     // Build the data
     const data = {
         labels: _data.valuesDates,
-        datasets: filteredProducts.map((item) => {
+        datasets: filteredProducts.map((p) => {
             return {
-                data: item.values,
-                label: item.name,
-                borderColor: '#30aa30',
-                backgroundColor: '#304030',
-                fill: true
+                data: p.values,
+                label: p.name,
+                borderColor: p.color,
+                backgroundColor: p.color + '30',
+                fill: '-1'
             }
         }),
     }
+    // set the fill as true for the first one instead of -1
+    data.datasets[0].fill = true;
     return data;
 }
 

@@ -18,8 +18,6 @@ function makeDataVisible(data) {
 
 function App() {
     // Add the visible property and sets it to true to all products.
-    makeDataVisible(fakeData);
-
     const [Data, SetData] = useState(fakeData);
 
     function updateData(){
@@ -29,21 +27,15 @@ function App() {
     }
 
     return (
-        <div className='screen-size'>
+        <Container className='screen-size'>
             <SplitPane minSize={15} maxSize={70} defaultSize={20}>
                 <NavTab data={Data} updateData={updateData} />
                 <SplitPane horizontal={true}>
-                        <ValuesChart data={Data} />
-                        <IncomeChart data={Data} />
+                    <ValuesChart data={Data} />
+                    <IncomeChart data={Data} />
                 </SplitPane>
             </SplitPane>
-            {/* <Row className="full-size">
-                <Col xs={3} className="navtab">
-                </Col>
-                <Col className="chart">
-                </Col>
-            </Row> */}
-        </div>
+        </Container>
     );
 }
 

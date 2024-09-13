@@ -1,22 +1,23 @@
 import React, {useState} from 'react';
-import { Col, Row, Button, Alert, Container} from 'reactstrap';
+import { Col, Row, Button, Alert, Container, Input, Form} from 'reactstrap';
 
-function Product(props) {
+function Product(props) {    
     const product = props.product;
-    // const [name, setName] = useState(product.name);
-
-    // Function that switch isOpen value.
+    
     function toggleVisible(){
         product.visible = !product.visible;
         props.updateData();
     }
-
     const strikeStyle = {
         textDecoration: 'line-through'
     }
 
     function tryDeleteProduct(){
         props.updateProduct(product.name, null);
+    }
+    function changeColor(event){
+        product.color = event.target.value;
+        props.updateData();   
     }
 
     const buttons = (
@@ -32,6 +33,7 @@ function Product(props) {
                     product.name :
                     (<span style={strikeStyle}>{product.name}</span>)
             }</p>
+            <Form><Input type="color" className='color-input' onChange={changeColor} value={product.color}></Input></Form>
             {buttons}
         </Container>
     );

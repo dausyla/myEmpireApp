@@ -94,6 +94,7 @@
     border: var(--dark-grey) solid;
 }
 
+
 .form-control:hover, .btn:hover{
     color:white;
     border-radius: 0;
@@ -116,6 +117,22 @@
 
 .form-control::placeholder, .btn::placeholder{
     color: var(--light-grey);
+}
+
+.color-input{
+    width: 1.2rem;
+    height: 1.2rem;
+    padding:0;
+    margin:0;
+    border: var(--nav-border-size) var(--med-grey) solid;
+    background-color: var(--light-grey);
+}
+.color-input:hover{
+    border: var(--nav-border-size) var(--dark-grey) solid;
+    border-bottom: var(--nav-border-size) var(--light-grey) solid;
+    border-right: var(--nav-border-size) var(--light-grey) solid;
+
+    background-color: var(--light-grey);
 }
 
 .item-name{

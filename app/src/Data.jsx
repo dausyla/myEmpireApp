@@ -11,7 +11,9 @@ export const fakeData = {
             fees: {
                 everyDays: 90,
                 val: 10
-            }
+            },
+            visible: true,
+            color: "#aa2020",
         },
         {
             name: 'immo',
@@ -23,7 +25,9 @@ export const fakeData = {
             fees: {
                 everyDays: 30,
                 val: 30
-            }
+            },
+            visible: true,
+            color: "#aa2020",
         },
         {
             name: 'food',
@@ -35,7 +39,9 @@ export const fakeData = {
             fees: {
                 everyDays: 1,
                 val: 10
-            }
+            },
+            visible: true,
+            color: "#aa2020",
         },
         {
             name: 'job',
@@ -47,7 +53,9 @@ export const fakeData = {
             fees: {
                 everyDays: 0,
                 val: 0
-            }
+            },
+            visible: true,
+            color: "#aa2020",
         },
         {
             name: 'rent',
@@ -59,7 +67,9 @@ export const fakeData = {
             fees: {
                 everyDays: 30,
                 val: 500
-            }
+            },
+            visible: true,
+            color: "#aa2020",
         }
     ]
 };
