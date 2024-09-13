@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Col, Row, Button, Alert} from 'reactstrap';
+import { Col, Row, Button, Alert, Container} from 'reactstrap';
 
 function Product(props) {
     const product = props.product;
@@ -20,25 +20,20 @@ function Product(props) {
     }
 
     const buttons = (
-        <Col>
-        <Button onClick={toggleVisible}>V</Button>
-        <Button onClick={tryDeleteProduct}>D</Button>
-        </Col>
-    )
+        <Container className='on-right'>
+            <Button onClick={toggleVisible}>V</Button>
+            <Button onClick={tryDeleteProduct}>D</Button>
+        </Container>)
 
     return (
-        <div className="container product">
-            <Row>
-                <Col>
-                    <p>{
-                        product.visible ?
-                            product.name :
-                            (<span style={strikeStyle}>{product.name}</span>)
-                    }</p>
-                </Col>
-                {buttons}
-            </Row>
-        </div>
+        <Container className='product flex'>
+            <p className='item-name'>{
+                product.visible ?
+                    product.name :
+                    (<span style={strikeStyle}>{product.name}</span>)
+            }</p>
+            {buttons}
+        </Container>
     );
 }
 

@@ -45,19 +45,15 @@ function Hierarchy(props) {
         props.updateProduct(name, prod); // Will create and save the Data
     }
 
-    const addProductHTML = <Row>
-        <Col>
+    const addProductHTML = <Container className='flex'>
             <Input id="add-player-input" name="add-player-input" placeholder="New Product Name" onChange={verifyNewProductName} />
-        </Col>
-        <Col>
-            <Button disabled={addProductDisabled} onClick={addProduct}>+</Button>
-        </Col>
-    </Row>
+            <Button disabled={addProductDisabled} onClick={addProduct} className='on-right'>+</Button>
+    </Container>
 
     return (
         <Container className='hierarchy'>
-            {hierarchy}
             {addProductHTML}
+            {hierarchy}
         </Container>
     );
 }

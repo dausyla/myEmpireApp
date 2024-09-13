@@ -2,6 +2,9 @@
     --dark-grey: rgb(40,40,40);
     --med-grey: rgb(60,60,60);
     --light-grey: rgb(80,80,80);
+
+    --nav-border-size: 0.2rem;
+    --nav-minus-margin-size: -0.2rem;
 }
 
 .container {
@@ -29,6 +32,14 @@
     width: 100%;
 }
 
+.on-right{
+    text-align: right;
+}
+
+.flex{
+    display: flex;
+}
+
 .navtab{
     background-color: var(--light-grey);
 }
@@ -36,7 +47,7 @@
 .custom-nav-items{
     background-color: var(--med-grey);
     border: 0;
-    border-bottom: 2px var(--dark-grey) solid;
+    border-bottom: var(--nav-border-size) var(--dark-grey) solid;
 }
 
 .custom-nav-items .nav-link{
@@ -47,23 +58,23 @@
     border-radius: 0;
     color:white; 
     background-color: var(--med-grey);
-    border: 2px var(--dark-grey) solid;
+    border: var(--nav-border-size) var(--dark-grey) solid;
     border-left: 0;
-    margin-bottom:-2px;
+    margin-bottom: var(--nav-minus-margin-size);
 }
 .custom-nav-items:hover .nav-link:hover{
     cursor: pointer;
-    border: 2px var(--dark-grey) solid;
-    border-bottom: 2px var(--med-grey) solid;
+    border: var(--nav-border-size) var(--dark-grey) solid;
+    border-bottom: var(--nav-border-size) var(--med-grey) solid;
     border-left: 0;
     background-color: var(--light-grey);
     color: white;    
 }
 
 .custom-nav-items .nav-link.active{
-    border: 2px var(--dark-grey) solid;
+    border: var(--nav-border-size) var(--dark-grey) solid;
     border-left: 0;
-    border-bottom: 2px var(--light-grey) solid;
+    border-bottom: var(--nav-border-size) var(--light-grey) solid;
     background-color: var(--light-grey);
     color: white;    
 }
@@ -105,5 +116,19 @@
 }
 
 .form-control::placeholder, .btn::placeholder{
-    color:white;
+    color: var(--light-grey);
+}
+
+.item-name{
+    color: white;
+    margin:0;
+    padding-left: 0.5rem;
+}
+
+.product{
+    align-items: center;
+}
+
+.product:hover{
+    background-color: var(--med-grey);
 }
