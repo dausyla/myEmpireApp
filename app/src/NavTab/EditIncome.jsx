@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Form, FormGroup, Label, Input, Button, Col, Row } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, Col, Row, Container } from 'reactstrap';
 import EditProductValue from './EditProductValue';
 
 function buildLabel(name, _for){
-    return (<Label for={_for}>{name}</Label>)
+    return (<Label for={_for} className='item-name'>{name}</Label>)
 }
 
 function EditIncome(props) {
@@ -36,37 +36,39 @@ function EditIncome(props) {
     // Build the whole form for one product
     function buildIncomeFeeForm(product) {
         return (
-            <FormGroup>
+            <FormGroup className=''>
                 <Row>
                     <Col>
-                        {buildLabel("Income", `income-value`)}
+                        <Container className='flex'>
+                            {buildLabel("Income:", `income-value`)}
+                            <Input id={`${product.name}-income-value`} name={product.name}
+                                defaultValue={product.income.val} onChange={onIncomeValueChange} className='on-right'/>
+                        </Container>
                     </Col>
                     <Col>
-                        <Input id={`${product.name}-income-value`} name={product.name} 
-                        defaultValue={product.income.val} type="number" onChange={onIncomeValueChange} />
-                    </Col>
-                    <Col>
-                        {buildLabel("Every", `income-every`)}
-                    </Col>
-                    <Col>
-                        <Input id={`${product.name}-income-every`} name={product.name}
-                        defaultValue={product.income.everyDays} type="number" onChange={onIncomeDaysChange} />
+                        <Container className='flex'>
+                            {buildLabel("Every:", `income-every`)}
+                            <Input id={`${product.name}-income-every`} name={product.name}
+                                defaultValue={product.income.everyDays} onChange={onIncomeDaysChange} className='on-right'/>
+                            {buildLabel("Days", `days`)}
+                        </Container>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        {buildLabel("Fee", `fees-value`)}
+                        <Container className='flex'>
+                            {buildLabel("Fees:", `fees-value`)}
+                            <Input id={`${product.name}-fees-value`} name={product.name}
+                                defaultValue={product.fees.val} onChange={onFeesValueChange} className='on-right'/>
+                        </Container>
                     </Col>
                     <Col>
-                        <Input id={`${product.name}-fees-value`} name={product.name}
-                        defaultValue={product.fees.val} type="number" onChange={onFeesValueChange} />
-                    </Col>
-                    <Col>
-                        {buildLabel("Every", `fees-every`)}
-                    </Col>
-                    <Col>
-                        <Input id={`${product.name}-fees-every`} name={product.name}
-                        defaultValue={product.fees.everyDays} type="number" onChange={onFeesDaysChange} />
+                        <Container className='flex'>
+                            {buildLabel("Every:", `fees-every`)}
+                            <Input id={`${product.name}-fees-every`} name={product.name}
+                                defaultValue={product.fees.everyDays} onChange={onFeesDaysChange} className='on-right'/>
+                            {buildLabel("Days", `days`)}
+                        </Container>
                     </Col>
                 </Row>
             </FormGroup>
