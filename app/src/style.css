@@ -1,6 +1,7 @@
 :root {
     --dark-grey: rgb(40,40,40);
     --med-grey: rgb(60,60,60);
+    --light-med-grey: rgb(70,70,70);
     --light-grey: rgb(80,80,80);
 
     --nav-border-size: 0.2rem;
@@ -15,9 +16,11 @@
 
 .row {
     margin: 0;
+    padding: 0;
 }
 .col {
     padding:0;
+    margin: 0;
 }
 
 .screen-size {
@@ -148,6 +151,18 @@
     padding-left: 0.5rem;
     padding-right: 0.5rem;
 }
+.value{
+    margin:0;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-style: italic;
+}
+.negative-value{
+    color:rgb(255, 169, 169);
+}
+.positive-value{
+    color:rgb(182, 255, 182);
+}
 
 .on-right{
     text-align: right;
@@ -165,9 +180,10 @@
     text-decoration: line-through;
 }
 
-.med-grey-hover{
-    background-color: var(--light-grey);
-}
 .med-grey-hover:hover{
     background-color: var(--med-grey);
+}
+
+.light-med-grey-hover:hover{
+    background-color: var(--light-med-grey);
 }

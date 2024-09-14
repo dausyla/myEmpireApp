@@ -4,70 +4,59 @@ export const fakeData = {
         {
             name: 'stocks',
             values: [1000, 1200, 900, 1100],
-            income: {
-                everyDays: 1,
-                val: 1
-            },
-            fees: {
-                everyDays: 90,
-                val: 10
-            },
+            incomes: [{
+                name: 'taxes',
+                value: -50,
+                days: 30,
+            }],
             visible: true,
             color: "#aa2020",
         },
         {
             name: 'immo',
             values: [2000, 1800, 2050, 2100],
-            income: {
-                everyDays: 30,
-                val: 200
-            },
-            fees: {
-                everyDays: 30,
-                val: 30
-            },
+            incomes: [{
+                name: 'rent',
+                value: 100,
+                days: 30,
+            },{
+                name: 'taxes',
+                value: -10,
+                days: 30,
+            }],
             visible: true,
             color: "#aa2020",
         },
         {
             name: 'food',
             values: [],
-            income: {
-                everyDays: 0,
-                val: 0
-            },
-            fees: {
-                everyDays: 1,
-                val: 10
-            },
+            incomes: [{
+                name: 'pizzas',
+                value: -10,
+                days: 1,
+            }],
             visible: true,
             color: "#aa2020",
         },
         {
             name: 'job',
             values: [],
-            income: {
-                everyDays: 30,
-                val: 2000
-            },
-            fees: {
-                everyDays: 0,
-                val: 0
-            },
+            incomes: [{
+                name: 'wage',
+                value: 1200,
+                days: 30,
+            }],
             visible: true,
             color: "#aa2020",
         },
         {
             name: 'rent',
             values: [],
-            income:{
-                everyDays: 0,
-                val: 0,
-            },
-            fees: {
-                everyDays: 30,
-                val: 500
-            },
+            incomes: [{
+                name: 'rent',
+                value: -400,
+                days: 30,
+            }],
             visible: true,
             color: "#aa2020",
         }
