@@ -187,3 +187,7 @@
 .light-med-grey-hover:hover{
     background-color: var(--light-med-grey);
 }
+
+.clickable:hover{
+    cursor: pointer;
+}
