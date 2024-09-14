@@ -3,7 +3,7 @@ export const fakeData = {
     products: [
         {
             name: 'stocks',
-            values: [1000, 1200, 900, 1100],
+            values: [1000, 1200, 1300, 1400],
             incomes: [{
                 name: 'taxes',
                 value: -50,
@@ -29,7 +29,7 @@ export const fakeData = {
         },
         {
             name: 'food',
-            values: [],
+            values: [0,0,0,0],
             incomes: [{
                 name: 'pizzas',
                 value: -10,
@@ -40,7 +40,7 @@ export const fakeData = {
         },
         {
             name: 'job',
-            values: [],
+            values: [0,0,0,0],
             incomes: [{
                 name: 'wage',
                 value: 1200,
@@ -51,7 +51,7 @@ export const fakeData = {
         },
         {
             name: 'rent',
-            values: [],
+            values: [0,0,0,0],
             incomes: [{
                 name: 'rent',
                 value: -400,

@@ -36,7 +36,9 @@ function EditIncomeRow(props) {
         return <Row className='med-grey-hover' key={product.name + '-' + income.name}>
             <Col className='flex'>
                 <p className='item-name'>&nbsp;| {income.name}</p>
-                <Button className='on-right' id={income.name} onClick={deleteIncome}>-</Button>
+                <Container className='on-right'>
+                    <Button id={income.name} onClick={deleteIncome}>-</Button>
+                </Container>
             </Col>
             <Col className='flex'>
                 <Input className='on-right' defaultValue={income.value} onChange={onValueChange}/>

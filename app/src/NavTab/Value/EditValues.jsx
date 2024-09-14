@@ -13,6 +13,7 @@ function EditValues(props) {
 
     // Set the Current Date Variable and related functions
     const [currentDate, setCurrentDate] = useState(new Date())
+    const newDateValid = dates.findIndex(d => d == dateToString(currentDate)) === -1;
     function setToToday(){
         const newDate = new Date();
         setCurrentDate(newDate);
@@ -21,49 +22,15 @@ function EditValues(props) {
         const newDate = new Date(event.target.value);
         setCurrentDate(newDate);
     }
-    const dateIndex = dates.findIndex(d => d == dateToString(currentDate));
-
-    // Update the product Value at this date (triggered in EditProductValue.jsx)
-    function updateProductValue(name, newValue){
-        const product = products.find(p => p.name == name);
-        // If first value entered, fill the list with 0
-        if (product.values.length === 0){
-            product.values = dates.map(item => 0);
-        }
-        product.values[dateIndex] = newValue == '' ? 0 : parseFloat(newValue);
-        // If there are no values for the product, reset the list to []
-        if (product.values.findIndex(v => v !== 0) === -1){
-            product.values = [];
-        }
-        props.updateData();
-    }
-
-    // Prepare the products
-    const preparedProducts = dateIndex !== -1 ? products.map(item => {
-        return {
-            name: item.name,
-            value: item.values.length > 0 ? item.values[dateIndex] : ''
-        }
-    }) : [];
-    // Convert it in HTML
-    const productsHTML = preparedProducts.map(p => <EditProductValue key={`${p.name}_${dateIndex}`} product={p} updateProductValue={updateProductValue}/>);
-
-    // Init all the data to a current date
-    function addDataToCurrentDate(){
-        let i = 0;
+    function addDate(){
         const date = dateToString(currentDate);
-        while(i < dates.length && dates[i] < date){
-            i++;
-        }
-        dates.splice(i, 0, date);
+        let dateIndex = dates.findIndex(d => d > date)
+        dateIndex = dateIndex === -1 ? dates.length : dateIndex;
+        dates.splice(dateIndex, 0, date);
         if (dates.length > 1){
             // take the previous value unless it's 0 => take the next one
-            const indexToTake = i > 0 ? i - 1 : 0;
-            products.forEach(p => {
-                if (p.values.length > 0){
-                    p.values.splice(i, 0, p.values[indexToTake]);
-                }
-            });
+            const indexToTake = dateIndex > 0 ? dateIndex - 1 : 0;
+            products.forEach(p => {p.values.splice(dateIndex, 0, p.values[indexToTake]);});
         }
         else{
             products.forEach(p => { 
@@ -72,42 +39,72 @@ function EditValues(props) {
         }
         props.updateData();
     }
+    const dateItems = <Container className='flex'>
+            <Button disabled={!newDateValid} onClick={addDate}>Add</Button>
+            <Input className='input-date' id="date" name="date" value={dateToString(currentDate)} type="date" onChange={updateDate} />
+            <Button onClick={setToToday}>Today</Button>
+    </Container>
 
-    // button If the date is not registered yet
-    const addDateForm = (
-        <Button onClick={addDataToCurrentDate}>
-            Add data to this date
-        </Button>
-    );
-
-    // Delete a date
-    function deleteDate(){
+    function deleteDate(event){
+        const date = event.target.name;
+        const dateIndex = dates.findIndex(d => d == date);
         dates.splice(dateIndex, 1);
-        products.forEach(p => {
-            p.values.splice(dateIndex, 1);
-        });
+        products.forEach(p => p.values.splice(dateIndex, 1));
         props.updateData();
     }
-    // Delete date button if the date exists
-    const deleteDateButton = (
-        <Button onClick={deleteDate}>
-            Delete this date
-        </Button>
-    );
+    function onChangeDate(event){
+        const oldDate = event.target.name;
+        const newDate = event.target.value;
+        const oldDateIndex = dates.findIndex(d => d == oldDate);
+        dates[oldDateIndex] = newDate;
 
-    return (
-        <Container>
-            <Container className="flex">
-                <Input className='input-date' id="date" name="date" value={dateToString(currentDate)} type="date" onChange={updateDate} />
-                <Button onClick={setToToday}>Today</Button>
+        const dateIndexes = Array.from(dates.keys()).sort((a,b) => dates[a].localeCompare(dates[b]));
+        const sortedDates = dateIndexes.map(i => dates[i]);
+        for (let i in dates){
+            dates[i] = sortedDates[i];
+        }
+        products.forEach(p => {p.values = dateIndexes.map(i => p.values[i])});
+        props.updateData()
+    }
+    const dateColumn = <Col>
+        <Row>&nbsp;</Row>
+        {dates.map(d => <Row className='med-grey-hover' key={d}>
+            <Container className='flex'>
+                <Button onClick={deleteDate} name={d}>-</Button>
+                <Input className='input-date' defaultValue={d} name={d} type='date' onChange={onChangeDate}/>
             </Container>
-            {
-                dateIndex !== -1 ?
-                    <Container> {deleteDateButton} {productsHTML} </Container> :
-                    <Container> {addDateForm} </Container>
+        </Row>)}
+    </Col>
+
+    function onValueChange(event){
+        const name = event.target.getAttribute('data-product-name');
+        const index = parseInt(event.target.getAttribute('data-value-index'));
+        const product = products.find(p => p.name == name);
+        product.values[index] = event.target.value;
+        props.updateData();
+    }
+
+    const productsColumns = products.map(p => (
+        <Col id={`product-col-${p.name}`} key={p.name}>
+            <Row><p className='item-name'>{p.name}</p></Row>
+            {p.values.map((v,i) => (
+                <Row className='flex' key={p.name + i}>
+                    <Container className='flex'>
+                        <Input defaultValue={v} data-product-name={p.name} data-value-index={i} className='on-right' onChange={onValueChange}/>
+                    </Container>
+                </Row>))
             }
+        </Col>));
+
+
+    return <Container className='overflow full-size'>
+        {dateItems}
+        <Container className='flex'>
+            {dateColumn}
+            {productsColumns}
         </Container>
-    );
+    </Container>
+
 }
 
 export default EditValues;
