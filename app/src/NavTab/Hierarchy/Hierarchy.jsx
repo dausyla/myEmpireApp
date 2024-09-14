@@ -21,7 +21,7 @@ function createProduct(name) {
 function Hierarchy(props) {
     const products = props.data.products;
 
-    const hierarchy = products.map(item => <Product product={item} key={item.name}
+    const hierarchy = products.map(item => <Product product={item} key={item.name} products={products}
         updateData={props.updateData} updateProduct={props.updateProduct}/>
     );
 

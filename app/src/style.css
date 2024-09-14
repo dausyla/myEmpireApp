@@ -68,7 +68,7 @@
     color: white;    
 }
 
-.custom-nav-items .nav-link.active{
+.custom-nav-items .nav-link.active,.custom-nav-items .nav-link.active:hover{
     border: var(--nav-border-size) var(--dark-grey) solid;
     border-left: 0;
     border-bottom: var(--nav-border-size) var(--light-grey) solid;
@@ -161,6 +161,13 @@
     width: 5rem;
 }
 
+.line-through {
+    text-decoration: line-through;
+}
+
+.med-grey-hover{
+    background-color: var(--light-grey);
+}
 .med-grey-hover:hover{
     background-color: var(--med-grey);
 }

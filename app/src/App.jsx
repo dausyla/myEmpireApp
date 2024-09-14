@@ -28,7 +28,7 @@ function App() {
 
     return (
         <Container className='screen-size'>
-            <SplitPane minSize={15} maxSize={70} defaultSize={20}>
+            <SplitPane minSize={15} maxSize={70} defaultSize={30}>
                 <NavTab data={Data} updateData={updateData} />
                 <SplitPane horizontal={true}>
                     <ValuesChart data={Data} />
