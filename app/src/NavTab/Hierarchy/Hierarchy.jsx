@@ -7,14 +7,8 @@ function createProduct(name) {
         visible: true,
         name: name,
         values: [],
-        income: {
-            everyDays: 0,
-            val: 0
-        },
-        fees: {
-            everyDays: 0,
-            val: 0
-        }
+        incomes: [],
+        color: '#30aa30'
     }
 }
 
@@ -53,7 +47,7 @@ function Hierarchy(props) {
     return (
         <Container className='full-size flexy hierarchy'>
             {addProductHTML}
-            <Container className='overflowy'>
+            <Container className='overflow'>
             {hierarchy}
             </Container>
         </Container>
