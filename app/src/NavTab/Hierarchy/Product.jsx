@@ -1,11 +1,19 @@
 import React, {useState} from 'react';
-import { Col, Row, Button, Alert, Container, Input, Form} from 'reactstrap';
+import { Col, Row, Button, Alert, Container, Input, Form } from 'reactstrap';
 
 function Product(props) {    
     const product = props.product;
     
-    function toggleVisible(){
-        product.visible = !product.visible;
+    function checkVisible(event){
+        product.visible = event.target.checked;
+        props.updateData();
+    }
+    function checkHasValue(event){
+        product.hasValue = event.target.checked;
+        props.updateData();
+    }
+    function checkHasIncome(event){
+        product.hasIncome = event.target.checked;
         props.updateData();
     }
     function tryDeleteProduct(){
@@ -51,8 +59,10 @@ function Product(props) {
     const buttons = (
         <Container className='flex nowrap'>
             <Button className="flex-on-right" onClick={renameProduct}>R</Button>
-            <Button onClick={toggleVisible}>V</Button>
             <Button onClick={tryDeleteProduct}>D</Button>
+            <Input type="checkbox" className='form-control' onChange={checkVisible} defaultChecked={product.visible}></Input>
+            <Input type="checkbox" className='form-control' onChange={checkHasValue} defaultChecked={product.hasValue}></Input>
+            <Input type="checkbox" className='form-control' onChange={checkHasIncome} defaultChecked={product.hasIncome}></Input>
         </Container>)
 
 

@@ -65,7 +65,7 @@ function EditValues(props) {
         products.forEach(p => {p.values = dateIndexes.map(i => p.values[i])});
         props.updateData()
     }
-    const dateColumn = <Col>
+    const dateColumn = <div>
         <Row>&nbsp;</Row>
         {dates.map(d => <Row className='med-grey-hover' key={d}>
             <Container className='flex'>
@@ -73,7 +73,7 @@ function EditValues(props) {
                 <Input className='input-date' defaultValue={d} name={d} type='date' onChange={onChangeDate}/>
             </Container>
         </Row>)}
-    </Col>
+    </div>
 
     function onValueChange(event){
         const name = event.target.getAttribute('data-product-name');

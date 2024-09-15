@@ -94,7 +94,7 @@ function formatData(_data) {
     const listSize = _data.valuesDates.length;
 
     // Filter the valueless products
-    const filteredProducts = _data.products.filter(item => item.visible && item.values.length !== 0);
+    const filteredProducts = _data.products.filter(item => item.visible && item.hasValue && item.values.length !== 0);
     // sort the values of the latest data in DESC order
     filteredProducts.sort((a, b) => b.values[listSize - 1] - a.values[listSize - 1]);
 

@@ -69,7 +69,7 @@ const options = {
     maintainAspectRatio: false
 }
 function formatData(data) {
-    const filteredProducts = data.products.filter(item => item.visible && (item.incomes.length > 0));
+    const filteredProducts = data.products.filter(item => item.visible && item.hasIncome && (item.incomes.length > 0));
     const monthlyIncomesProducts = filteredProducts.map(p => {
         
         return {

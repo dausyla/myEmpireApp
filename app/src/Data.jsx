@@ -10,6 +10,8 @@ export const fakeData = {
                 days: 30,
             }],
             visible: true,
+            hasValue: true,
+            hasIncome: false,
             color: "#aa2020",
         },
         {
@@ -25,6 +27,8 @@ export const fakeData = {
                 days: 30,
             }],
             visible: true,
+            hasValue: true,
+            hasIncome: true,
             color: "#aa2020",
         },
         {
@@ -36,6 +40,8 @@ export const fakeData = {
                 days: 1,
             }],
             visible: true,
+            hasValue: false,
+            hasIncome: true,
             color: "#aa2020",
         },
         {
@@ -47,6 +53,8 @@ export const fakeData = {
                 days: 30,
             }],
             visible: true,
+            hasValue: false,
+            hasIncome: true,
             color: "#aa2020",
         },
         {
@@ -58,6 +66,8 @@ export const fakeData = {
                 days: 30,
             }],
             visible: true,
+            hasValue: false,
+            hasIncome: true,
             color: "#aa2020",
         }
     ]
