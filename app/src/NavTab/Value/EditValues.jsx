@@ -8,6 +8,7 @@ function dateToString(date){
 function EditValues(props) {
     // Get some variables (cleaner)
     const products = props.data.products;
+    const filteredProducts = products.filter(p => p.hasValue);
     const dates = props.data.valuesDates;
 
     // Set the Current Date Variable and related functions
@@ -85,7 +86,7 @@ function EditValues(props) {
 
     const productsColumn = <Col className='flex not-centered'>
         {
-            products.map(p => (
+            filteredProducts.map(p => (
                 <Col id={`product-col-${p.name}`} key={p.name}>
                     <Row><p className='item-name'>{p.name}</p></Row>
                     {p.values.map((v, i) => (

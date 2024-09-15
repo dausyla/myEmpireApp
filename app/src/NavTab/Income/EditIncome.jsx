@@ -5,7 +5,9 @@ import EditIncomeRow from './EditIncomeRow';
 function EditIncome(props) {
     const products = props.data.products;
 
-    const editIncomeRows = products.map(product => <EditIncomeRow product={product} updateData={props.updateData} key={product.name}/>);
+    const filteredProducts = products.filter(p => p.hasIncome);
+
+    const editIncomeRows = filteredProducts.map(product => <EditIncomeRow product={product} updateData={props.updateData} key={product.name}/>);
 
     return (
         <Container className='full-size flexy overflow'>
