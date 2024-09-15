@@ -32,7 +32,7 @@ function EditIncomeRow(props) {
             income.days = parseFloat(event.target.value);
             updateData()
         }
-        return <Row className='med-grey-hover' key={product.name + '-' + income.name}>
+        return <Row className='med-grey-hover flex-no-wrap flex' key={product.name + '-' + income.name}>
             <Col className='flex'>
                 <p className='item-name'>&nbsp;| {income.name}</p>
                 <Container className='on-right'>
@@ -67,11 +67,11 @@ function EditIncomeRow(props) {
     let total = 0;
     product.incomes.forEach(i => total += i.days === 0 ? 0 : i.value * 30 / i.days);
 
-    const productNameCol = <Row>
+    const productNameCol = <Row className='flex flex-no-wrap'>
         <Col className='flex'>
             <p className='item-name clickable' onClick={toggleShowIncomes} >{showIncomes ? '▽' : '▷'} {product.name}</p>
         </Col>
-        <Col className='flex'>
+        <Col className='flex input-min-width'>
             <Input placeholder='New Income Name' onChange={isNewIncomeValid} id={`new-income-input-${product.name}`}></Input>
             <Button disabled={!newIncomeValid} onClick={addNewIncome}>+</Button>
         </Col>
@@ -80,7 +80,7 @@ function EditIncomeRow(props) {
         </Col>
     </Row>;
 
-    return <Row className='light-med-grey-hover'>
+    return <Row className='light-med-grey-hover flex-no-wrap flexy'>
         {productNameCol}
         {showIncomes ? product.incomes.map(i => EditIncomeRowValue(i)) : ''}
     </Row>

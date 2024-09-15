@@ -62,6 +62,9 @@
 .flex-wrap{
     flex-wrap: wrap;
 }
+.flex-no-wrap{
+    flex-wrap: nowrap;
+}
 
 .navtab{
     background-color: var(--light-grey);

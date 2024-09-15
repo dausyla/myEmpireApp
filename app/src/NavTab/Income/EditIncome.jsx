@@ -8,13 +8,13 @@ function EditIncome(props) {
     const editIncomeRows = products.map(product => <EditIncomeRow product={product} updateData={props.updateData} key={product.name}/>);
 
     return (
-        <Container className='full-size flexy'>
-            <Row>
-                <Col></Col>
-                <Col className='med-grey-hover'><p className='item-name'>Income</p></Col>
-                <Col className='med-grey-hover'><p className='item-name'>Every x Days</p></Col>
+        <Container className='full-size flexy overflow'>
+            <Row className='flex flex-no-wrap'>
+                <Col className='input-min-width'></Col>
+                <Col className='input-min-width med-grey-hover'><p className='item-name'>Income</p></Col>
+                <Col className='input-min-width med-grey-hover'><p className='item-name'>Every x Days</p></Col>
             </Row>
-            <Container className='overflowy'>
+            <Container className=''>
                 {editIncomeRows}
             </Container>
         </Container>
