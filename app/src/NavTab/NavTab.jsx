@@ -28,7 +28,7 @@ function NavTab(props) {
     const [activeTab, setActiveTab] = useState('hierarchy');
     return (
         <Container className='navtab full-size'>
-            <Container className='custom-nav-items' style={{height: "2rem"}}>
+            <Container className='custom-nav-items flex overflowx' style={{height: "2rem"}}>
                 <Button className={activeTab == 'hierarchy' ? 'active' : ''} onClick={() => setActiveTab('hierarchy')}>
                     Hierachy
                 </Button>
