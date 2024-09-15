@@ -38,7 +38,7 @@ function EditValues(props) {
         }
         props.updateData();
     }
-    const dateItems = <Container className='flex'>
+    const dateItems = <Container className='flex flex-wrap'>
             <Button disabled={!newDateValid} onClick={addDate}>Add</Button>
             <Input className='input-date' id="date" name="date" value={dateToString(currentDate)} type="date" onChange={updateDate} />
             <Button onClick={setToToday}>Today</Button>
@@ -83,26 +83,28 @@ function EditValues(props) {
         props.updateData();
     }
 
-    const productsColumns = products.map(p => (
-        <Col id={`product-col-${p.name}`} key={p.name}>
-            <Row><p className='item-name'>{p.name}</p></Row>
-            {p.values.map((v,i) => (
-                <Row className='flex' key={p.name + i}>
-                    <Container className='flex'>
-                        <Input defaultValue={v} data-product-name={p.name} data-value-index={i} className='on-right input-min-width' onChange={onValueChange}/>
-                    </Container>
-                </Row>))
-            }
-        </Col>));
+    const productsColumn = <Col className='flex not-centered'>
+        {
+            products.map(p => (
+                <Col id={`product-col-${p.name}`} key={p.name}>
+                    <Row><p className='item-name'>{p.name}</p></Row>
+                    {p.values.map((v, i) => (
+                        <Row className='flex' key={p.name + i}>
+                            <Container className='flex'>
+                                <Input defaultValue={v} data-product-name={p.name} data-value-index={i} className='on-right input-min-width' onChange={onValueChange} />
+                            </Container>
+                        </Row>))
+                    }
+                </Col>))
+        }
+    </Col>
 
 
     return <Container className='full-size flexy'>
         {dateItems}
-        <Container className='flex not-centered overflowy'>
+        <Container className='flex not-centered overflow'>
             {dateColumn}
-            <Container className='flex not-centered overflowx'>
-                {productsColumns}
-            </Container>
+            {productsColumn}
         </Container>
     </Container>
 

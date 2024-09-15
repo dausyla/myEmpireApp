@@ -59,6 +59,9 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
+.flex-wrap{
+    flex-wrap: wrap;
+}
 
 .navtab{
     background-color: var(--light-grey);
