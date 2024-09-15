@@ -1,20 +1,18 @@
 {
-    "parking":{
-        "values": [
-            {"x": "2024-01-01", "y": 1000},
-            {"x": "2024-01-05", "y": 1200}
-        ]
-    },
-    "loyer":{
-        "values": []
-    },
-    "salaire":{
-        "values": []
-    },
-    "actions":{
-        "values": [
-            {"x": "2024-01-03", "y": 1500},
-            {"x": "2024-01-06", "y": 1100}
-        ]
-    }
+    "valuesDates": ["2024-09-01"],
+    "products": [
+        {
+            "name": "test",
+            "values": [1000],
+            "incomes": [{
+                "name": "taxes",
+                "value": -50,
+                "days": 30
+            }],
+            "visible": true,
+            "hasValue": true,
+            "hasIncome": false,
+            "color": "#aa2020"
+        }
+    ]
 }

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef} from 'react';
+import Header from './Header';
 import NavTab from './NavTab/NavTab';
 import ValuesChart from './ChartComponents/ValuesChart';
 import IncomeChart from './ChartComponents/IncomeChart';
@@ -17,24 +18,52 @@ function makeDataVisible(data) {
 }
 
 function App() {
-    // Add the visible property and sets it to true to all products.
-    const [Data, SetData] = useState(fakeData);
-
+    const [Data, SetData] = useState(null);
     function updateData(){
         // Create a whole new object
         const newData = JSON.parse(JSON.stringify(Data));
         SetData(newData);
     }
 
+    const file = useRef(null);
+    function updateFile(file){
+            const reader = new FileReader();
+            reader.onload = function(e){
+                const fileContent = e.target.result;
+                const fileData = JSON.parse(fileContent);
+                SetData(fileData);
+            }
+            reader.onerror = function(e) {
+                console.error("Error while reading the file: ", e);
+            }
+            reader.readAsText(file);
+    }
+    function saveFile(){
+        const fileContent = JSON.stringify(Data);
+        const blob = new Blob([fileContent], {type: 'application/json'});
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "myWallet.json";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+
+
     return (
-        <Container className='screen-size'>
-            <SplitPane minSize={30} maxSize={70} defaultSize={40}>
-                <NavTab data={Data} updateData={updateData} />
-                <SplitPane horizontal={true}>
-                    <ValuesChart data={Data} />
-                    <IncomeChart data={Data} />
-                </SplitPane>
-            </SplitPane>
+        <Container className='screen-size flexy'>
+            <Header updateFile={updateFile} saveFile={saveFile}/>
+            {
+                Data === null ? '' :
+                    <SplitPane minSize={30} maxSize={70} defaultSize={40}>
+                        <NavTab data={Data} updateData={updateData} />
+                        <SplitPane horizontal={true}>
+                            <ValuesChart data={Data} />
+                            <IncomeChart data={Data} />
+                        </SplitPane>
+                    </SplitPane>
+            }
         </Container>
     );
 }

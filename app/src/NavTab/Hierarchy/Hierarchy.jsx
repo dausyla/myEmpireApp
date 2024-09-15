@@ -8,6 +8,8 @@ function createProduct(name) {
         name: name,
         values: [],
         incomes: [],
+        hasIncome: true,
+        hasValue: true,
         color: '#30aa30'
     }
 }
@@ -35,8 +37,10 @@ function Hierarchy(props) {
         const input = document.getElementById('add-player-input');
         const name = input.value;
         input.value = '';
-        const prod = createProduct(name);
-        props.updateProduct(name, prod); // Will create and save the Data
+        const newProduct = createProduct(name);
+        newProduct.values = props.data.valuesDates.map(() => 0)
+        props.data.products.push(newProduct)
+        props.updateData();
     }
 
     const addProductHTML = <Container className='flex'>
