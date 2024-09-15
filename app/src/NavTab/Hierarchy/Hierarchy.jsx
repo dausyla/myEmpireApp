@@ -51,9 +51,11 @@ function Hierarchy(props) {
     </Container>
 
     return (
-        <Container className='hierarchy'>
+        <Container className='full-size flexy hierarchy'>
             {addProductHTML}
+            <Container className='overflowy'>
             {hierarchy}
+            </Container>
         </Container>
     );
 }

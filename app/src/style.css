@@ -39,9 +39,25 @@
     display: flex;
     align-items: center;
 }
+.flexy{
+    display: flex;
+    flex-direction: column;
+}
+
+.not-centered{
+    align-items:normal;
+}
 
 .overflow{
     overflow: auto;
+}
+.overflowx{
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+.overflowy{
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .navtab{
@@ -52,6 +68,7 @@
     background-color: var(--med-grey);
     border: 0;
     border-bottom: var(--nav-border-size) var(--dark-grey) solid;
+    flex-wrap: nowrap;
 }
 
 .custom-nav-items .nav-link{
@@ -99,6 +116,10 @@
     border-radius: 0;
     background-color: var(--dark-grey);
     border: var(--dark-grey) solid;
+}
+
+.input-min-width{
+    min-width: 4rem;
 }
 
 
@@ -163,9 +184,11 @@
     font-style: italic;
 }
 .negative-value{
+    white-space: nowrap;
     color:rgb(255, 169, 169);
 }
 .positive-value{
+    white-space: nowrap;
     color:rgb(182, 255, 182);
 }
 

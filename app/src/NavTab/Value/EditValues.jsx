@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Form, FormGroup, Label, Input, Button, Col, Row, Container } from 'reactstrap';
-import EditProductValue from './EditProductValue';
 
 function dateToString(date){
     return date.toISOString().split('T')[0];
@@ -90,18 +89,20 @@ function EditValues(props) {
             {p.values.map((v,i) => (
                 <Row className='flex' key={p.name + i}>
                     <Container className='flex'>
-                        <Input defaultValue={v} data-product-name={p.name} data-value-index={i} className='on-right' onChange={onValueChange}/>
+                        <Input defaultValue={v} data-product-name={p.name} data-value-index={i} className='on-right input-min-width' onChange={onValueChange}/>
                     </Container>
                 </Row>))
             }
         </Col>));
 
 
-    return <Container className='overflow full-size'>
+    return <Container className='full-size flexy'>
         {dateItems}
-        <Container className='flex'>
+        <Container className='flex not-centered overflowy'>
             {dateColumn}
-            {productsColumns}
+            <Container className='flex not-centered overflowx'>
+                {productsColumns}
+            </Container>
         </Container>
     </Container>
 

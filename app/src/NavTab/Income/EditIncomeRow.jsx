@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Form, FormGroup, Label, Input, Button, Col, Row, Container } from 'reactstrap';
-import EditProductValue from '../Value/EditProductValue';
 
 function buildLabel(name, _for) {
     return (<Label for={_for} className='item-name'>{name}</Label>)
@@ -41,10 +40,10 @@ function EditIncomeRow(props) {
                 </Container>
             </Col>
             <Col className='flex'>
-                <Input className='on-right' defaultValue={income.value} onChange={onValueChange}/>
+                <Input className='input-min-width on-right' defaultValue={income.value} onChange={onValueChange}/>
             </Col>
             <Col className='flex'>
-                <Input className='on-right' defaultValue={income.days} onChange={onDaysChange}/>
+                <Input className='input-min-width on-right' defaultValue={income.days} onChange={onDaysChange}/>
             </Col>
         </Row>
     }
