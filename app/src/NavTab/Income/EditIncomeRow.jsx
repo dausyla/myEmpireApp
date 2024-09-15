@@ -60,6 +60,7 @@ function EditIncomeRow(props) {
             value: 0,
             days: 0,
         })
+        document.getElementById(`new-income-input-${product.name}`).value = '';
         setShowIncomes(true);
         updateData();
     }
