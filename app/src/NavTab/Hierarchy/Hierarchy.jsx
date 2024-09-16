@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Product from './Product';
-import { Col, Container, Input, Row, Button } from 'reactstrap';
 
 function createProduct(name) {
     return {
@@ -43,18 +42,18 @@ function Hierarchy(props) {
         props.updateData();
     }
 
-    const addProductHTML = <Container className='flex'>
-            <Input id="add-player-input" name="add-player-input" placeholder="New Product Name" onChange={verifyNewProductName} />
-            <Button disabled={addProductDisabled} onClick={addProduct} className='on-right'>+</Button>
-    </Container>
+    const addProductHTML = <div className='flex'>
+            <input id="add-player-input" name="add-player-input" placeholder="New Product Name" onChange={verifyNewProductName} />
+            <button disabled={addProductDisabled} onClick={addProduct} className='on-right'>+</button>
+    </div>
 
     return (
-        <Container className='full-size flexy hierarchy'>
+        <div className='full-size flexy hierarchy'>
             {addProductHTML}
-            <Container className='overflow'>
+            <div className='overflow'>
             {hierarchy}
-            </Container>
-        </Container>
+            </div>
+        </div>
     );
 }
 

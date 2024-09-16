@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Form, FormGroup, Label, Input, Button, Col, Row, Container } from 'reactstrap';
 
 function dateToString(date){
     return date.toISOString().split('T')[0];
@@ -39,11 +38,11 @@ function EditValues(props) {
         }
         props.updateData();
     }
-    const dateItems = <Container className='flex flex-wrap'>
-            <Button disabled={!newDateValid} onClick={addDate}>Add</Button>
-            <Input className='input-date' id="date" name="date" value={dateToString(currentDate)} type="date" onChange={updateDate} />
-            <Button onClick={setToToday}>Today</Button>
-    </Container>
+    const dateItems = <div className='flex flex-wrap'>
+            <button disabled={!newDateValid} onClick={addDate}>Add</button>
+            <input className='input-date' id="date" name="date" value={dateToString(currentDate)} type="date" onChange={updateDate} />
+            <button onClick={setToToday}>Today</button>
+    </div>
 
     function deleteDate(event){
         const date = event.target.name;
@@ -67,13 +66,13 @@ function EditValues(props) {
         props.updateData()
     }
     const dateColumn = <div>
-        <Row>&nbsp;</Row>
-        {dates.map(d => <Row className='med-grey-hover' key={d}>
-            <Container className='flex'>
-                <Button onClick={deleteDate} name={d}>-</Button>
-                <Input className='input-date' defaultValue={d} name={d} type='date' onChange={onChangeDate}/>
-            </Container>
-        </Row>)}
+        <div>&nbsp;</div>
+        {dates.map(d => <div className='med-grey-hover' key={d}>
+            <div className='flex'>
+                <button onClick={deleteDate} name={d}>-</button>
+                <input className='input-date' defaultValue={d} name={d} type='date' onChange={onChangeDate}/>
+            </div>
+        </div>)}
     </div>
 
     function onValueChange(event){
@@ -84,30 +83,30 @@ function EditValues(props) {
         props.updateData();
     }
 
-    const productsColumn = <Col className='flex not-centered'>
+    const productsColumn = <div className='flex not-centered'>
         {
             filteredProducts.map(p => (
-                <Col id={`product-col-${p.name}`} key={p.name}>
-                    <Row><p className='item-name'>{p.name}</p></Row>
+                <div id={`product-col-${p.name}`} key={p.name}>
+                    <div><p className='item-name'>{p.name}</p></div>
                     {p.values.map((v, i) => (
-                        <Row className='flex' key={p.name + i}>
-                            <Container className='flex'>
-                                <Input defaultValue={v} data-product-name={p.name} data-value-index={i} className='on-right input-min-width' onChange={onValueChange} />
-                            </Container>
-                        </Row>))
+                        <div className='flex' key={p.name + i}>
+                            <div className='flex'>
+                                <input defaultValue={v} data-product-name={p.name} data-value-index={i} className='on-right input-min-width' onChange={onValueChange} />
+                            </div>
+                        </div>))
                     }
-                </Col>))
+                </div>))
         }
-    </Col>
+    </div>
 
 
-    return <Container className='full-size flexy'>
+    return <div className='full-size flexy'>
         {dateItems}
-        <Container className='flex not-centered overflow'>
+        <div className='flex not-centered overflow'>
             {dateColumn}
             {productsColumn}
-        </Container>
-    </Container>
+        </div>
+    </div>
 
 }
 

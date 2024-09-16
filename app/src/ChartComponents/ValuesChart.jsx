@@ -2,7 +2,6 @@ import {React, useState} from 'react';
 import { Line } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, TimeScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import { Container } from 'reactstrap';
 
 ChartJS.register(
   CategoryScale,
@@ -112,15 +111,17 @@ function formatData(_data) {
         }),
     }
     // set the fill as true for the first one instead of -1
-    data.datasets[0].fill = true;
+    if (data.datasets.length > 0){
+        data.datasets[0].fill = true;
+    }
     return data;
 }
 
 function ValuesChart(props) {
     return (
-        <Container className='full-size chart'>
+        <div className='full-size chart'>
             <Line data={formatData(props.data)} options={options} />
-        </Container>
+        </div>
     );
 }
 

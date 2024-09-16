@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Form, FormGroup, Label, Input, Button, Col, Row, Container } from 'reactstrap';
 import EditIncomeRow from './EditIncomeRow';
 
 function EditIncome(props) {
@@ -10,16 +9,16 @@ function EditIncome(props) {
     const editIncomeRows = filteredProducts.map(product => <EditIncomeRow product={product} updateData={props.updateData} key={product.name}/>);
 
     return (
-        <Container className='full-size flexy overflow'>
-            <Row className='flex flex-no-wrap'>
-                <Col className='input-min-width'></Col>
-                <Col className='input-min-width med-grey-hover'><p className='item-name'>Income</p></Col>
-                <Col className='input-min-width med-grey-hover'><p className='item-name'>Every x Days</p></Col>
-            </Row>
-            <Container className=''>
+        <div className='full-size flexy overflow'>
+            <div className='flex flex-no-wrap'>
+                <div className='input-min-width'></div>
+                <div className='input-min-width med-grey-hover'><p className='item-name'>Income</p></div>
+                <div className='input-min-width med-grey-hover'><p className='item-name'>Every x Days</p></div>
+            </div>
+            <div className=''>
                 {editIncomeRows}
-            </Container>
-        </Container>
+            </div>
+        </div>
     );
 }
 

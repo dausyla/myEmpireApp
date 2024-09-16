@@ -1,13 +1,20 @@
 IMPORTANT:
 Add Folders
-Restrict inputs
-better style options
+FIX STYLE (REMOVE BOOTSTRAP)
+Make input Generic (EUR/NUMBER(Days)/TEXT)
+\_Restrict inputs
+\_Add € to all inputs
 
 TODO:
 Add Warning before deleting
 Fix split screen bug/lag
 Add % between tables
 refactor tables better
+€ values in the income table
+Change Income Chart (Veritcal Bar Chart)
+Sort things
+Add Total to Edit Values
+Add Inputs per product (taken income, not prediction)
 
 OSEF:
 Opti Data Saving

@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import { Col, Row, Button, Alert, Container, Input, Form } from 'reactstrap';
 
 function Product(props) {    
     const product = props.product;
@@ -45,10 +44,10 @@ function Product(props) {
         }
     }
     const renameInput = (
-        <Container className='flex'>
-            <Input id={`rename-input-${product.name}`} onChange={isRenameValid} defaultValue={product.name}></Input>
-            <Button onClick={saveName} disabled={!renameValid}>V</Button>
-        </Container>
+        <div className='flex'>
+            <input id={`rename-input-${product.name}`} onChange={isRenameValid} defaultValue={product.name}></input>
+            <button onClick={saveName} disabled={!renameValid}>V</button>
+        </div>
     )
     const productName = isRenaming ? renameInput : (
         product.visible ? 
@@ -57,21 +56,21 @@ function Product(props) {
     );
 
     const buttons = (
-        <Container className='flex nowrap'>
-            <Button className="flex-on-right" onClick={renameProduct}>R</Button>
-            <Button onClick={tryDeleteProduct}>D</Button>
-            <Input type="checkbox" className='form-control' onChange={checkVisible} defaultChecked={product.visible}></Input>
-            <Input type="checkbox" className='form-control' onChange={checkHasValue} defaultChecked={product.hasValue}></Input>
-            <Input type="checkbox" className='form-control' onChange={checkHasIncome} defaultChecked={product.hasIncome}></Input>
-        </Container>)
+        <div className='flex nowrap'>
+            <button className="flex-on-right" onClick={renameProduct}>R</button>
+            <button onClick={tryDeleteProduct}>D</button>
+            <input type="checkbox" className='form-control' onChange={checkVisible} defaultChecked={product.visible}></input>
+            <input type="checkbox" className='form-control' onChange={checkHasValue} defaultChecked={product.hasValue}></input>
+            <input type="checkbox" className='form-control' onChange={checkHasIncome} defaultChecked={product.hasIncome}></input>
+        </div>)
 
 
     return (
-            <Container className='flex med-grey-hover'>
+            <div className='flex med-grey-hover'>
                 {productName}
-                <Form><Input type="color" className='color-input' onChange={changeColor} value={product.color}></Input></Form>
+                <input type="color" className='color-input' onChange={changeColor} value={product.color}></input>
                 {buttons}
-            </Container>
+            </div>
     );
 }
 

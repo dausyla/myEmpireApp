@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Form, FormGroup, Label, Input, Button, Col, Row, Container } from 'reactstrap';
 
 function buildLabel(name, _for) {
     return (<Label for={_for} className='item-name'>{name}</Label>)
@@ -32,20 +31,20 @@ function EditIncomeRow(props) {
             income.days = parseFloat(event.target.value);
             updateData()
         }
-        return <Row className='med-grey-hover flex-no-wrap flex' key={product.name + '-' + income.name}>
-            <Col className='flex'>
+        return <div className='med-grey-hover flex-no-wrap flex' key={product.name + '-' + income.name}>
+            <div className='flex'>
                 <p className='item-name'>&nbsp;| {income.name}</p>
-                <Container className='on-right'>
-                    <Button id={income.name} onClick={deleteIncome}>-</Button>
-                </Container>
-            </Col>
-            <Col className='flex'>
-                <Input className='input-min-width on-right' defaultValue={income.value} onChange={onValueChange}/>
-            </Col>
-            <Col className='flex'>
-                <Input className='input-min-width on-right' defaultValue={income.days} onChange={onDaysChange}/>
-            </Col>
-        </Row>
+                <div className='on-right'>
+                    <button id={income.name} onClick={deleteIncome}>-</button>
+                </div>
+            </div>
+            <div className='flex'>
+                <input className='input-min-width on-right' defaultValue={income.value} onChange={onValueChange}/>
+            </div>
+            <div className='flex'>
+                <input className='input-min-width on-right' defaultValue={income.days} onChange={onDaysChange}/>
+            </div>
+        </div>
     }
 
     const [newIncomeValid, setNewIncomeValid] = useState(false);
@@ -61,6 +60,7 @@ function EditIncomeRow(props) {
             days: 0,
         })
         document.getElementById(`new-income-input-${product.name}`).value = '';
+        setNewIncomeValid(false);
         setShowIncomes(true);
         updateData();
     }
@@ -68,23 +68,23 @@ function EditIncomeRow(props) {
     let total = 0;
     product.incomes.forEach(i => total += i.days === 0 ? 0 : i.value * 30 / i.days);
 
-    const productNameCol = <Row className='flex flex-no-wrap'>
-        <Col className='flex'>
+    const productNameCol = <div className='flex flex-no-wrap'>
+        <div className='flex'>
             <p className='item-name clickable' onClick={toggleShowIncomes} >{showIncomes ? '▽' : '▷'} {product.name}</p>
-        </Col>
-        <Col className='flex input-min-width'>
-            <Input placeholder='New Income Name' onChange={isNewIncomeValid} id={`new-income-input-${product.name}`}></Input>
-            <Button disabled={!newIncomeValid} onClick={addNewIncome}>+</Button>
-        </Col>
-        <Col className='flex'>
+        </div>
+        <div className='flex input-min-width'>
+            <input placeholder='New Income Name' onChange={isNewIncomeValid} id={`new-income-input-${product.name}`}></input>
+            <button disabled={!newIncomeValid} onClick={addNewIncome}>+</button>
+        </div>
+        <div className='flex'>
         <p className={`value on-right ${total > 0 ? 'positive-value' : 'negative-value'}`}>{total}€ /mo</p>
-        </Col>
-    </Row>;
+        </div>
+    </div>;
 
-    return <Row className='light-med-grey-hover flex-no-wrap flexy'>
+    return <div className='light-med-grey-hover flex-no-wrap flexy'>
         {productNameCol}
         {showIncomes ? product.incomes.map(i => EditIncomeRowValue(i)) : ''}
-    </Row>
+    </div>
 
 }
 

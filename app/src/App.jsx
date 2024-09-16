@@ -4,11 +4,6 @@ import NavTab from './NavTab/NavTab';
 import ValuesChart from './ChartComponents/ValuesChart';
 import IncomeChart from './ChartComponents/IncomeChart';
 import { fakeData } from './Data';
-
-//BootStrap
-import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
-import { Container, Row, Col } from "reactstrap";
 import SplitPane from './SplitPane';
 
 function makeDataVisible(data) {
@@ -25,7 +20,6 @@ function App() {
         SetData(newData);
     }
 
-    const file = useRef(null);
     function updateFile(file){
             const reader = new FileReader();
             reader.onload = function(e){
@@ -48,12 +42,16 @@ function App() {
         link.click();
         document.body.removeChild(link);
     }
-
-
+    function newRawFile(){
+        SetData({
+            valuesDates:[],
+            products: [],
+        })
+    }
 
     return (
-        <Container className='screen-size flexy'>
-            <Header updateFile={updateFile} saveFile={saveFile}/>
+        <div className='screen-size flexy'>
+            <Header updateFile={updateFile} saveFile={saveFile} newRawFile={newRawFile}/>
             {
                 Data === null ? '' :
                     <SplitPane minSize={30} maxSize={70} defaultSize={40}>
@@ -64,7 +62,7 @@ function App() {
                         </SplitPane>
                     </SplitPane>
             }
-        </Container>
+        </div>
     );
 }
 
