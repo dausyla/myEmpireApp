@@ -1,15 +1,59 @@
+:root {
+    --grey-30: rgb(30,30,30);
+    --grey-40: rgb(40,40,40);
+    --grey-50: rgb(50,50,50);
+    --grey-60: rgb(60,60,60);
+    --grey-70: rgb(70,70,70);
+    --grey-80: rgb(80,80,80);
+    --grey-90: rgb(90,90,90);
 
+    --border-small: 0.2rem;
+    --border-big: 0.5rem;
 
-/* :root {
-    --dark-grey: rgb(40,40,40);
-    --med-grey: rgb(60,60,60);
-    --light-med-grey: rgb(70,70,70);
-    --light-grey: rgb(80,80,80);
-
-    --nav-border-size: 0.2rem;
-    --nav-minus-margin-size: -0.2rem;
+    font-family: sans-serif;
+    font-size: 1rem;
+    color: white;
+    background-color: var(--grey-90);
+}
+body{
+    margin:0;
+}
+/* SIZE */
+.screen-size{
+    width: 100vw;
+    height: 100vh;
+}
+.full-size{
+    width: 100%;
+    height: 100%;
 }
 
+/* ! SIZE */
+
+
+/* FLEX */
+.flex{
+    display: flex;
+}
+.flexy{
+    display: flex;
+    flex-direction: column;
+}
+.flex-grow{
+    flex: 1 1 0;
+}
+/* ! FLEX */
+
+
+button{
+    font-size: 1rem;
+    color: white;
+    background-color: var(--grey-80);
+}
+
+
+
+/* ========OLD=========
 .container {
     margin: 0;
     padding: 0;

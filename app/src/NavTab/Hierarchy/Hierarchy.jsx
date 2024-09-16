@@ -44,7 +44,7 @@ function Hierarchy(props) {
 
     const addProductHTML = <div className='flex'>
             <input id="add-player-input" name="add-player-input" placeholder="New Product Name" onChange={verifyNewProductName} />
-            <button disabled={addProductDisabled} onClick={addProduct} className='on-right'>+</button>
+            <button className='on-right' disabled={addProductDisabled} onClick={addProduct}></button>
     </div>
 
     return (

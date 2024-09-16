@@ -46,7 +46,7 @@ function Product(props) {
     const renameInput = (
         <div className='flex'>
             <input id={`rename-input-${product.name}`} onChange={isRenameValid} defaultValue={product.name}></input>
-            <button onClick={saveName} disabled={!renameValid}>V</button>
+            <button className='' onClick={saveName} disabled={!renameValid}>V</button>
         </div>
     )
     const productName = isRenaming ? renameInput : (
@@ -58,7 +58,7 @@ function Product(props) {
     const buttons = (
         <div className='flex nowrap'>
             <button className="flex-on-right" onClick={renameProduct}>R</button>
-            <button onClick={tryDeleteProduct}>D</button>
+            <button className='' onClick={tryDeleteProduct}>D</button>
             <input type="checkbox" className='form-control' onChange={checkVisible} defaultChecked={product.visible}></input>
             <input type="checkbox" className='form-control' onChange={checkHasValue} defaultChecked={product.hasValue}></input>
             <input type="checkbox" className='form-control' onChange={checkHasIncome} defaultChecked={product.hasIncome}></input>

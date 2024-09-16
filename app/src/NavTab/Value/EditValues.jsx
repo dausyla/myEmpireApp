@@ -39,9 +39,9 @@ function EditValues(props) {
         props.updateData();
     }
     const dateItems = <div className='flex flex-wrap'>
-            <button disabled={!newDateValid} onClick={addDate}>Add</button>
+        <button onClick={addDate} disabled={!newDateValid}>Add</button>
             <input className='input-date' id="date" name="date" value={dateToString(currentDate)} type="date" onChange={updateDate} />
-            <button onClick={setToToday}>Today</button>
+        <button onClick={setToToday}>Today</button>
     </div>
 
     function deleteDate(event){

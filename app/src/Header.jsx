@@ -12,8 +12,8 @@ function Header(props) {
     return (
         <div className='flex'>
             <input type='file' onChange={(filePathChange)}/>
-            <button onClick={props.saveFile}>Save File</button>
-            <button onClick={props.newRawFile}>New File</button>
+                <button className='' onClick={props.saveFile}> Save File </button>
+                <button className='' onClick={props.newRawFile}> New File </button>
         </div>
     );
 }

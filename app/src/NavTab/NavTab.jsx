@@ -28,21 +28,15 @@ function NavTab(props) {
     return (
         <div className='navtab full-size'>
             <div className='custom-nav-items flex overflowx' style={{height: "2rem"}}>
-                <button className={activeTab == 'hierarchy' ? 'active' : ''} onClick={() => setActiveTab('hierarchy')}>
-                    Hierachy
-                </button>
-                <button className={activeTab == 'values' ? 'active' : ''} onClick={() => setActiveTab('values')}>
-                    Values
-                </button>
-                <button className={activeTab == 'income' ? 'active' : ''} onClick={() => setActiveTab('income')}>
-                    Income
-                </button>
+                <button className='' onClick={() => setActiveTab('hierarchy')}>Hierarchy</button>
+                <button className='' onClick={() => setActiveTab('values')}>Values</button>
+                <button className='' onClick={() => setActiveTab('income')}>Income</button>
             </div>
             <div style={{height: `calc(100% - 2rem)`}}>
                 {activeTab == "hierarchy" ?
                     <Hierarchy data={props.data} updateProduct={updateProduct} updateData={props.updateData} /> :
                     activeTab == "values" ?
-                        <EditValues data={props.data} updateProduct={updateProduct} updateData={props.updateData} /> :
+                        <EditValues data={props.data} updateData={props.updateData} /> :
                         <EditIncome data={props.data} updateData={props.updateData} />
                 }
             </div>
