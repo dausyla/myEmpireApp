@@ -4,6 +4,7 @@ import NavTab from './NavTab/NavTab';
 import ValuesChart from './ChartComponents/ValuesChart';
 import IncomeChart from './ChartComponents/IncomeChart';
 import { fakeData } from './Data';
+import { Table } from './Utils/Table';
 import SplitPane from './SplitPane';
 
 function makeDataVisible(data) {
@@ -50,7 +51,7 @@ function App() {
     }
 
     return (
-        <div className='screen-size flexy'>
+        <div className='screen-size flexy overflow-hidden'>
             <Header updateFile={updateFile} saveFile={saveFile} newRawFile={newRawFile}/>
             {
                 Data === null ? '' :

@@ -36,14 +36,14 @@ function SplitPane(props) {
         }
     };
 
-    const wholeClass = `flex-grow ${isHorizontal ? 'flexy' : 'flex'}`
+    const wholeClass = `full-size ${isHorizontal ? 'flexy' : 'flex'}`
 
     const firstStyle = {
         width: isHorizontal ? '100%' : size + '%',
         height: !isHorizontal ? '100%' : size + '%',
     }
 
-    const dividerSize = '0.5rem'
+    const dividerSize = '0.3rem'
     const dividerStyle = {
         backgroundColor: '#000',
         cursor: isHorizontal ? 'ns-resize' : 'ew-resize',
@@ -58,11 +58,11 @@ function SplitPane(props) {
 
     return (
         <div className={wholeClass} ref={containerRef} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
-            <div className='flex' style={firstStyle}>
+            <div style={firstStyle}>
                 {child1}
             </div>
             <div onMouseDown={handleMouseDown} style={dividerStyle}/>
-            <div className='flex' style={secondStyle}>
+            <div  style={secondStyle}>
                 {child2}
             </div>
         </div>
