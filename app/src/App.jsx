@@ -14,7 +14,7 @@ function makeDataVisible(data) {
 }
 
 function App() {
-    const [Data, SetData] = useState(null);
+    const [Data, SetData] = useState(fakeData);
     function updateData(){
         // Create a whole new object
         const newData = JSON.parse(JSON.stringify(Data));

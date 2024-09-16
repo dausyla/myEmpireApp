@@ -15,7 +15,7 @@ function buildTopRow(content, topClass, topLeftClass){
                 {content[0].map((header, i) => 
                     <th className={
                         i === 0 ? topLeftClass + ' table-top-left' : topClass
-                    }>
+                    } key={'header-' + i}>
                         {header}
                     </th>)}
             </tr>
@@ -28,10 +28,10 @@ function buildOtherRows(content, leftClass, itemClass) {
     for (let i = 1; i < content.length; i++){
         const row = content[i];
         rows.push(
-            <tr>
+            <tr key={i}>
                 {row.map((item,i) => i === 0 ? // if it's the far left column
-                <th className={leftClass}>{item}</th> : // otherwise (normal item)
-                <td className={itemClass}> 
+                <th className={leftClass} key={i}>{item}</th> : // otherwise (normal item)
+                <td className={itemClass} key={i}> 
                     {item}
                 </td>)}
             </tr>
@@ -42,7 +42,7 @@ function buildOtherRows(content, leftClass, itemClass) {
     </tbody>
 }
 
-export function Table(content, className = '', topClass = '', leftClass = '', itemClass = '', topLeftClass = '') {
+export function Table(content, {className = '', topClass = '', leftClass = '', itemClass = '', topLeftClass = ''} = {}) {
     const nbRow = content.length;
     const nbCol = nbRow > 0 ? content[0].length : 0;
 
@@ -56,7 +56,7 @@ export function Table(content, className = '', topClass = '', leftClass = '', it
     const otherRows = buildOtherRows(content, leftClass, itemClass);
 
     return (
-        <div class={"table-container " + className}>
+        <div className={"table-container " + className}>
             <table>
                 {topRow}
                 {otherRows}

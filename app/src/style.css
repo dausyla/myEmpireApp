@@ -45,6 +45,23 @@ body{
 }
 /* !FLEX */
 
+/* POSITION */
+.justify-right {
+    justify-content: right;
+}
+.justify-left {
+    justify-content: left;
+}
+.justify-space-between{
+    justify-content: space-between;
+}
+.text-right {
+    text-align: right;
+}
+.text-left {
+    text-align: left;
+}
+/* !POSITION */
 
 /* OVERFLOW */
 .overflow-hidden{
@@ -55,8 +72,6 @@ body{
 
 /* TABLE */
 .table-container {
-  width: 300px; /* Set the desired width */
-  height: 200px; /* Set the desired height */
   overflow: auto; /* Enable scrolling */
 }
 
@@ -92,6 +107,11 @@ tbody th {
 }
 /* !TABLE */
 
+/* CUSTOMIZATION */
+.clickable {
+    cursor: pointer;
+}
+/* !CUSTOMIZATION */
 
 button{ 
     font-size: 1rem;

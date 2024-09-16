@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Table } from '../../Utils/Table';
+import { EurInput } from '../../Utils/Inputs';
 
 function dateToString(date){
     return date.toISOString().split('T')[0];
@@ -38,7 +40,7 @@ function EditValues(props) {
         }
         props.updateData();
     }
-    const dateItems = <div className='flex flex-wrap'>
+    const newDateItems = <div className='flex flex-wrap'>
         <button onClick={addDate} disabled={!newDateValid}>Add</button>
             <input className='input-date' id="date" name="date" value={dateToString(currentDate)} type="date" onChange={updateDate} />
         <button onClick={setToToday}>Today</button>
@@ -65,47 +67,27 @@ function EditValues(props) {
         products.forEach(p => {p.values = dateIndexes.map(i => p.values[i])});
         props.updateData()
     }
-    const dateColumn = <div>
-        <div>&nbsp;</div>
-        {dates.map(d => <div className='med-grey-hover' key={d}>
-            <div className='flex'>
+
+    const tableContent = [['', ...filteredProducts.map(p => p.name)]];
+    dates.forEach((d, i) => {
+        tableContent.push([
+            <div key={`value-row-${d}`} className='flex'>
                 <button onClick={deleteDate} name={d}>-</button>
-                <input className='input-date' defaultValue={d} name={d} type='date' onChange={onChangeDate}/>
-            </div>
-        </div>)}
-    </div>
-
-    function onValueChange(event){
-        const name = event.target.getAttribute('data-product-name');
-        const index = parseInt(event.target.getAttribute('data-value-index'));
-        const product = products.find(p => p.name == name);
-        product.values[index] = event.target.value;
-        props.updateData();
-    }
-
-    const productsColumn = <div className='flex not-centered'>
-        {
-            filteredProducts.map(p => (
-                <div id={`product-col-${p.name}`} key={p.name}>
-                    <div><p className='item-name'>{p.name}</p></div>
-                    {p.values.map((v, i) => (
-                        <div className='flex' key={p.name + i}>
-                            <div className='flex'>
-                                <input defaultValue={v} data-product-name={p.name} data-value-index={i} className='on-right input-min-width' onChange={onValueChange} />
-                            </div>
-                        </div>))
-                    }
-                </div>))
-        }
-    </div>
-
+                <input type='date' className='item-date' defaultValue={d} name={d} onChange={onChangeDate} />
+            </div>,
+            ...filteredProducts.map(p => {
+                function valueChanged(newValue) {
+                    p.values[i] = newValue;
+                    props.updateData();
+                }
+                return EurInput(p.values[i], valueChanged, `item-${p.name}-${d}`)
+            })
+        ])
+    });
 
     return <div className='full-size flexy'>
-        {dateItems}
-        <div className='flex not-centered overflow'>
-            {dateColumn}
-            {productsColumn}
-        </div>
+        {newDateItems}
+        {Table(tableContent)}
     </div>
 
 }
