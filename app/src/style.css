@@ -43,6 +43,10 @@ body{
 .flex-grow{
     flex: 1 1 0;
 }
+.flex-nowrap{
+    white-space: nowrap;
+    flex-wrap: nowrap;
+}
 /* !FLEX */
 
 /* POSITION */

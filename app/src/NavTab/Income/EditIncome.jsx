@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table } from '../../Utils/Table';
-import { EurInput } from '../../Utils/Inputs';
+import { EurInput, NaturalInput } from '../../Utils/Inputs';
 
 function getProductRow(product, updateData){
     const [showIncomes, setShowIncomes] = useState(false);
@@ -27,10 +27,10 @@ function getProductRow(product, updateData){
 
     const key = `new-income-input-${product.name}`
     const res = [[
-        <div onClick={() => setShowIncomes(!showIncomes)} className='clickable'>
-            {showIncomes ? '▽' : '▷'}{product.name}
+        <div onClick={() => setShowIncomes(!showIncomes)} className='clickable flex flex-nowrap'>
+            {showIncomes ? '▽' : '▷'} {product.name}
         </div>,
-        <div>
+        <div className='flex flex-nowrap'>
             <input placeholder='New Income' id={key} onChange={isNewIncomeValid} defaultValue='' key={key}/>
             <button onClick={newIncome} disabled={!newIncomeValid}>+</button>
         </div>, sum]];
@@ -44,8 +44,8 @@ function getProductRow(product, updateData){
             i.value = value;
             updateData();
         }
-        function changeDays(event){
-            i.days = parseFloat(event.target.value);
+        function changeDays(newValue){
+            i.days = parseFloat(newValue);
             updateData();
         }
         function deleteIncome(){
@@ -54,12 +54,13 @@ function getProductRow(product, updateData){
             updateData();
         }
         res.push([
-            <div className='flex justify-space-between'>
-                &nbsp;| {i.name}
+            <div className='flex justify-space-between flex-nowrap'>
+                &nbsp;| {i.name}&nbsp;
                 <button className='flex-right' onClick={deleteIncome}>-</button>
             </div>,
             EurInput(i.value, changeValue),
-            <input defaultValue={i.days} onChange={changeDays} />])
+            NaturalInput(i.days, changeDays)
+            ])
     });
 
     return res;

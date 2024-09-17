@@ -1,28 +1,130 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 
-function strFromFloat(n){
-    const str = `${n}`;
-    const nbWholeDigit = `${Math.floor(n)}`.length;
+function removeSpaces(str){
+    return str.replace(/ /g, '');
+}
+
+function addSpaces(str){
+    const minus = str.length > 0 && str[0] === '-' ? '-' : ''
+    const start = minus.length
+    let nbWholeDigit = 0;
+    for (let i = start; i < str.length && str[i] !== '.'; i++){
+        nbWholeDigit++;
+    }
     const mod = nbWholeDigit % 3;
-    let res = '';
+    let res = minus;
     for (let i = 0; i < nbWholeDigit; i++){
-        res += i !== 0 && i % 3 === mod ? ' ' + str[i] : str[i]
+        res += i !== 0 && i % 3 === mod ? ' ' + str[i + start] : str[i + start]
+    }
+    return res + str.slice(start + nbWholeDigit);
+}
+
+function getCarretRealPos(str, carretPos){
+    let res = carretPos;
+    for (let i = 0; i < carretPos; i++){
+        if (str[i] === ' '){
+            res--;
+        }
     }
     return res;
 }
 
-export function EurInput(value, valueChanged, key){
+function testKey(base, newKey, pos){
+    const noSpace = removeSpaces(base);
+    const index = getCarretRealPos(noSpace, pos);
+    const res = noSpace.slice(0, index) + newKey + noSpace.slice(index);
+    const regex = /^-?\d*[\.,]?\d*$/g
+    return regex.test(res);
+}
+
+function fixZerosAndComas(str){
+    const dots = str.replace(',', '.');
+    // If it's >= 1 or <= -1, no needs to have a zero before the dot
+    if (/^-?0*[1-9]\d*(\.\d*)?$/.test(dots)) {
+        return dots.replace(/^(-?)0*([1-9].*)$/, "$1$2");
+    }
+    return dots.replace(/^(-?)0*([1-9\.].*)$/, "$10$2");
+}
+
+function fixMinus(str) {
+    if (str.length === 0) {
+        return '0';
+    }
+    if (str[0] === '-') {
+        if (str.length === 1 || str[1] === '.') {
+            return '-0' + str.slice(1);
+        }
+    }
+    if (str[0] === '.') {
+        return '0' + str;
+    }
+    return str;
+}
+
+export function EurInput(value, valueChanged, key) {
     function onKeyDown(event) {
-        // TODO
-        return;
+        const keyCode = event.keyCode;
+        const key = event.key;
+        const carretPos = event.target.selectionStart;
+        const currentValue = event.target.value;
+
+        const inputs = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 188, 189, 190]; // digits , - .
+        const arrows = [37, 38, 39, 40]; // left top right bottom
+        const others = [8, 9, 13, 27, 46, 35, 36]; // Backspace, Tab, Enter, Escape, Suppr, Start, End
+
+        if (arrows.includes(keyCode)) {
+            return;
+        } else if (inputs.includes(keyCode) && testKey(currentValue, key, carretPos)) {
+            return;
+        } else if (others.includes(keyCode)) {
+            return;
+        }
+
+        // If here => wrong key
+        if (event.preventDefault) {
+            event.preventDefault(); //normal browsers
+        }
+        event.returnValue = false; //IE
     }
     function onChange(event) {
-        // TODO
-        valueChanged(event.target.value)
+        const noSpace = removeSpaces(event.target.value)
+        const zeroFixed = fixZerosAndComas(noSpace);
+        const minusFix = fixMinus(zeroFixed);
+        valueChanged(parseFloat(minusFix));
+        event.target.value = addSpaces(zeroFixed);
     }
 
     return <div className='flex justify-right' key={key}>
-        { <input onKeyDown={onKeyDown} onChange={onChange} defaultValue={value}></input> }
-        &nbsp;€
+        {<input onKeyDown={onKeyDown} onChange={onChange} defaultValue={addSpaces('' + value)}></input>}
+        &nbsp;€&nbsp;
+    </div>
+}
+
+export function NaturalInput(value, valueChanged, key) {
+    function onKeyDown(event) {
+        const keyCode = event.keyCode;
+
+        const digits = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57]; // digits
+        const arrows = [37, 38, 39, 40]; // left top right bottom
+        const others = [8, 9, 13, 27, 46, 35, 36]; // Backspace, Tab, Enter, Escape, Suppr, Start, End
+
+        if (digits.includes(keyCode) || arrows.includes(keyCode) || others.includes(keyCode)) {
+            return;
+        }
+
+        // If here => wrong key
+        if (event.preventDefault) {
+            event.preventDefault(); //normal browsers
+        }
+        event.returnValue = false; //IE
+    }
+    function onChange(event) {
+        const zeroFixed = fixZerosAndComas(event.target.value);
+        valueChanged(parseInt(zeroFixed));
+        event.target.value = zeroFixed;
+    }
+
+    return <div className='' key={key}>
+        {<input onKeyDown={onKeyDown} onChange={onChange} defaultValue={value}></input>}
     </div>
 }

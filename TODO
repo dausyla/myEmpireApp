@@ -1,15 +1,15 @@
 DOING:
-Make Hierarchy tab
-
-NEXT:
-Make input Generic (EUR/NUMBER(Days)/TEXT)
+Make input Generic (EUR/NUMBER(Days)/Names)
 \_Restrict inputs
 \_Add € to all inputs
 
-IMPORTANT:
+NEXT:
 Make better css (inputs/charts/buttons/...)
 
+IMPORTANT:
+
 TODO:
+Fix Header with Chose file/Save file/New file
 Add Folders
 Add Warning before deleting
 Add % between tables
