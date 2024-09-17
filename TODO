@@ -1,11 +1,13 @@
-NEXT:
+DOING:
 Make Hierarchy tab
 
-IMPORTANT:
-Make better css (inputs/charts/buttons/...)
+NEXT:
 Make input Generic (EUR/NUMBER(Days)/TEXT)
 \_Restrict inputs
 \_Add € to all inputs
+
+IMPORTANT:
+Make better css (inputs/charts/buttons/...)
 
 TODO:
 Add Folders

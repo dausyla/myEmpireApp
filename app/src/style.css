@@ -55,8 +55,14 @@ body{
 .justify-space-between{
     justify-content: space-between;
 }
+.justify-center{
+    justify-content: center;
+}
 .text-right {
     text-align: right;
+}
+.text-right {
+    text-align: center;
 }
 .text-left {
     text-align: left;

@@ -68,7 +68,7 @@ function EditValues(props) {
         props.updateData()
     }
 
-    const tableContent = [['', ...filteredProducts.map(p => p.name)]];
+    const tableContent = [['Dates', ...filteredProducts.map(p => p.name)]];
     dates.forEach((d, i) => {
         tableContent.push([
             <div key={`value-row-${d}`} className='flex'>

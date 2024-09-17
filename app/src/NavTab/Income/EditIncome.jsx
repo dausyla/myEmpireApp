@@ -71,7 +71,7 @@ function EditIncome(props) {
 
     const filteredProducts = products.filter(p => p.hasIncome);
 
-    const header = ['', 'Income', 'Every x Days'];
+    const header = ['Product', 'Income', 'Every x Days'];
 
     const incomeRows = [];
     filteredProducts.forEach(p => getProductRow(p, props.updateData).forEach(r => incomeRows.push(r)))

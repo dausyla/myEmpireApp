@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Product from './Product';
+import {Table} from '../../Utils/Table'
 
 function createProduct(name) {
     return {
@@ -13,48 +13,68 @@ function createProduct(name) {
     }
 }
 
+
 function Hierarchy(props) {
     const products = props.data.products;
+    const updateData = props.updateData;
 
-    const hierarchy = products.map(item => <Product product={item} key={item.name} products={products}
-        updateData={props.updateData} updateProduct={props.updateProduct}/>
-    );
+    const header = ['Product', 'Visible', 'Has Value', 'Has Income'];
 
-    const [addProductDisabled, setAddProductDisabled] = useState(true);
-    function verifyNewProductName(event) {
-        const name = document.getElementById('add-player-input').value;
-        if (props.data.products.find(p => p.name == name)) {
-            setAddProductDisabled(true);
-        } else if (name.length === 0) {
-            setAddProductDisabled(true);
-        } else {
-            setAddProductDisabled(false);
+    function buildProductRow(product) {
+        function onCheckChange(event){
+            const property = event.target.name;
+            product[property] = event.target.checked;
+            updateData();
         }
+        function deleteProduct(event){
+            const productIndex = products.findIndex(p => p.name == event.target.name);
+            products.splice(productIndex, 1);
+            updateData();
+        }
+        return [
+            <div className='flex'>
+                <button name={product.name} onClick={deleteProduct}>-</button>&nbsp;{product.name}
+            </div>,
+            <div className='flex justify-center'>
+                <input name='visible' defaultChecked={product.visible} onChange={onCheckChange} type='checkbox' />
+            </div>,
+            <div className='flex justify-center'>
+                <input name='hasValue' defaultChecked={product.hasValue} onChange={onCheckChange} type='checkbox' />
+            </div>,
+            <div className='flex justify-center'>
+                <input name='hasIncome' defaultChecked={product.hasIncome} onChange={onCheckChange} type='checkbox' />
+            </div>,
+        ]
     }
+    const productRows = products.map(p => buildProductRow(p));
 
-    function addProduct(){
+    const tableContent = [header, ...productRows];
+    
+    const [addProductDisabled, setAddProductDisabled] = useState(true);
+    function verifyNewProductName() {
+        const name = document.getElementById('add-player-input').value;
+        setAddProductDisabled(name.length === 0 || products.find(p => p.name == name));
+    }
+    function addProduct() {
         const input = document.getElementById('add-player-input');
         const name = input.value;
         input.value = '';
+        setAddProductDisabled(true);
         const newProduct = createProduct(name);
         newProduct.values = props.data.valuesDates.map(() => 0)
         props.data.products.push(newProduct)
         props.updateData();
     }
-
     const addProductHTML = <div className='flex'>
-            <input id="add-player-input" name="add-player-input" placeholder="New Product Name" onChange={verifyNewProductName} />
-            <button className='on-right' disabled={addProductDisabled} onClick={addProduct}></button>
+        <input id="add-player-input" name="add-player-input" placeholder="New Product Name" onChange={verifyNewProductName} />
+        <button className='on-right' disabled={addProductDisabled} onClick={addProduct}>+</button>
     </div>
 
-    return (
-        <div className='full-size flexy hierarchy'>
-            {addProductHTML}
-            <div className='overflow'>
-            {hierarchy}
-            </div>
-        </div>
-    );
+    return <div className='flexy full-size'>
+        {addProductHTML}
+        {Table(tableContent)}
+    </div>;
+
 }
 
 export default Hierarchy;
