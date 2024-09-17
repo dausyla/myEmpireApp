@@ -33,7 +33,10 @@ function getProductRow(product, updateData){
         <div className='flex flex-nowrap'>
             <input placeholder='New Income' id={key} onChange={isNewIncomeValid} defaultValue='' key={key}/>
             <button onClick={newIncome} disabled={!newIncomeValid}>+</button>
-        </div>, sum]];
+        </div>,
+        <div className='flex justify-space-between flex-nowrap'>
+            <div>Total: </div><div>{sum}€ /mo</div>
+        </div>]];
 
     if (!showIncomes){
         return res;

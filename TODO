@@ -1,10 +1,7 @@
 DOING:
-Make input Generic (EUR/NUMBER(Days)/Names)
-\_Restrict inputs
-\_Add € to all inputs
+Make better css (inputs/charts/buttons/...)
 
 NEXT:
-Make better css (inputs/charts/buttons/...)
 
 IMPORTANT:
 
@@ -21,3 +18,4 @@ Add Inputs per product (taken income, not prediction)
 OSEF:
 Opti Data Saving
 Linear gradient chart
+Name Input Restricted
