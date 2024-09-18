@@ -95,7 +95,7 @@ export function EurInput(value, valueChanged, key) {
     }
 
     return <div className='flex justify-right' key={key}>
-        {<input onKeyDown={onKeyDown} onChange={onChange} defaultValue={addSpaces('' + value)}></input>}
+        {<input onKeyDown={onKeyDown} onChange={onChange} defaultValue={addSpaces('' + value)} className='text-right'></input>}
         &nbsp;€&nbsp;
     </div>
 }
@@ -125,6 +125,6 @@ export function NaturalInput(value, valueChanged, key) {
     }
 
     return <div className='' key={key}>
-        {<input onKeyDown={onKeyDown} onChange={onChange} defaultValue={value}></input>}
+        {<input onKeyDown={onKeyDown} onChange={onChange} defaultValue={value} className='text-right'></input>}
     </div>
 }

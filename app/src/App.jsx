@@ -51,8 +51,9 @@ function App() {
     }
 
     return (
-        <div className='screen-size flexy overflow-hidden'>
+        <div className='screen-size flexy'>
             <Header updateFile={updateFile} saveFile={saveFile} newRawFile={newRawFile}/>
+            <div className='flex-grow'>
             {
                 Data === null ? '' :
                     <SplitPane minSize={30} maxSize={70} defaultSize={40}>
@@ -63,6 +64,7 @@ function App() {
                         </SplitPane>
                     </SplitPane>
             }
+            </div>
         </div>
     );
 }
