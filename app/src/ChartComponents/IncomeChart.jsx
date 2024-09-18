@@ -65,7 +65,8 @@ const options = {
             onClick: () => {} // Make legend fixed
         }
     },
-    maintainAspectRatio: false
+    maintainAspectRatio: false,
+    animation: false
 }
 function formatData(data) {
     const filteredProducts = data.products.filter(item => item.visible && item.hasIncome && (item.incomes.length > 0));

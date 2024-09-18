@@ -85,7 +85,8 @@ const options = {
             onClick: () => {}
         }
     },
-    maintainAspectRatio: false
+    maintainAspectRatio: false,
+    animation: false
 }
 
 function formatData(_data) {

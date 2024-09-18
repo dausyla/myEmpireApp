@@ -55,22 +55,22 @@ function SplitPane(props) {
         isResizing.current = false;
     };
 
-    const setSizeThrottled = toThrottled(setSize, 500)
-
     const handleMouseMove = (e) => {
         if (isResizing.current) {
+            const containerRect = containerRef.current.getBoundingClientRect();  // Get the container's position and size
+
             if (isHorizontal) {
-                const containerHeight = containerRef.current.offsetHeight;
-                const newSize = (e.clientY / containerHeight) * 100;
-                setSizeThrottled(Math.max(minSize, Math.min(maxSize, newSize)))
-            }
-            else {
-                const containerWidth = containerRef.current.offsetWidth;
-                const newSize = (e.clientX / containerWidth) * 100;
-                setSizeThrottled(Math.max(minSize, Math.min(maxSize, newSize)))
+                const containerHeight = containerRect.height;
+                const newSize = ((e.clientY - containerRect.top) / containerHeight) * 100;
+                setSize(Math.max(minSize, Math.min(maxSize, newSize)));
+            } else {
+                const containerWidth = containerRect.width;
+                const newSize = ((e.clientX - containerRect.left) / containerWidth) * 100;
+                setSize(Math.max(minSize, Math.min(maxSize, newSize)));
             }
         }
     };
+
 
     const wholeClass = `full-size ${isHorizontal ? 'flexy' : 'flex'}`
 
@@ -97,8 +97,8 @@ function SplitPane(props) {
             <div style={firstStyle}>
                 {child1}
             </div>
-            <div onMouseDown={handleMouseDown} style={dividerStyle}/>
-            <div  style={secondStyle}>
+            <div onMouseDown={handleMouseDown} style={dividerStyle} />
+            <div style={secondStyle}>
                 {child2}
             </div>
         </div>
