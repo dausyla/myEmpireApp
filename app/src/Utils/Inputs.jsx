@@ -61,6 +61,11 @@ function fixMinus(str) {
     return str;
 }
 
+function getMinWidth(value){
+    const size = value.length / 2;
+    return `${(size > 4 ? size : 4) + 1}rem`
+}
+
 export function EurInput(value, valueChanged, key) {
     function onKeyDown(event) {
         const keyCode = event.keyCode;
@@ -92,10 +97,17 @@ export function EurInput(value, valueChanged, key) {
         const minusFix = fixMinus(zeroFixed);
         valueChanged(parseFloat(minusFix));
         event.target.value = addSpaces(zeroFixed);
+        event.target.style.minWidth = getMinWidth(event.target.value);
     }
 
-    return <div className='flex justify-right' key={key}>
-        {<input onKeyDown={onKeyDown} onChange={onChange} defaultValue={addSpaces('' + value)} className='text-right'></input>}
+    const defaultValue = addSpaces('' + value);
+
+    const inputStyle ={
+        minWidth: getMinWidth(defaultValue)
+    }
+
+    return <div className='flex justify-right align-center' key={key}>
+        {<input style={inputStyle} onKeyDown={onKeyDown} onChange={onChange} defaultValue={defaultValue} className='text-right'></input>}
         &nbsp;€&nbsp;
     </div>
 }

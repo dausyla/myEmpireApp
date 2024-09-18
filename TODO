@@ -4,6 +4,8 @@ Make better css (inputs/charts/buttons/...)
 NEXT:
 
 IMPORTANT:
+EurInput digipad
+Sum in incomes
 
 TODO:
 Fix Header with Chose file/Save file/New file
@@ -14,8 +16,11 @@ Change Income Chart (Veritcal Bar Chart)
 Sort things
 Add Total on the left to Edit Values
 Add Inputs per product (taken income, not prediction)
+Add Lock Product
 
 OSEF:
 Opti Data Saving
+Add logarithmic Scale Charts
+Add Chose time of chart
 Linear gradient chart
 Name Input Restricted

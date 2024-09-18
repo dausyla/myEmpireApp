@@ -40,7 +40,7 @@ function EditValues(props) {
         }
         props.updateData();
     }
-    const newDateItems = <div className='flex flex-wrap'>
+    const newDateItems = <div className='flex'>
         <button onClick={addDate} disabled={!newDateValid}>Add</button>
             <input className='input-date' id="date" name="date" value={dateToString(currentDate)} type="date" onChange={updateDate} />
         <button onClick={setToToday}>Today</button>
@@ -71,7 +71,7 @@ function EditValues(props) {
     const tableContent = [['Dates', ...filteredProducts.map(p => p.name)]];
     dates.forEach((d, i) => {
         tableContent.push([
-            <div key={`value-row-${d}`} className='flex'>
+            <div key={`value-row-${d}`} className='flex align-center'>
                 <button onClick={deleteDate} name={d}>-</button>
                 <input type='date' className='item-date' defaultValue={d} name={d} onChange={onChangeDate} />
             </div>,

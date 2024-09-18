@@ -32,7 +32,7 @@ function Hierarchy(props) {
             updateData();
         }
         return [
-            <div className='flex'>
+            <div className='flex align-center'>
                 <button name={product.name} onClick={deleteProduct}>-</button>&nbsp;{product.name}
             </div>,
             <div className='flex justify-center'>

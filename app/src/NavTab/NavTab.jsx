@@ -26,13 +26,13 @@ function NavTab(props) {
 
     const [activeTab, setActiveTab] = useState('hierarchy');
     return (
-        <div className='navtab full-size'>
-            <div className='custom-nav-items flex overflowx' style={{height: "2rem"}}>
-                <button className='' onClick={() => setActiveTab('hierarchy')}>Hierarchy</button>
-                <button className='' onClick={() => setActiveTab('values')}>Values</button>
-                <button className='' onClick={() => setActiveTab('income')}>Income</button>
+        <div className='tab-menu full-size flexy'>
+            <div className='flex overflowx' style={{height: "2rem"}}>
+                <button className={activeTab === 'hierarchy' ? 'tab-btn-active': 'tab-btn'} onClick={() => setActiveTab('hierarchy')}>Hierarchy</button>
+                <button className={activeTab === 'values' ? 'tab-btn-active': 'tab-btn'} onClick={() => setActiveTab('values')}>Values</button>
+                <button className={activeTab === 'income' ? 'tab-btn-active': 'tab-btn'} onClick={() => setActiveTab('income')}>Income</button>
             </div>
-            <div style={{height: `calc(100% - 2rem)`}}>
+            <div className='tab-open flex-grow overflow-hidden'>
                 {activeTab == "hierarchy" ?
                     <Hierarchy data={props.data} updateProduct={updateProduct} updateData={props.updateData} /> :
                     activeTab == "values" ?

@@ -30,11 +30,11 @@ function getProductRow(product, updateData){
         <div onClick={() => setShowIncomes(!showIncomes)} className='clickable flex flex-nowrap'>
             {showIncomes ? '▽' : '▷'} {product.name}
         </div>,
-        <div className='flex flex-nowrap'>
+        <div className='flex flex-nowrap align-center'>
             <input placeholder='New Income' id={key} onChange={isNewIncomeValid} defaultValue='' key={key}/>
             <button onClick={newIncome} disabled={!newIncomeValid}>+</button>
         </div>,
-        <div className='flex justify-space-between flex-nowrap'>
+        <div className='flex justify-space-between flex-nowrap align-center'>
             <div>Total: </div><div>{sum}€ /mo</div>
         </div>]];
 
@@ -57,7 +57,7 @@ function getProductRow(product, updateData){
             updateData();
         }
         res.push([
-            <div className='flex justify-space-between flex-nowrap'>
+            <div className='flex justify-space-between flex-nowrap' key={`${product.name}-${i.name}`}>
                 &nbsp;| {i.name}&nbsp;
                 <button className='flex-right' onClick={deleteIncome}>-</button>
             </div>,

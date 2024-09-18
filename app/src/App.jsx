@@ -3,6 +3,7 @@ import Header from './Header';
 import NavTab from './NavTab/NavTab';
 import ValuesChart from './ChartComponents/ValuesChart';
 import IncomeChart from './ChartComponents/IncomeChart';
+import Container from './Container';
 import { fakeData } from './Data';
 import { Table } from './Utils/Table';
 import SplitPane from './SplitPane';
@@ -51,18 +52,16 @@ function App() {
     }
 
     return (
-        <div className='screen-size flexy overflow-hidden'>
+        <div className='screen-size flexy'>
             <Header updateFile={updateFile} saveFile={saveFile} newRawFile={newRawFile}/>
-            <div className='flex-grow'>
+            <div className='flex-grow overflow-hidden'>
             {
                 Data === null ? '' :
                     <SplitPane minSize={30} maxSize={70} defaultSize={40}>
-                        <NavTab data={Data} updateData={updateData} />
+                        <Container defaultscreen="NavTab" data={Data} updateData={updateData} />
                         <SplitPane horizontal={true}>
-                            {/* <div></div>
-                            <div></div> */}
-                            <ValuesChart data={Data} />
-                            <IncomeChart data={Data} />
+                            <Container defaultscreen="ValuesChart" data={Data} updateData={updateData} />
+                            <Container defaultscreen="IncomeChart" data={Data} updateData={updateData} />
                         </SplitPane>
                     </SplitPane>
             }

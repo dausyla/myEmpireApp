@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 /* 
 List of Rows: 
@@ -7,40 +7,6 @@ l = [[a,b,c],
      [g,i,h]]
 So: l[2][1] == i
 */
-
-function buildTopRow(content, topClass, topLeftClass){
-    return (
-        <thead>
-            <tr>
-                {content[0].map((header, i) => 
-                    <th className={
-                        i === 0 ? topLeftClass + ' table-top-left' : topClass
-                    } key={'header-' + i}>
-                        {header}
-                    </th>)}
-            </tr>
-        </thead>
-    )
-}
-
-function buildOtherRows(content, leftClass, itemClass) {
-    const rows = [];
-    for (let i = 1; i < content.length; i++){
-        const row = content[i];
-        rows.push(
-            <tr key={i}>
-                {row.map((item,i) => i === 0 ? // if it's the far left column
-                <th className={leftClass} key={i}>{item}</th> : // otherwise (normal item)
-                <td className={itemClass} key={i}> 
-                    {item}
-                </td>)}
-            </tr>
-        );
-    }
-    return <tbody>
-        {rows}
-    </tbody>
-}
 
 export function Table(content, {className = '', topClass = '', leftClass = '', itemClass = '', topLeftClass = ''} = {}) {
     const nbRow = content.length;
@@ -52,46 +18,67 @@ export function Table(content, {className = '', topClass = '', leftClass = '', i
         </div>
     }
 
-    const topRow = buildTopRow(content, topClass, topLeftClass);
-    const otherRows = buildOtherRows(content, leftClass, itemClass);
+    const [activeItem, setActiveItem] = useState([-1,-1]);
+    const [hoverItem, setHoverItem] = useState([-1,-1]);
+    function isHover(i, j){
+        if (hoverItem[1] === 0){
+            return j === 0 && hoverItem[0] === i; 
+        }
+        if (hoverItem[0] === 0){
+            return i === 0 && hoverItem[1] === j; 
+        }
+        return hoverItem[0] === i && hoverItem[1] >= j || hoverItem[1] === j && hoverItem[0] >= i;
+    }
+
+    function buildTopRow() {
+        return (
+            <thead>
+                <tr>
+                    {content[0].map((header, i) =>
+                        <th className={ (i === 0 ? topLeftClass + ' table-top-left' : topClass) }
+                        status={ isHover(0, i) ? 'hover' : '' } 
+                        onMouseOver={() => setHoverItem([0, i])}
+                        key={'header-' + i}>
+                            {header}
+                        </th>)}
+                </tr>
+            </thead>
+        )
+    }
+
+    function buildOtherRows() {
+        const rows = [];
+        for (let i = 1; i < content.length; i++) {
+            const row = content[i];
+            rows.push(
+                <tr key={i}>
+                    {row.map((item, j) => j === 0 ? // if it's the far left column
+                        <th className={leftClass} key={j}
+                        status={ isHover(i,j) ? 'hover' : '' } 
+                        onMouseOver={() => setHoverItem([i, j])}>
+                            {item}
+                        </th> : // otherwise (normal item)
+                        <td className={itemClass} key={j}
+                        status={ isHover(i,j) ? 'hover' : '' }
+                        onMouseOver={() => setHoverItem([i, j])}> {/* if it's on the same col/row */}
+                            {item}
+                        </td>)}
+                </tr>
+            );
+        }
+        return <tbody>
+            {rows}
+        </tbody>
+    }
+
+    const topRow = buildTopRow();
+    const otherRows = buildOtherRows();
 
     return (
-        <div className={"table-container " + className}>
+        <div className={"table-container " + className} onMouseLeave={() => setHoverItem([-1,-1])}>
             <table>
                 {topRow}
                 {otherRows}
-                {/* <thead>
-                    <tr>
-                        <th className={"table-top-left " + topLeftClass}></th>
-                        <th>Header 1</th>
-                        <th>Header 2</th>
-                        <th>Header 3</th>
-                        <th>Header 4</th>
-                    </tr>
-                </thead> */}
-                {/* <tbody>
-                    <tr>
-                        <th>Row 1</th>
-                        <td>Data 1.1</td>
-                        <td>Data 1.2</td>
-                        <td>Data 1.3</td>
-                        <td>Data 1.4</td>
-                    </tr>
-                    <tr>
-                        <th>Row 2</th>
-                        <td>Data 2.1</td>
-                        <td>Data 2.2</td>
-                        <td>Data 2.3</td>
-                        <td>Data 2.4</td>
-                    </tr>
-                    <tr>
-                        <th>Row 3</th>
-                        <td>Data 3.1</td>
-                        <td>Data 3.2</td>
-                        <td>Data 3.3</td>
-                        <td>Data 3.4</td>
-                    </tr>
-                </tbody> */}
             </table>
         </div>
 
