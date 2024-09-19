@@ -102,7 +102,7 @@ function formatData(data) {
         folder.products.forEach(p => {
             if (p.visible) {
                 if (p.type === 'f') {
-                    getFolderValuesSums(p, listSize).forEach((v, i) => sum[i] += v);
+                    getFolderValuesSums(p, listSize)[0].values.forEach((v, i) => sum[i] += v);
                 } else if (p.hasValue) {
                     p.values.forEach((v, i) => {
                         sum[i] += v;
@@ -110,7 +110,11 @@ function formatData(data) {
                 }
             }
         })
-        return sum;
+        return [{
+            name: folder.name,
+            values: sum,
+            color: folder.color
+        }];
     }
     function getValues(product) {
         if (!product.visible) {
@@ -118,17 +122,18 @@ function formatData(data) {
         }
         if (product.type === 'f') {
             if (product.isOpen) {
-                return product.products.reduce((res, p) => res.push(...getValues(p)), []);
+                return product.products.reduce((res, p) => {res.push(...getValues(p)); return res;}, []);
             }
-            return getFolderValuesSums(product.products);
+            return getFolderValuesSums(product);
         }
         else if (product.hasValue) {
-            return {
+            return [{
                 name: product.name,
                 values: product.values,
                 color: product.color
-            };
+            }];
         }
+        return [];
     }
 
     // Filter the valueless products
