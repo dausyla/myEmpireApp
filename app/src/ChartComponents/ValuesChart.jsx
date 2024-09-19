@@ -47,48 +47,6 @@ function sumFooterToolip(tooltipItems) {
 function sortItem(a,b){
     return b.datasetIndex - a.datasetIndex;
 }
-function getFolderValuesSums(folder, nbDates){
-    let sum = [];
-    for (let i = 0; i < nbDates; i++){
-        sum.push(0);
-    }
-    folder.products.forEach(p => {
-        if (p.visible) {
-            if (p.type === 'f') {
-                getFolderValuesSums(p, nbDates).forEach((v, i) => sum[i] += v);
-            } else if (p.hasValue) {
-                p.values.forEach((v, i) => {
-                    console.log(`sum: ${sum}, i: ${i}, v: ${v}`)
-                    sum[i] += v;
-                });
-            }
-        }
-    })
-    return sum;
-}
-function getFoldersAndProductsValues(products, nbDates) {
-    const res = [];
-    products.forEach(p => {
-        if (p.visible) {
-            if (p.type === 'f') {
-                if (p.isOpen) {
-                    res.push(...getFoldersAndProductsValues(p.products, nbDates))
-                }
-                else {
-                    res.push({
-                        name: p.name,
-                        values: getFolderValuesSums(p, nbDates),
-                        color: p.color
-                    })
-                }
-            }
-            else if (p.hasValue) {
-                res.push({ name: p.name, values: p.values, color: p.color })
-            }
-        }
-    })
-    return res;
-}
 
 const options = {
     scales: {
@@ -132,21 +90,55 @@ const options = {
 }
 
 
-function formatData(_data) {
+function formatData(data) {
     // Number of dates we have data of  
-    const listSize = _data.valuesDates.length;
+    const listSize = data.wallet.valuesDates.length;
+
+    function getFolderValuesSums(folder) {
+        let sum = [];
+        for (let i = 0; i < listSize; i++) {
+            sum.push(0);
+        }
+        folder.products.forEach(p => {
+            if (p.visible) {
+                if (p.type === 'f') {
+                    getFolderValuesSums(p, listSize).forEach((v, i) => sum[i] += v);
+                } else if (p.hasValue) {
+                    p.values.forEach((v, i) => {
+                        sum[i] += v;
+                    });
+                }
+            }
+        })
+        return sum;
+    }
+    function getValues(product) {
+        if (!product.visible) {
+            return [];
+        }
+        if (product.type === 'f') {
+            if (product.isOpen) {
+                return product.products.reduce((res, p) => res.push(...getValues(p)), []);
+            }
+            return getFolderValuesSums(product.products);
+        }
+        else if (product.hasValue) {
+            return {
+                name: product.name,
+                values: product.values,
+                color: product.color
+            };
+        }
+    }
 
     // Filter the valueless products
-    const items = getFoldersAndProductsValues(_data.products, listSize);
-    console.log(items);
-    // const filteredProducts = _data.products.filter(item => item.visible && item.hasValue && item.values.length !== 0);
+    const items = getValues(data.wallet);
     // // sort the values of the latest data in DESC order
-    // filteredProducts.sort((a, b) => b.values[listSize - 1] - a.values[listSize - 1]);
     items.sort((a, b) => b.values[listSize - 1] - a.values[listSize - 1]);
 
     // Build the data
-    const data = {
-        labels: _data.valuesDates,
+    const chartData = {
+        labels: data.wallet.valuesDates,
         datasets: items.map((item) => {
             return {
                 data: item.values,
@@ -158,16 +150,16 @@ function formatData(_data) {
         }),
     }
     // set the fill as true for the first one instead of -1
-    if (data.datasets.length > 0) {
-        data.datasets[0].fill = true;
+    if (chartData.datasets.length > 0) {
+        chartData.datasets[0].fill = true;
     }
-    return data;
+    return chartData;
 }
 
-function ValuesChart(props) {
+function ValuesChart({ data }) {
     return (
         <div className='full-size chart'>
-            <Line data={formatData(props.data)} options={options} />
+            <Line data={formatData(data)} options={options} />
         </div>
     );
 }

@@ -50,16 +50,15 @@ function getFolderIncomesSum(folder){
             } else if (p.hasIncome) {
                 pos += p.incomes.reduce((sum, i) => {
                     const monthly = getMonthlyIncome(i);
-                    return monthly > 0 ? monthly : 0;
+                    return sum + (monthly > 0 ? monthly : 0);
                 }, 0);
                 neg += p.incomes.reduce((sum, i) => {
                     const monthly = getMonthlyIncome(i);
-                    return monthly < 0 ? monthly : 0;
+                    return sum + (monthly < 0 ? monthly : 0);
                 }, 0);
             }
         }
     })
-    console.log(`pos: ${pos}, neg: ${neg}`)
     return {
         name: folder.name,
         incomes: [
@@ -74,24 +73,23 @@ function getFolderIncomesSum(folder){
         ]
     }
 }
-function getFoldersAndProductsIncomes(products) {
-    const res = [];
-    products.forEach(p => {
-        if (p.visible) {
-            if (p.type === 'f') {
-                if (p.isOpen) {
-                    res.push(...getFoldersAndProductsIncomes(p.products))
-                }
-                else {
-                    res.push(getFolderIncomesSum(p))
-                }
-            }
-            else if (p.hasIncome) {
-                res.push({ name: p.name, incomes: p.incomes.map(i => {return {name: i.name, value: getMonthlyIncome(i)}})})
-            }
+function getIncomes(product) {
+    if (!product.visible){
+        return [];
+    }
+    if (product.type === 'f'){
+        if (product.isOpen){
+            return product.products.reduce((res, p) => {res.push(...getIncomes(p)); return res}, []);
         }
-    })
-    return res;
+        return [getFolderIncomesSum(product)];
+    }
+    else if (product.hasIncome){
+        return [{
+            name: product.name,
+            incomes: product.incomes.map(i => {return {name: i.name, value: getMonthlyIncome(i)}})
+        }];
+    }
+    return [];
 }
 
 const options = {
@@ -124,20 +122,7 @@ const options = {
     animation: false
 }
 function formatData(data) {
-    const items = getFoldersAndProductsIncomes(data.products);
-    const filteredProducts = data.products.filter(item => item.visible && item.hasIncome && (item.incomes.length > 0));
-    const monthlyIncomesProducts = filteredProducts.map(p => {
-
-        return {
-            name: p.name,
-            incomes: p.incomes.map(i => {
-                return {
-                    name: i.name,
-                    value: getMonthlyIncome(i)
-                }
-            }),
-        }
-    });
+    const items = getIncomes(data.wallet);
     addSumMonthlyIncome(items); // Add the sum to the product
 
     // monthlyIncomesProducts.sort((a, b) => b.sum - a.sum);
@@ -177,10 +162,10 @@ function formatData(data) {
     }
 }
 
-function IncomeChart(props) {
+function IncomeChart({data}) {
     return (
         <div className='full-size chart'>
-            <MixedChart data={formatData(props.data)} options={options} />
+            <MixedChart data={formatData(data)} options={options} />
         </div>
     );
 }

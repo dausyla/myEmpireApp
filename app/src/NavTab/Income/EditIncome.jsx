@@ -57,7 +57,7 @@ function getProductRow(product, updateData){
             updateData();
         }
         res.push([
-            <div className='flex justify-space-between flex-nowrap' key={`${product.name}-${i.name}`}>
+            <div className='flex justify-space-between flex-nowrap align-center' key={`${product.name}-${i.name}`}>
                 &nbsp;| {i.name}&nbsp;
                 <button className='flex-right' onClick={deleteIncome}>-</button>
             </div>,
