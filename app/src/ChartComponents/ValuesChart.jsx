@@ -47,6 +47,48 @@ function sumFooterToolip(tooltipItems) {
 function sortItem(a,b){
     return b.datasetIndex - a.datasetIndex;
 }
+function getFolderValuesSums(folder, nbDates){
+    let sum = [];
+    for (let i = 0; i < nbDates; i++){
+        sum.push(0);
+    }
+    folder.products.forEach(p => {
+        if (p.visible) {
+            if (p.type === 'f') {
+                getFolderValuesSums(p, nbDates).forEach((v, i) => sum[i] += v);
+            } else if (p.hasValue) {
+                p.values.forEach((v, i) => {
+                    console.log(`sum: ${sum}, i: ${i}, v: ${v}`)
+                    sum[i] += v;
+                });
+            }
+        }
+    })
+    return sum;
+}
+function getFoldersAndProductsValues(products, nbDates) {
+    const res = [];
+    products.forEach(p => {
+        if (p.visible) {
+            if (p.type === 'f') {
+                if (p.isOpen) {
+                    res.push(...getFoldersAndProductsValues(p.products, nbDates))
+                }
+                else {
+                    res.push({
+                        name: p.name,
+                        values: getFolderValuesSums(p, nbDates),
+                        color: p.color
+                    })
+                }
+            }
+            else if (p.hasValue) {
+                res.push({ name: p.name, values: p.values, color: p.color })
+            }
+        }
+    })
+    return res;
+}
 
 const options = {
     scales: {
@@ -74,45 +116,49 @@ const options = {
             propagate: false
         },
         tooltip: {
-            callbacks:{
+            callbacks: {
                 footer: sumFooterToolip,
                 title: dateTitleTooltip,
                 label: labelTooltip,
             },
             itemSort: sortItem
         },
-        legend:{
-            onClick: () => {}
+        legend: {
+            onClick: () => { }
         }
     },
     maintainAspectRatio: false,
     animation: false
 }
 
+
 function formatData(_data) {
     // Number of dates we have data of  
     const listSize = _data.valuesDates.length;
 
     // Filter the valueless products
-    const filteredProducts = _data.products.filter(item => item.visible && item.hasValue && item.values.length !== 0);
-    // sort the values of the latest data in DESC order
-    filteredProducts.sort((a, b) => b.values[listSize - 1] - a.values[listSize - 1]);
+    const items = getFoldersAndProductsValues(_data.products, listSize);
+    console.log(items);
+    // const filteredProducts = _data.products.filter(item => item.visible && item.hasValue && item.values.length !== 0);
+    // // sort the values of the latest data in DESC order
+    // filteredProducts.sort((a, b) => b.values[listSize - 1] - a.values[listSize - 1]);
+    items.sort((a, b) => b.values[listSize - 1] - a.values[listSize - 1]);
 
     // Build the data
     const data = {
         labels: _data.valuesDates,
-        datasets: filteredProducts.map((p) => {
+        datasets: items.map((item) => {
             return {
-                data: p.values,
-                label: p.name,
-                borderColor: p.color,
-                backgroundColor: p.color + '50',
+                data: item.values,
+                label: item.name,
+                borderColor: item.color,
+                backgroundColor: item.color + '50',
                 fill: '-1'
             }
         }),
     }
     // set the fill as true for the first one instead of -1
-    if (data.datasets.length > 0){
+    if (data.datasets.length > 0) {
         data.datasets[0].fill = true;
     }
     return data;

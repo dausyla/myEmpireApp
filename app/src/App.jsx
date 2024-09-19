@@ -57,12 +57,9 @@ function App() {
             <div className='flex-grow overflow-hidden'>
             {
                 Data === null ? '' :
-                    <SplitPane minSize={30} maxSize={70} defaultSize={40}>
+                    <SplitPane>
                         <Container defaultscreen="NavTab" data={Data} updateData={updateData} />
-                        <SplitPane horizontal={true}>
-                            <Container defaultscreen="ValuesChart" data={Data} updateData={updateData} />
                             <Container defaultscreen="IncomeChart" data={Data} updateData={updateData} />
-                        </SplitPane>
                     </SplitPane>
             }
             </div>

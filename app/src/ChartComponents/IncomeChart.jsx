@@ -38,6 +38,61 @@ function getMonthlyIncome(income){
     const str = `${income.value}`;
     return income.days === 0 ? 0 : income.value * 30 / income.days;
 }
+function getFolderIncomesSum(folder){
+    let pos = 0;
+    let neg = 0;
+    folder.products.forEach(p => {
+        if (p.visible) {
+            if (p.type === 'f') {
+                let tmp = getFolderIncomesSum(p);
+                pos += tmp.incomes[0].value;
+                neg += tmp.incomes[1].value;
+            } else if (p.hasIncome) {
+                pos += p.incomes.reduce((sum, i) => {
+                    const monthly = getMonthlyIncome(i);
+                    return monthly > 0 ? monthly : 0;
+                }, 0);
+                neg += p.incomes.reduce((sum, i) => {
+                    const monthly = getMonthlyIncome(i);
+                    return monthly < 0 ? monthly : 0;
+                }, 0);
+            }
+        }
+    })
+    console.log(`pos: ${pos}, neg: ${neg}`)
+    return {
+        name: folder.name,
+        incomes: [
+            {
+                name: 'Positive Incomes',
+                value: pos,
+            },
+            {
+                name: 'Negative Incomes',
+                value: neg,
+            },
+        ]
+    }
+}
+function getFoldersAndProductsIncomes(products) {
+    const res = [];
+    products.forEach(p => {
+        if (p.visible) {
+            if (p.type === 'f') {
+                if (p.isOpen) {
+                    res.push(...getFoldersAndProductsIncomes(p.products))
+                }
+                else {
+                    res.push(getFolderIncomesSum(p))
+                }
+            }
+            else if (p.hasIncome) {
+                res.push({ name: p.name, incomes: p.incomes.map(i => {return {name: i.name, value: getMonthlyIncome(i)}})})
+            }
+        }
+    })
+    return res;
+}
 
 const options = {
     scales: {
@@ -57,21 +112,22 @@ const options = {
     responsive: true,
     plugins: {
         tooltip: {
-            callbacks:{
+            callbacks: {
                 label: labelTooltip
             }
         },
-        legend:{
-            onClick: () => {} // Make legend fixed
+        legend: {
+            onClick: () => { } // Make legend fixed
         }
     },
     maintainAspectRatio: false,
     animation: false
 }
 function formatData(data) {
+    const items = getFoldersAndProductsIncomes(data.products);
     const filteredProducts = data.products.filter(item => item.visible && item.hasIncome && (item.incomes.length > 0));
     const monthlyIncomesProducts = filteredProducts.map(p => {
-        
+
         return {
             name: p.name,
             incomes: p.incomes.map(i => {
@@ -80,34 +136,37 @@ function formatData(data) {
                     value: getMonthlyIncome(i)
                 }
             }),
-    }
+        }
     });
-    addSumMonthlyIncome(monthlyIncomesProducts); // Add the sum to the product
+    addSumMonthlyIncome(items); // Add the sum to the product
 
-    monthlyIncomesProducts.sort((a, b) => b.sum - a.sum);
+    // monthlyIncomesProducts.sort((a, b) => b.sum - a.sum);
+    items.sort((a, b) => b.sum - a.sum);
 
-    const labels = monthlyIncomesProducts.map(p => p.name);
-    const sums = monthlyIncomesProducts.map(p => p.sum);
+    // const labels = monthlyIncomesProducts.map(p => p.name);
+    // const sums = monthlyIncomesProducts.map(p => p.sum);
+    const labels = items.map(item => item.name);
+    const sums = items.map(item => item.sum);
 
     const datasets = [{
         type: 'line',
         data: sums,
         label: 'Sum',
-                borderWidth: 2,
-                borderColor: '#3030aa',
-                backgroundColor: '#3030aa50',
+        borderWidth: 2,
+        borderColor: '#3030aa',
+        backgroundColor: '#3030aa50',
     }];
 
-    monthlyIncomesProducts.forEach(p => {
-        p.incomes.forEach(i => {
+    items.forEach(item => {
+        item.incomes.forEach(i => {
             datasets.push({
-                    type: 'bar',
-                    data: [{x: p.name, y: i.value}],
-                    label: i.name,
-                    borderWidth: 2,
-                    borderColor: i.value > 0 ? '#30aa30' : '#aa3030',
-                    backgroundColor: i.value > 0 ? '#30aa3050' : '#aa303050',
-                    fill: true,
+                type: 'bar',
+                data: [{ x: item.name, y: i.value }],
+                label: i.name,
+                borderWidth: 2,
+                borderColor: i.value > 0 ? '#30aa30' : '#aa3030',
+                backgroundColor: i.value > 0 ? '#30aa3050' : '#aa303050',
+                fill: true,
             })
         })
     });
