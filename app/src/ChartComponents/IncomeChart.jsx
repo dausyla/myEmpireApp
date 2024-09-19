@@ -35,7 +35,6 @@ function labelTooltip(tooltipItem){
 }
 
 function getMonthlyIncome(income){
-    const str = `${income.value}`;
     return income.days === 0 ? 0 : income.value * 30 / income.days;
 }
 function getFolderIncomesSum(folder){
