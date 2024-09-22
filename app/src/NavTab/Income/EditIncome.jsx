@@ -9,6 +9,14 @@ function EditIncome({ data, updateData }) {
 
     const foldersSum = {};
 
+    const prefixStyle = {height: '100%', width: '0.1rem',
+        backgroundColor: 'grey', marginLeft: '0.35rem', marginRight: '0.45rem'}
+    let prefixCount=0;
+    function getNewPrefix(){
+        prefixCount++;
+        return <div style={prefixStyle} key={prefixCount}/>
+    }
+
     function calculFoldersIncomesSum(folder){
             foldersSum[folder.id] = folder.products.reduce((sum, p) => {
                 if (!p.visible){
@@ -26,21 +34,24 @@ function EditIncome({ data, updateData }) {
 
     calculFoldersIncomesSum(data.wallet);
 
-    function getFolderRow(folder, prefix) {
+    function getFolderRow(folder, prefixs) {
         function toggleOpen(){
             folder.isOpen = !folder.isOpen;
             updateData();
         }
-        return [
-            <div key={folder.id} className='clickable flex justify-space-between flex-nowrap align-center'
-            onClick={toggleOpen}>
-                {prefix}{folder.isOpen ? '▽ ' : '▷ '}{folder.name}
+        const res = [
+            <div className='flex flex-nowrap align-center full-size' key={folder.id + '-group'}>
+                <div className='flex align-self-stretch'>{prefixs}</div>
+                <div className='clickable' onClick={toggleOpen} key={folder.id + 'name'}>
+                    {folder.isOpen ? '▽ ' : '▷ '}{folder.name}
+                </div>
             </div>,
-            '', <div>{foldersSum[folder.id]}</div>,
+            <div key={folder.id + '-empty'}></div>, <div key={folder.id + '-sum'}>{foldersSum[folder.id]}</div>,
         ];
+        return res;
     }
     
-    function getIncomeRows(product, prefix) {
+    function getIncomeRows(product, prefixs) {
         return product.incomes.map(i => {
             function changeValue(value) {
                 i.value = value;
@@ -55,18 +66,18 @@ function EditIncome({ data, updateData }) {
                 updateData();
             }
             return [
-                <div className='flex justify-space-between flex-nowrap align-center'
+                <div className='flex flex-nowrap align-center full-size'
                     key={`${product.name}-${i.name}`}>
-                    {prefix}{i.name}&nbsp;
-                    <button className='flex-right' onClick={deleteIncome}>-</button>
+                    <div className=' flex align-self-stretch'>{prefixs}</div>{i.name}&nbsp;
+                    <button className='' onClick={deleteIncome}>-</button>
                 </div>,
-                EurInput(i.value, changeValue),
-                NaturalInput(i.days, changeDays)
+                EurInput(i.value, changeValue, i.name + '-value'),
+                NaturalInput(i.days, changeDays, i.name + '-days')
             ];
         });
     }
 
-    function getProductRow(product, prefix) {
+    function getProductRow(product, prefixs) {
 
         const [showIncomes, setShowIncomes] = useState(false);
 
@@ -92,14 +103,17 @@ function EditIncome({ data, updateData }) {
 
         const key = `new-income-input-${product.id}`
         const productRow = [
-            <div onClick={() => setShowIncomes(!showIncomes)} className='clickable flex flex-nowrap'>
-                {prefix}{showIncomes ? '▽' : '▷'} {product.name}
+            <div onClick={() => setShowIncomes(!showIncomes)} className='flex flex-nowrap full-size' key={product.id + '-name'}>
+                <div className='align-self-stretch flex'>{prefixs}</div>
+                <div className='flex clickable'>
+                {showIncomes ? '▽' : '▷'} {product.name}
+                </div>
             </div>,
-            <div className='flex flex-nowrap align-center'>
+            <div className='flex flex-nowrap align-center' key={product.name + '-new'}>
                 <input placeholder='New Income' id={key} onChange={isNewIncomeValid} defaultValue='' key={key} />
                 <button onClick={newIncome} disabled={!newIncomeValid}>+</button>
             </div>,
-            <div className='flex justify-space-between flex-nowrap align-center'>
+            <div className='flex justify-space-between flex-nowrap align-center' key={product.name + '-total'}>
                 <div>Total: </div><div>{sum}€ /mo</div>
             </div>];
 
@@ -107,24 +121,24 @@ function EditIncome({ data, updateData }) {
             return [productRow];
         }
 
-        const incomeRows = getIncomeRows(product, '\xa0| ' + prefix);
+        const incomeRows = getIncomeRows(product, [...prefixs, getNewPrefix()]);
         return [productRow, ...incomeRows];
     }
 
-    function getRows(product, prefix='') {
+    function getRows(product, prefixs=[]) {
         if (!product.visible) {
             return [];
         }
         if (product.type === 'f') {
-            const folderRow = getFolderRow(product, prefix);
-            const productRows = product.products.reduce((res, p) => { res.push(...getRows(p, prefix + '\xa0| ')); return res }, [])
+            const folderRow = getFolderRow(product, prefixs);
+            const productRows = product.products.reduce((res, p) => { res.push(...getRows(p, [...prefixs, getNewPrefix()])); return res }, [])
             if (product.isOpen) {
                 return [folderRow, ...productRows];
             } else {
                 return [folderRow];
             }
         } else if (product.hasIncome) {
-            return getProductRow(product, prefix);
+            return getProductRow(product, prefixs);
         }
         return [];
     }

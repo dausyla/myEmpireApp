@@ -66,6 +66,9 @@ body{
 .justify-center{
     justify-content: center;
 }
+.justify-self-right{
+    justify-self: right;
+}
 .text-right {
     text-align: right;
 }
@@ -78,9 +81,19 @@ body{
 .align-center{
     align-items: center;
 }
+.align-baseline{
+    align-items: baseline;
+}
+.align-self-stretch{
+    align-self: stretch;
+}
+.margin-left-auto {
+    margin-left: auto;
+}
 .relative{
     position: relative;
 }
+
 /* !POSITION */
 
 /* OVERFLOW */
@@ -182,6 +195,9 @@ button:hover{
     border: var(--border-small) var(--grey-30) solid;
     border-bottom-color: var(--grey-70);
     border-right-color: var(--grey-70);
+}
+input[type="date"]{
+    width: 7.5rem;
 }
 input[type="file"]{
     width: auto;

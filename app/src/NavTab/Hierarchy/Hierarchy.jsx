@@ -19,9 +19,17 @@ function Hierarchy({data, updateData}) {
         }
     }
 
+    const prefixStyle = {height: '100%', width: '0.1rem',
+        backgroundColor: 'grey', marginLeft: '0.35rem', marginRight: '0.45rem'}
+    let prefixCount=0;
+    function getNewPrefix(){
+        prefixCount++;
+        return <div style={prefixStyle} key={prefixCount}/>
+    }
+
     const header = ['Product', 'Visible', 'Has Value', 'Has Income'];
 
-    function buildRows(product, prefix = '') {
+    function buildRows(product, prefixs = []) {
         function onCheckChange(event) {
             const property = event.target.name;
             product[property] = event.target.checked;
@@ -37,14 +45,16 @@ function Hierarchy({data, updateData}) {
         }
         const rowHeader = product.type === 'p' ?
             <div className='flex align-center'>
-                {prefix}{product.name}
-                <button onClick={deleteProduct}>-</button>
+                <div className='flex align-self-stretch'>{prefixs}</div>
+                {product.name}
+                <button onClick={deleteProduct} className='margin-left-auto'>-</button>
             </div> :
             <div className='flex align-center'>
+                <div className='flex align-self-stretch'>{prefixs}</div>
                 <div className='clickable' onClick={toggleOpen}>
-                    {prefix}{(product.isOpen ? '▽ ' : '▷ ') + product.name}
+                    {(product.isOpen ? '▽ ' : '▷ ') + product.name}
                 </div>
-                {product.id !== 0 ? <button onClick={deleteProduct}>-</button> : '' /* if it's not the root */}
+                {product.id !== 0 ? <button onClick={deleteProduct} className='margin-left-auto'>-</button> : '' /* if it's not the root */}
             </div>;
 
         const otherCols = [
@@ -62,7 +72,7 @@ function Hierarchy({data, updateData}) {
         ]
 
         const childRows = product.type === 'f' && product.isOpen ?
-        product.products.reduce((res, p) => {res.push(...buildRows(p, prefix + '\xa0| ')); return res}, [])
+        product.products.reduce((res, p) => {res.push(...buildRows(p, [...prefixs, getNewPrefix()])); return res}, [])
         : [];
 
         return [[rowHeader, ...otherCols], ...childRows]

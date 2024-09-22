@@ -100,6 +100,50 @@ function EditValues({data, updateData}) {
 
     // const tableContent = [['Dates', ...filteredProducts.map(p => p.name)]];
     const tableContent = initCols();
+
+    const prefixStyle = {width: '100%', height: '0.1rem',
+        backgroundColor: 'grey', marginTop: '0.5rem', marginBottom: '0.4rem'}
+    let prefixCount=0;
+    function getNewPrefix(){
+        prefixCount++;
+        return <div style={prefixStyle} key={prefixCount}/>
+    }
+    function completeCols(product, prefixs=[]){
+        if (product.visible){
+            if (product.type === 'f') {
+                function toggleOpen() {
+                    product.isOpen = !product.isOpen;
+                    updateData();
+                }
+                tableContent[0].push(
+                    <div className='flexy full-size align-baseline'>
+                        {prefixs}
+                        <div className='clickable flex flex-nowrap' onClick={toggleOpen}>
+                            {product.name}{product.isOpen ? ' ▷' : ' ◁'}
+                        </div>
+                    </div>)
+                dates.forEach((_, i) => tableContent[i + 1].push('')); // TODO
+                if (product.isOpen) {
+                    product.products.forEach(p => completeCols(p, [...prefixs, getNewPrefix()]));
+                }
+            } else if (product.hasValue) {
+                tableContent[0].push(
+                    <div className='flexy full-size align-baseline'>
+                        {prefixs}
+                        {product.name}
+                    </div>); // title
+                product.values.forEach((v, i) => {
+                    function valueChanged(newValue) {
+                        product.values[i] = newValue;
+                        props.updateData();
+                    }
+                    tableContent[i + 1].push(EurInput(v, valueChanged, `item-${product.id}-${i}`));
+                });
+            }
+        }
+    }
+
+    completeCols(wallet);
     // dates.forEach((d, i) => {
     //     tableContent.push([
     //         <div key={`value-row-${d}`} className='flex align-center'>
