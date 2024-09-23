@@ -135,7 +135,7 @@ function EditValues({data, updateData}) {
                 product.values.forEach((v, i) => {
                     function valueChanged(newValue) {
                         product.values[i] = newValue;
-                        props.updateData();
+                        updateData();
                     }
                     tableContent[i + 1].push(EurInput(v, valueChanged, `item-${product.id}-${i}`));
                 });

@@ -73,7 +73,9 @@ export function EurInput(value, valueChanged, key) {
         const carretPos = event.target.selectionStart;
         const currentValue = event.target.value;
 
-        const inputs = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 188, 189, 190]; // digits , - .
+        const inputs = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, // digits
+            96, 97, 98, 99, 100, 101, 102, 103, 104, 105, // digipad
+            188, 189, 190]; // , - .
         const arrows = [37, 38, 39, 40]; // left top right bottom
         const others = [8, 9, 13, 27, 46, 35, 36]; // Backspace, Tab, Enter, Escape, Suppr, Start, End
 
