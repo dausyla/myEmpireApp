@@ -105,7 +105,7 @@ function EditIncome({ data, updateData }) {
         const productRow = [
             <div onClick={() => setShowIncomes(!showIncomes)} className='flex flex-nowrap full-size' key={product.id + '-name'}>
                 <div className='align-self-stretch flex'>{prefixs}</div>
-                <div className='flex clickable'>
+                <div className='flex clickable align-center'>
                 {showIncomes ? '▽' : '▷'} {product.name}
                 </div>
             </div>,

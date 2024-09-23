@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 
 function removeSpaces(str){
     return str.replace(/ /g, '');
@@ -139,4 +139,25 @@ export function NaturalInput(value, valueChanged, key) {
     return <div className='' key={key}>
         {<input onKeyDown={onKeyDown} onChange={onChange} defaultValue={value} className='text-right'></input>}
     </div>
+}
+
+
+export function RenamableName(product, renamingProduct, setRenamingProduct, updateData){
+    function submit(event){
+        const input = document.getElementById(product.id + '-rename');
+        if (input.value.length !== 0){
+            product.name = input.value;
+            updateData();
+            setRenamingProduct(-1);
+        }
+        event.preventDefault();
+    }
+
+    if (product.id === renamingProduct) {
+        return <form onSubmit={submit}><input id={product.id + '-rename'} className='renaming-input'
+        defaultValue={product.name} autoFocus/></form>
+    }
+    else {
+        return <div onDoubleClick={() => setRenamingProduct(product.id)}>{product.name}</div>;
+    }
 }

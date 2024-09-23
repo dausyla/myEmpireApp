@@ -264,3 +264,28 @@ input[type="file"]{
     border-right-color: var(--grey-70);
 }
 /* !TAB MENU */
+
+/* HIERARCHY */
+.hierarchy-product {
+}
+.hierarchy-folder {
+}
+
+.hierarchy-product:hover{
+    background-color: var(--grey-40);
+}
+.hierarchy-folder:hover{
+    background-color: var(--grey-60);
+}
+.hierarchy-input{
+    background-color: var(--grey-60);
+    padding:0;
+    border:0;
+    min-width: 15px;
+    width: 15px;
+    height: 15px;
+}
+.hierarchy-input:hover{
+    border:0;
+}
+/* !HIERARCHY */

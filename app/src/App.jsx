@@ -46,22 +46,31 @@ function App() {
     }
     function newRawFile(){
         SetData({
-            valuesDates:[],
-            products: [],
+            wallet: {
+                nextId: 1,
+                valuesDates: [],
+                id: 0,
+                name: 'My Wallet',
+                type: 'f',
+                visible: true,
+                color: '#aa3030',
+                isOpen: false,
+                products: []
+            }
         })
     }
 
     return (
         <div className='screen-size flexy'>
-            <Header updateFile={updateFile} saveFile={saveFile} newRawFile={newRawFile}/>
+            <Header updateFile={updateFile} saveFile={saveFile} newRawFile={newRawFile} />
             <div className='flex-grow overflow-hidden'>
-            {
-                Data === null ? '' :
-                    <SplitPane>
-                        <Container defaultscreen="NavTab" data={Data} updateData={updateData} />
+                {
+                    Data === null ? '' :
+                        <SplitPane>
+                            <Container defaultscreen="NavTab" data={Data} updateData={updateData} />
                             <Container defaultscreen="IncomeChart" data={Data} updateData={updateData} />
-                    </SplitPane>
-            }
+                        </SplitPane>
+                }
             </div>
         </div>
     );
