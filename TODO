@@ -1,24 +1,27 @@
 DOING:
+Make better select input
 
 NEXT:
+Make the NavTab more general
 
 IMPORTANT:
+Add a chart options area with predictions
+Refractor code in multiple files (more clear)
+
 
 TODO:
-Put the - from the hierarchy to the right
 Add new Charts
 Add new perceived income values
 Add Warning before deleting
-Add % between tables
 Change Income Chart (Veritcal Bar Chart)
 Sort things
 Add Total on the left to Edit Values
 Add Inputs per product (taken income, not prediction)
 Add Lock Product
+Add Animation
 
 OSEF:
 Opti Data Saving
 Add logarithmic Scale Charts
 Add Chose time of chart
 Linear gradient chart
-Name Input Restricted

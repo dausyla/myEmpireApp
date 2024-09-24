@@ -2,6 +2,7 @@ import {React, useState} from 'react';
 import { Chart as MixedChart } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, TimeScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import { getMonthlyIncome } from '../NavTab/Income/EditIncome';
 
 ChartJS.register(
   CategoryScale,
@@ -34,9 +35,6 @@ function labelTooltip(tooltipItem){
     return `${label}: ${eur}`;
 }
 
-function getMonthlyIncome(income){
-    return income.days === 0 ? 0 : income.value * 30 / income.days;
-}
 function getFolderIncomesSum(folder){
     let pos = 0;
     let neg = 0;
@@ -48,11 +46,11 @@ function getFolderIncomesSum(folder){
                 neg += tmp.incomes[1].value;
             } else if (p.hasIncome) {
                 pos += p.incomes.reduce((sum, i) => {
-                    const monthly = getMonthlyIncome(i);
+                    const monthly = getMonthlyIncome(p, i);
                     return sum + (monthly > 0 ? monthly : 0);
                 }, 0);
                 neg += p.incomes.reduce((sum, i) => {
-                    const monthly = getMonthlyIncome(i);
+                    const monthly = getMonthlyIncome(p, i);
                     return sum + (monthly < 0 ? monthly : 0);
                 }, 0);
             }
@@ -85,7 +83,7 @@ function getIncomes(product) {
     else if (product.hasIncome){
         return [{
             name: product.name,
-            incomes: product.incomes.map(i => {return {name: i.name, value: getMonthlyIncome(i)}})
+            incomes: product.incomes.map(i => {return {name: i.name, value: getMonthlyIncome(product, i)}})
         }];
     }
     return [];

@@ -66,7 +66,7 @@ function getMinWidth(value){
     return `${(size > 4 ? size : 4) + 1}rem`
 }
 
-export function EurInput(value, valueChanged, key) {
+export function EurInput(value, valueChanged, key, suffix='\xa0€\xa0') {
     function onKeyDown(event) {
         const keyCode = event.keyCode;
         const key = event.key;
@@ -110,7 +110,7 @@ export function EurInput(value, valueChanged, key) {
 
     return <div className='flex justify-right align-center' key={key}>
         {<input style={inputStyle} onKeyDown={onKeyDown} onChange={onChange} defaultValue={defaultValue} className='text-right'></input>}
-        &nbsp;€&nbsp;
+        {suffix}
     </div>
 }
 

@@ -29,7 +29,10 @@ export const fakeData = {
                         incomes: [{
                             name: 'taxes',
                             value: -50,
-                            days: 30,
+                            type: 'euro',
+                            period: 1,
+                            periodType: 'month',
+                            into: -1,
                         }],
                     },
                     {
@@ -44,11 +47,17 @@ export const fakeData = {
                         incomes: [{
                             name: 'rent',
                             value: 100,
-                            days: 30,
+                            type: 'euro',
+                            period: 1,
+                            periodType: 'month',
+                            into: -1,
                         }, {
                             name: 'taxes',
                             value: -10,
-                            days: 30,
+                            type: 'euro',
+                            period: 1,
+                            periodType: 'month',
+                            into: -1,
                         }],
                     },
                 ]
@@ -73,7 +82,10 @@ export const fakeData = {
                         incomes: [{
                             name: 'pizzas',
                             value: -10,
-                            days: 1,
+                            type: 'euro',
+                            period: 1,
+                            periodType: 'day',
+                            into: -1,
                         }],
                     },
                     {
@@ -88,7 +100,10 @@ export const fakeData = {
                         incomes: [{
                             name: 'rent',
                             value: -400,
-                            days: 30,
+                            type: 'euro',
+                            period: 1,
+                            periodType: 'month',
+                            into: -1,
                         }],
                     }
 
@@ -106,7 +121,10 @@ export const fakeData = {
                 incomes: [{
                     name: 'wage',
                     value: 1200,
-                    days: 30,
+                    type: 'euro',
+                    period: 1,
+                    periodType: 'month',
+                    into: -1,
                 }],
             },
         ]

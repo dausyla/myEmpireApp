@@ -159,7 +159,7 @@ tbody th {
 .chart {
     background-color: var(--grey-40);
 }
-input{
+input, select{
     color: white;
     width: 100%;
     min-width: 4rem;
@@ -173,7 +173,7 @@ input{
     border-bottom-color: var(--grey-40);
     border-right-color: var(--grey-40);
 }
-input:hover{
+input:hover, select:hover{
     background-color: var(--grey-50);
     border: var(--border-small) var(--grey-30) solid;
     border-bottom-color: var(--grey-70);
@@ -202,6 +202,10 @@ input[type="date"]{
 input[type="file"]{
     width: auto;
     height: auto;
+}
+.raw-text {
+    text-decoration: none;
+    font-weight: 100;
 }
 /* !GENERAL ITEM */
 

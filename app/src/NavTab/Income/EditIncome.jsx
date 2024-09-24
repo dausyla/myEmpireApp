@@ -2,12 +2,37 @@ import React, { useState } from 'react';
 import { Table } from '../../Utils/Table';
 import { EurInput, NaturalInput } from '../../Utils/Inputs';
 import { NumberLabel } from '../../Utils/Labels';
+import { IncomeRows } from './IncomeRows';
 
-function getMonthlyIncome(income) {
-    return income.days === 0 ? 0 : income.value * 30 / income.days;
+
+export function getMonthlyIncome(product, income) {
+    const pt = income.periodType;
+    const p = income.period;
+    const monthPeriod = 365 / 12;
+    const month = p * (
+        pt === 'day' ? 1 / monthPeriod:
+        pt === 'week' ? 7 / monthPeriod:
+        pt === 'month' ? 1 :
+        365 / monthPeriod
+    )
+    const val = income.type === 'pct' ? product.values[product.values.length -1] * income.value / 100 : income.value;
+    return month === 0 ? 0 : val / month;
 }
+
+function getProductNames(product){
+    if (product.type === 'f'){
+        return product.products.reduce((total, p) => {total.push(...getProductNames(p)); return total}, []);
+    } else {
+        return [{
+            name: product.name,
+            id: product.id
+        }]
+    }
+}
+
 function EditIncome({ data, updateData }) {
 
+    const productNames = getProductNames(data.wallet);
     const foldersSum = {};
 
     const prefixStyle = {
@@ -29,7 +54,7 @@ function EditIncome({ data, updateData }) {
                 calculFoldersIncomesSum(p);
                 return sum + foldersSum[p.id];
             } else if (p.hasIncome) {
-                return sum + p.incomes.reduce((sum, i) => sum + getMonthlyIncome(i), 0);
+                return sum + p.incomes.reduce((sum, i) => sum + getMonthlyIncome(p, i), 0);
             }
             return sum;
         }, 0)
@@ -48,46 +73,22 @@ function EditIncome({ data, updateData }) {
                 <div className='clickable' onClick={toggleOpen} key={folder.id + 'name'}>
                     {folder.isOpen ? '▽ ' : '▷ '}{folder.name}
                 </div>
+                {NumberLabel(`\xa0`, foldersSum[folder.id], '€ /mo')}
             </div>,
-            <div key={folder.id + '-sum'}>
-                {NumberLabel(`${folder.name}:\xa0`, foldersSum[folder.id], '€ /mo')}
-            </div>,
-            <div key={folder.id + '-empty'}></div>
+            '','',''
         ];
         return res;
     }
 
     function getIncomeRows(product, prefixs) {
-        return product.incomes.map(i => {
-            function changeValue(value) {
-                i.value = value;
-                updateData();
-            }
-            function changeDays(newValue) {
-                i.days = parseFloat(newValue);
-                updateData();
-            }
-            function deleteIncome() {
-                product.incomes = product.incomes.filter(_i => _i.name !== i.name);
-                updateData();
-            }
-            return [
-                <div className='flex flex-nowrap align-center full-size'
-                    key={`${product.name}-${i.name}`}>
-                    <div className=' flex align-self-stretch'>{prefixs}</div>{i.name}&nbsp;
-                    <button className='' onClick={deleteIncome}>-</button>
-                </div>,
-                EurInput(i.value, changeValue, i.name + '-value'),
-                NaturalInput(i.days, changeDays, i.name + '-days')
-            ];
-        });
+        return IncomeRows(prefixs, product, productNames, updateData)
     }
 
     function getProductRow(product, prefixs) {
 
         const [showIncomes, setShowIncomes] = useState(false);
 
-        const sum = product.incomes.reduce((s, i) => i.days !== 0 ? s + i.value * 30 / i.days : 0, 0);
+        const sum = product.incomes.reduce((s, i) => s + getMonthlyIncome(product, i), 0);
 
         const [newIncomeValid, setNewIncomeValid] = useState(false)
         function isNewIncomeValid(event) {
@@ -98,8 +99,11 @@ function EditIncome({ data, updateData }) {
             const input = document.getElementById('new-income-input-' + product.id);
             product.incomes.push({
                 name: input.value,
-                days: 30,
                 value: 1,
+                type: 'euro',
+                period: 1,
+                periodType: 'month',
+                into: -1,
             });
             input.value = ''
             setNewIncomeValid(false);
@@ -114,14 +118,15 @@ function EditIncome({ data, updateData }) {
                 <div className='flex clickable align-center'>
                     {showIncomes ? '▽' : '▷'} {product.name}
                 </div>
+                {NumberLabel('\xa0', sum, '€ /mo')}
             </div>,
             <div className='flex flex-nowrap align-center' key={product.name + '-new'}>
                 <input placeholder='New Income' id={key} onChange={isNewIncomeValid} defaultValue='' key={key} />
                 <button onClick={newIncome} disabled={!newIncomeValid}>+</button>
             </div>,
-            <div className='flex justify-space-between flex-nowrap align-center' key={product.name + '-total'}>
-                {NumberLabel(product.name + ':\xa0', sum, '€ /mo')}
-            </div>];
+            '',
+            ''
+            ];
 
         if (!showIncomes) {
             return [productRow];
@@ -163,7 +168,7 @@ function EditIncome({ data, updateData }) {
         return [];
     }
 
-    const header = ['Product', 'Income', 'Every x Days'];
+    const header = ['Product', 'Income', 'Every', 'Into'];
 
     const incomeRows = getRows(data.wallet);
 
