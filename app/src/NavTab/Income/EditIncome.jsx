@@ -1,41 +1,44 @@
 import React, { useState } from 'react';
 import { Table } from '../../Utils/Table';
 import { EurInput, NaturalInput } from '../../Utils/Inputs';
+import { NumberLabel } from '../../Utils/Labels';
 
-function getMonthlyIncome(income){
+function getMonthlyIncome(income) {
     return income.days === 0 ? 0 : income.value * 30 / income.days;
 }
 function EditIncome({ data, updateData }) {
 
     const foldersSum = {};
 
-    const prefixStyle = {height: '100%', width: '0.1rem',
-        backgroundColor: 'grey', marginLeft: '0.35rem', marginRight: '0.45rem'}
-    let prefixCount=0;
-    function getNewPrefix(){
+    const prefixStyle = {
+        height: '100%', width: '0.1rem',
+        backgroundColor: 'grey', marginLeft: '0.35rem', marginRight: '0.45rem'
+    }
+    let prefixCount = 0;
+    function getNewPrefix() {
         prefixCount++;
-        return <div style={prefixStyle} key={prefixCount}/>
+        return <div style={prefixStyle} key={prefixCount} />
     }
 
-    function calculFoldersIncomesSum(folder){
-            foldersSum[folder.id] = folder.products.reduce((sum, p) => {
-                if (!p.visible){
-                    return sum;
-                }
-                if (p.type === 'f'){
-                    calculFoldersIncomesSum(p);
-                    return sum + foldersSum[p.id];
-                } else if (p.hasIncome){
-                    return sum + p.incomes.reduce((sum, i) => sum + getMonthlyIncome(i), 0);
-                }
+    function calculFoldersIncomesSum(folder) {
+        foldersSum[folder.id] = folder.products.reduce((sum, p) => {
+            if (!p.visible) {
                 return sum;
-            }, 0)
+            }
+            if (p.type === 'f') {
+                calculFoldersIncomesSum(p);
+                return sum + foldersSum[p.id];
+            } else if (p.hasIncome) {
+                return sum + p.incomes.reduce((sum, i) => sum + getMonthlyIncome(i), 0);
+            }
+            return sum;
+        }, 0)
     }
 
     calculFoldersIncomesSum(data.wallet);
 
     function getFolderRow(folder, prefixs) {
-        function toggleOpen(){
+        function toggleOpen() {
             folder.isOpen = !folder.isOpen;
             updateData();
         }
@@ -46,11 +49,14 @@ function EditIncome({ data, updateData }) {
                     {folder.isOpen ? '▽ ' : '▷ '}{folder.name}
                 </div>
             </div>,
-            <div key={folder.id + '-empty'}></div>, <div key={folder.id + '-sum'}>{foldersSum[folder.id]}</div>,
+            <div key={folder.id + '-sum'}>
+                {NumberLabel(`${folder.name}:\xa0`, foldersSum[folder.id], '€ /mo')}
+            </div>,
+            <div key={folder.id + '-empty'}></div>
         ];
         return res;
     }
-    
+
     function getIncomeRows(product, prefixs) {
         return product.incomes.map(i => {
             function changeValue(value) {
@@ -106,7 +112,7 @@ function EditIncome({ data, updateData }) {
             <div onClick={() => setShowIncomes(!showIncomes)} className='flex flex-nowrap full-size' key={product.id + '-name'}>
                 <div className='align-self-stretch flex'>{prefixs}</div>
                 <div className='flex clickable align-center'>
-                {showIncomes ? '▽' : '▷'} {product.name}
+                    {showIncomes ? '▽' : '▷'} {product.name}
                 </div>
             </div>,
             <div className='flex flex-nowrap align-center' key={product.name + '-new'}>
@@ -114,7 +120,7 @@ function EditIncome({ data, updateData }) {
                 <button onClick={newIncome} disabled={!newIncomeValid}>+</button>
             </div>,
             <div className='flex justify-space-between flex-nowrap align-center' key={product.name + '-total'}>
-                <div>Total: </div><div>{sum}€ /mo</div>
+                {NumberLabel(product.name + ':\xa0', sum, '€ /mo')}
             </div>];
 
         if (!showIncomes) {
@@ -125,11 +131,25 @@ function EditIncome({ data, updateData }) {
         return [productRow, ...incomeRows];
     }
 
-    function getRows(product, prefixs=[]) {
+    function folderHasIncome(folder) {
+        for (let i in folder.products) {
+            const p = folder.products[i]
+            if (p.type === 'p' && p.hasIncome) {
+                return true;
+            } else if (p.type === 'f') {
+                if (folderHasIncome(p)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    function getRows(product, prefixs = []) {
         if (!product.visible) {
             return [];
         }
-        if (product.type === 'f') {
+        if (product.type === 'f' && folderHasIncome(product)) {
             const folderRow = getFolderRow(product, prefixs);
             const productRows = product.products.reduce((res, p) => { res.push(...getRows(p, [...prefixs, getNewPrefix()])); return res }, [])
             if (product.isOpen) {
