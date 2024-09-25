@@ -19,20 +19,22 @@ export function getMonthlyIncome(product, income) {
     return month === 0 ? 0 : val / month;
 }
 
-function getProductNames(product){
+function getValuableProductNames(product){
     if (product.type === 'f'){
-        return product.products.reduce((total, p) => {total.push(...getProductNames(p)); return total}, []);
-    } else {
+        return product.products.reduce((total, p) => {total.push(...getValuableProductNames(p)); return total}, []);
+    } else if (product.hasValue) {
         return [{
             name: product.name,
             id: product.id
         }]
     }
+    return [];
 }
 
 function EditIncome({ data, updateData }) {
 
-    const productNames = getProductNames(data.wallet);
+    const productNames = getValuableProductNames(data.wallet);
+    productNames.push({id: -1, name: 'None'})
     const foldersSum = {};
 
     const prefixStyle = {
@@ -168,7 +170,7 @@ function EditIncome({ data, updateData }) {
         return [];
     }
 
-    const header = ['Product', 'Income', 'Every', 'Into'];
+    const header = ['Product', 'Income', 'Every', 'Into/From'];
 
     const incomeRows = getRows(data.wallet);
 
