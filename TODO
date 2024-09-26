@@ -1,8 +1,6 @@
 DOING:
-Make Income depend on the date
 
 NEXT:
-Add a chart options area with predictions
 Make the NavTab more general
 
 IMPORTANT:
@@ -11,6 +9,7 @@ Refractor code in multiple files (more clear)
 
 TODO:
 Add new Charts
+Add values prediction
 Add new perceived income values
 Add Warning before deleting
 Change Income Chart (Veritcal Bar Chart)

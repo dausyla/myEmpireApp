@@ -100,6 +100,9 @@ body{
 .overflow-hidden{
     overflow: hidden;
 }
+.overflow{
+    overflow: auto;
+}
 /* !OVERFLOW */
 
 

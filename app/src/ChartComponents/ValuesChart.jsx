@@ -2,6 +2,7 @@ import {React, useState} from 'react';
 import { Line } from 'react-chartjs-2'
 import { Chart as ChartJS, CategoryScale, LinearScale, TimeScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import { Select } from '../Utils/Select';
 
 ChartJS.register(
   CategoryScale,
@@ -90,22 +91,28 @@ const options = {
 }
 
 
-function formatData(data) {
-    // Number of dates we have data of  
-    const listSize = data.wallet.valuesDates.length;
+function formatData(data, startDate, endDate) {
+    // Number of dates we have data of
+    const dateSize = endDate - startDate + 1;
+    const dateIndexes = [];
+    for (let i = startDate; i <= endDate; i++){
+        dateIndexes.push(i)
+    }
 
     function getFolderValuesSums(folder) {
         let sum = [];
-        for (let i = 0; i < listSize; i++) {
+        for (let i = 0; i < dateSize; i++) {
             sum.push(0);
         }
         folder.products.forEach(p => {
             if (p.visible) {
                 if (p.type === 'f') {
-                    getFolderValuesSums(p, listSize)[0].values.forEach((v, i) => sum[i] += v);
+                    getFolderValuesSums(p)[0].values.forEach((v, i) => sum[i] += v);
                 } else if (p.hasValue) {
                     p.values.forEach((v, i) => {
-                        sum[i] += v;
+                        if (dateIndexes.includes(i)){
+                            sum[i - startDate] += v;
+                        }
                     });
                 }
             }
@@ -129,7 +136,7 @@ function formatData(data) {
         else if (product.hasValue) {
             return [{
                 name: product.name,
-                values: product.values,
+                values: product.values.filter((v,i) => dateIndexes.includes(i)),
                 color: product.color
             }];
         }
@@ -139,11 +146,11 @@ function formatData(data) {
     // Filter the valueless products
     const items = getValues(data.wallet);
     // // sort the values of the latest data in DESC order
-    items.sort((a, b) => b.values[listSize - 1] - a.values[listSize - 1]);
+    items.sort((a, b) => b.values[dateSize - 1] - a.values[dateSize - 1]);
 
     // Build the data
     const chartData = {
-        labels: data.wallet.valuesDates,
+        labels: data.wallet.valuesDates.filter((d,i) => dateIndexes.includes(i)),
         datasets: items.map((item) => {
             return {
                 data: item.values,
@@ -162,9 +169,24 @@ function formatData(data) {
 }
 
 function ValuesChart({ data }) {
+    const dates = data.wallet.valuesDates;
+
+    const [startDate, setStartDate] = useState(0);
+    function onStartDateChange(e){
+        setStartDate(parseInt(e.target.value));
+    }
+    const [endDate, setEndDate] = useState(dates.length-1);
+    function onEndDateChange(e){
+        setEndDate(parseInt(e.target.value));
+    }
+    const menu = <div className='flex flex-nowrap align-center overflow'>
+        Start Date:&nbsp;{Select(onStartDateChange, dates.map((d,i) => {return {name: d, id: i}}), 0)}
+        End Date:&nbsp;{Select(onEndDateChange, dates.map((d,i) => {return {name: d, id: i}}), dates.length-1)}
+    </div>
     return (
         <div className='full-size chart'>
-            <Line data={formatData(data)} options={options} />
+            {menu}
+            <Line data={formatData(data, startDate, endDate)} options={options} />
         </div>
     );
 }
