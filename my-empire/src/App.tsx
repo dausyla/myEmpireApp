@@ -11,8 +11,8 @@ import {
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { barChart, ellipse, triangle } from "ionicons/icons";
-import { Charts, Tab1, Tab2 } from "./pages";
+import { barChart, swapHorizontal, wallet } from "ionicons/icons";
+import { Charts, Transferts, Funds } from "./pages";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -51,27 +51,27 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route exact path="/tab1">
-            <Tab1 />
+          <Route exact path="/transferts">
+            <Transferts />
           </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
+          <Route exact path="/funds">
+            <Funds />
           </Route>
           <Route path="/charts">
             <Charts />
           </Route>
           <Route exact path="/">
-            <Redirect to="/tab2" />
+            <Redirect to="/funds" />
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
-            <IonIcon aria-hidden="true" icon={triangle} />
-            <IonLabel>Tab 1</IonLabel>
+          <IonTabButton tab="transferts" href="/transferts">
+            <IonIcon aria-hidden="true" icon={swapHorizontal} />
+            <IonLabel>Transferts</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon aria-hidden="true" icon={ellipse} />
-            <IonLabel>Tab 2</IonLabel>
+          <IonTabButton tab="funds" href="/funds">
+            <IonIcon aria-hidden="true" icon={wallet} />
+            <IonLabel>Funds</IonLabel>
           </IonTabButton>
           <IonTabButton tab="charts" href="/charts">
             <IonIcon aria-hidden="true" icon={barChart} />

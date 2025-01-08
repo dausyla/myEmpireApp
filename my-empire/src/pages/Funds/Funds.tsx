@@ -6,9 +6,9 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import "./Tab2.css";
+import "./Funds.css";
 
-export const Tab2: React.FC = () => {
+export const Funds: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
