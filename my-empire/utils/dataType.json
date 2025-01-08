@@ -1,0 +1,47 @@
+{
+  "name": "Bruno",
+  "data": {
+    "dates": ["2024-11-01", "2024-12-01", "2025-01-01"],
+    "funds": {
+      "Bank": {
+        "values": [2000, 2000, 2000],
+        "supposedGrowthRate": 0
+      },
+      "Immo": {
+        "values": [1000, 1000, 1000],
+        "supposedGrowthRate": 0.05
+      },
+      "Crypto": {
+        "values": [500, 600, 550],
+        "supposedGrowthRate": 0.15
+      },
+      "Stocks": {
+        "values": [1000, 1010, 1012],
+        "supposedGrowthRate": 0.1
+      }
+    },
+    "transferts": {
+      "salary": {
+        "from": null,
+        "to": "Bank",
+        "value": 600,
+        "startDate": "2025-01-01",
+        "days": 30
+      },
+      "rent": {
+        "from": null,
+        "to": "Bank",
+        "value": 20,
+        "startDate": "2024-11-01",
+        "days": 30
+      },
+      "invest": {
+        "from": "Bank",
+        "to": "Crypto",
+        "value": 20,
+        "startDate": "2024-11-01",
+        "days": 30
+      }
+    }
+  }
+}
