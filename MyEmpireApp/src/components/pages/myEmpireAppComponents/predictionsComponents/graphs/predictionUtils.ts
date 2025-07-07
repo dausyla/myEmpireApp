@@ -1,4 +1,4 @@
-import type { Asset } from "../../../../types/Assets";
+import type { Asset } from "../../../../../types/Assets";
 
 // Returns the dates lists + overMonths dates after the last date in the list
 export function getDates(dates: number[], overMonths: number) {

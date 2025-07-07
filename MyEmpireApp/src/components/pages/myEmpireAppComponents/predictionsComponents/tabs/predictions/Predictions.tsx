@@ -1,6 +1,6 @@
 import Table from "react-bootstrap/Table";
-import { usePortfolio } from "../../../../../contexts/DataContext/PortfolioContext";
-import { EditableValue } from "../../../../utilies/EditableValue";
+import { usePortfolio } from "../../../../../../contexts/DataContext/PortfolioContextHook";
+import { EditableValue } from "../../../../../utilies/EditableValue";
 
 export function Predictions() {
   const { portfolio, modifyPortfolio } = usePortfolio();

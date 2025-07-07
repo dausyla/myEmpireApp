@@ -1,11 +1,16 @@
 import { Line } from "react-chartjs-2";
-import { usePortfolio } from "../../../../contexts/DataContext/PortfolioContext";
+import { usePortfolio } from "../../../../../contexts/DataContext/PortfolioContextHook";
 import { Form, InputGroup } from "react-bootstrap";
 import { useState } from "react";
 import { getDates, getPredictedValues } from "./predictionUtils";
+import type { Color } from "../../../../../types/Assets";
 
-const random255 = () => {
-  return Math.floor(Math.random() * 255);
+const getFadedColor = (color: Color, alpha: number = 0.5) => {
+  return `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`; // Return a string in rgba format with alpha
+};
+
+const getColorString = (c: Color) => {
+  return `rgba(${c.r}, ${c.g}, ${c.b})`; // Return a string in rgba format
 };
 
 export function Graphs() {
@@ -28,10 +33,14 @@ export function Graphs() {
     maintainAspectRatio: true,
     scales: {
       y: {
+        stacked: true,
         min: 0,
       },
     },
     plugins: {
+      filler: {
+        propagate: false,
+      },
       legend: {
         position: "top" as const,
       },
@@ -45,8 +54,8 @@ export function Graphs() {
   const datasets = portfolio.assets.map((asset) => ({
     label: asset.name,
     data: getPredictedValues(asset, overMonths),
-    borderColor: `rgb(${random255()}, ${random255()}, ${random255()})`,
-    backgroundColor: `rgba(${random255()}, ${random255()}, ${random255()}, 0.5)`,
+    borderColor: getColorString(asset.color),
+    backgroundColor: getFadedColor(asset.color),
     fill: true,
   }));
 

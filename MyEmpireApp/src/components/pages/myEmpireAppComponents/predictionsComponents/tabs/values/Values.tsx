@@ -1,5 +1,5 @@
 import Table from "react-bootstrap/Table";
-import { usePortfolio } from "../../../../../contexts/DataContext/PortfolioContext";
+import { usePortfolio } from "../../../../../../contexts/DataContext/PortfolioContextHook";
 import { ValueRow } from "./ValueRow";
 
 export function Values() {

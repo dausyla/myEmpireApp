@@ -1,7 +1,5 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Dashboard } from "./components/pages/Dashboard";
-import { PortofolioContextProvider } from "./contexts/DataContext/PortfolioContextProvider";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,6 +10,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { Home } from "./components/pages/Home";
+import { NoRouteMatch } from "./components/pages/NoRouteMatch";
+import { MyEmpireApp } from "./components/pages/MyEmpireApp";
 
 // Register Chart.js to enable chart rendering
 ChartJS.register(
@@ -27,11 +28,11 @@ ChartJS.register(
 function App() {
   return (
     <Router>
-      <PortofolioContextProvider>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-        </Routes>
-      </PortofolioContextProvider>
+      <Routes>
+        <Route path="/app" element={<MyEmpireApp />} />
+        <Route path="/" element={<Home />} />
+        <Route path="*" element={<NoRouteMatch />} />
+      </Routes>
     </Router>
   );
 }

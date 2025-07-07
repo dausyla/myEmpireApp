@@ -3,12 +3,19 @@ export type Prediction = {
   monthlyInput: number;
 };
 
+export type Color = {
+  r: number;
+  g: number;
+  b: number;
+};
+
 export type Asset = {
-  id: string;
+  id: number;
   name: string;
   values: number[];
   inputs: number[];
   prediction: Prediction;
+  color: Color; // Optional color for the asset
 };
 
 export type Portfolio = {

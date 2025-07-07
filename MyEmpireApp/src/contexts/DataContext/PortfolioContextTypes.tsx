@@ -1,9 +1,10 @@
-import { createContext, useContext } from "react";
-import type { Portfolio } from "../../types/Assets";
+import type { Asset, Portfolio } from "../../types/Assets";
 
 export type PortfolioContextType = {
   portfolio: Portfolio;
   modifyPortfolio: (portfolio: Portfolio) => void;
+  editingAssetId?: number;
+  setEditingAssetId?: (id: number) => void;
 };
 
 export const emptyPortfolio: Portfolio = {
@@ -14,18 +15,9 @@ export const emptyPortfolio: Portfolio = {
   dates: [],
 };
 
-export const PortofolioContext = createContext<PortfolioContextType>({
-  portfolio: emptyPortfolio,
-  modifyPortfolio: () => {},
-});
-
-export function usePortfolio() {
-  return useContext(PortofolioContext);
-}
-
-export const assetsExample = [
+export const assetsExample: Asset[] = [
   {
-    id: "1",
+    id: 1,
     name: "Bitcoin",
     values: [500, 510, 705, 720],
     inputs: [500, 0, 200, 0],
@@ -33,6 +25,7 @@ export const assetsExample = [
       estimatedAPY: 0.05,
       monthlyInput: 200,
     },
+    color: { r: 255, g: 204, b: 0 }, // Yellow
   },
 ];
 
