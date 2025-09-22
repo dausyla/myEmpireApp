@@ -1,4 +1,5 @@
 import { usePortfolio } from "../../../../../../contexts/DataContext/PortfolioContextHook";
+import { EditableDate } from "../../../../../utilies/EditableDate";
 import { EditableValue } from "../../../../../utilies/EditableValue";
 
 export function ValueRow({ id }: { id: number }) {
@@ -18,7 +19,9 @@ export function ValueRow({ id }: { id: number }) {
 
   return (
     <tr>
-      <td>{new Date(portfolio.dates[id]).toISOString().split("T")[0]}</td>
+      <td>
+        <EditableDate index={id} />
+      </td>
       {values}
     </tr>
   );

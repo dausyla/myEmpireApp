@@ -38,6 +38,15 @@ export function EditableValue({
     setNewValue(formerValue);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!isEditing) return;
+    if (e.key === "Enter") {
+      saveValue();
+    } else if (e.key === "Escape") {
+      cancel();
+    }
+  };
+
   return (
     <div
       style={{
@@ -46,11 +55,12 @@ export function EditableValue({
         justifyContent: "space-between",
       }}
     >
-      <InputGroup style={{ width: "9rem" }}>
+      <InputGroup style={{ width: "9rem" }} onKeyDown={handleKeyDown}>
         <Form.Control
           onChange={onChange}
           value={newValue}
-          disabled={!isEditing}
+          readOnly={!isEditing}
+          onDoubleClick={() => setIsEditing(true)}
         />
         {isEditing ? (
           <>
@@ -70,7 +80,7 @@ export function EditableValue({
             <InputGroup.Text>{suffix}</InputGroup.Text>
             <Button
               onClick={() => setIsEditing(true)}
-              variant="primary"
+              variant="outline-primary"
               style={{ padding: "0" }}
             >
               <BsPencil style={{ margin: "0.4rem" }} />

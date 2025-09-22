@@ -5,6 +5,9 @@ export type PortfolioContextType = {
   modifyPortfolio: (portfolio: Portfolio) => void;
   isModified: boolean;
   savePortfolio: () => void;
+  addDate: (date: number) => void;
+  editDate: (oldDate: number, newDate: number) => void;
+  deleteDate: (date: number) => void;
   editingAssetId?: number;
   setEditingAssetId?: (id: number) => void;
 };

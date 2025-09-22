@@ -42,6 +42,60 @@ export const PortofolioContextProvider = ({
     }
   };
 
+  const addDate = (date: number) => {
+    if (portfolio.dates.includes(date)) {
+      alert("This date already exists!");
+      return;
+    }
+
+    portfolio.dates.push(date);
+    portfolio.dates.sort((a, b) => a - b);
+    const index = portfolio.dates.indexOf(date);
+    portfolio.assets.forEach((asset) => {
+      const previousValue = index > 0 ? asset.values[index - 1] : 0;
+      asset.values.splice(index, 0, previousValue);
+      asset.inputs.splice(index, 0, 0);
+    });
+
+    modifyPortfolio(portfolio);
+  };
+
+  const editDate = (oldDate: number, newDate: number) => {
+    if (portfolio.dates.includes(newDate)) {
+      alert("This date already exists!");
+      return;
+    }
+
+    const index = portfolio.dates.indexOf(oldDate);
+    if (index === -1) return;
+
+    portfolio.dates[index] = newDate;
+    portfolio.dates.sort((a, b) => a - b);
+
+    portfolio.assets.forEach((asset) => {
+      const value = asset.values.splice(index, 1)[0];
+      const input = asset.inputs.splice(index, 1)[0];
+      const newIndex = portfolio.dates.indexOf(newDate);
+      asset.values.splice(newIndex, 0, value);
+      asset.inputs.splice(newIndex, 0, input);
+    });
+
+    modifyPortfolio(portfolio);
+  };
+
+  const deleteDate = (date: number) => {
+    const index = portfolio.dates.indexOf(date);
+    if (index === -1) return;
+
+    portfolio.dates.splice(index, 1);
+    portfolio.assets.forEach((asset) => {
+      asset.values.splice(index, 1);
+      asset.inputs.splice(index, 1);
+    });
+
+    modifyPortfolio(portfolio);
+  };
+
   return (
     <PortofolioContext.Provider
       value={{
@@ -51,6 +105,9 @@ export const PortofolioContextProvider = ({
         setEditingAssetId,
         savePortfolio, // expose it to consumers
         isModified,
+        addDate,
+        editDate,
+        deleteDate,
       }}
     >
       {children}

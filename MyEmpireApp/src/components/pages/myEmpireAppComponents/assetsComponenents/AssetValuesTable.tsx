@@ -1,6 +1,7 @@
 import Table from "react-bootstrap/Table";
 import { usePortfolio } from "../../../../contexts/DataContext/PortfolioContextHook";
 import { EditableValue } from "../../../utilies/EditableValue";
+import { EditableDate } from "../../../utilies/EditableDate";
 
 export function AssetValuesTable() {
   const { portfolio, editingAssetId, modifyPortfolio } = usePortfolio();
@@ -13,9 +14,11 @@ export function AssetValuesTable() {
     return <div>No asset selected</div>;
   }
 
-  const rows = portfolio.dates.map((date, index) => (
+  const rows = portfolio.dates.map((_, index) => (
     <tr key={index}>
-      <td>{new Date(date).toISOString().split("T")[0]}</td>
+      <td>
+        <EditableDate index={index} />
+      </td>
       {/* Value */}
       <td>
         <EditableValue

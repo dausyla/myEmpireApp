@@ -5,3 +5,9 @@
   margin: 0;
   text-align: center;
 }
+
+/* Make the calendar button visible */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5); /* change color, try 1 for full inversion */
+  cursor: pointer;
+}
