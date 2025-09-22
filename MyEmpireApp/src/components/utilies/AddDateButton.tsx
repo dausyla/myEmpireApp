@@ -1,6 +1,7 @@
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { useState } from "react";
 import { usePortfolio } from "../../contexts/DataContext/PortfolioContextHook";
+import { BsPlus } from "react-icons/bs";
 
 export function AddDateButton() {
   const { addDate } = usePortfolio();
@@ -24,8 +25,12 @@ export function AddDateButton() {
         value={newDate}
         onChange={(e) => setNewDate(e.target.value)}
       />
-      <Button variant="primary" onClick={addDateButton} disabled={!newDate}>
-        +
+      <Button
+        variant="outline-primary"
+        onClick={addDateButton}
+        disabled={!newDate}
+      >
+        <BsPlus />
       </Button>
     </InputGroup>
   );

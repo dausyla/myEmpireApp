@@ -47,7 +47,8 @@ export function EditableDate({ index }: { index: number }) {
         type="date"
         value={newDate}
         onChange={(e) => setNewDate(e.target.value)}
-        disabled={!isEditing}
+        readOnly={!isEditing}
+        onDoubleClick={() => setIsEditing(true)}
       />
       {isEditing ? (
         <>
