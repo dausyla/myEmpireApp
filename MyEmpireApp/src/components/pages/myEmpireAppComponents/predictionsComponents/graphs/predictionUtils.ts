@@ -2,6 +2,8 @@ import type { Asset } from "../../../../../types/Assets";
 
 // Returns the dates lists + overMonths dates after the last date in the list
 export function getDates(dates: number[], overMonths: number) {
+  if (dates.length === 0) return [];
+
   const lastDate = new Date(dates[dates.length - 1]);
   const newDates = [];
 

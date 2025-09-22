@@ -3,6 +3,8 @@ import type { Asset, Portfolio } from "../../types/Assets";
 export type PortfolioContextType = {
   portfolio: Portfolio;
   modifyPortfolio: (portfolio: Portfolio) => void;
+  isModified: boolean;
+  savePortfolio: () => void;
   editingAssetId?: number;
   setEditingAssetId?: (id: number) => void;
 };

@@ -7,6 +7,8 @@ import {
 export const PortofolioContext = createContext<PortfolioContextType>({
   portfolio: emptyPortfolio,
   modifyPortfolio: () => {},
+  savePortfolio: () => {},
+  isModified: false,
 });
 
 export function usePortfolio() {
