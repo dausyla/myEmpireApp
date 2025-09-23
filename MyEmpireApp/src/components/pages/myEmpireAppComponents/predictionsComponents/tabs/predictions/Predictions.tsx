@@ -1,9 +1,11 @@
 import Table from "react-bootstrap/Table";
-import { usePortfolio } from "../../../../../../contexts/DataContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { EditableValue } from "../../../../../utilies/EditableValue";
 
 export function Predictions() {
   const { portfolio, modifyPortfolio } = usePortfolio();
+
+  if (!portfolio) return null;
 
   const predictionRows = portfolio.assets.map((asset) => (
     <tr key={asset.id}>

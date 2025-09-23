@@ -1,9 +1,11 @@
-import { usePortfolio } from "../../../../../../contexts/DataContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { EditableDate } from "../../../../../utilies/EditableDate";
 import { EditableValue } from "../../../../../utilies/EditableValue";
 
 export function ValueRow({ id }: { id: number }) {
   const { portfolio, modifyPortfolio } = usePortfolio();
+
+  if (!portfolio) return null;
 
   const values = portfolio.assets.map((asset) => (
     <td key={asset.id}>

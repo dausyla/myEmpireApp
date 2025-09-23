@@ -13,6 +13,9 @@ import {
 import { Home } from "./components/pages/Home";
 import { NoRouteMatch } from "./components/pages/NoRouteMatch";
 import { MyEmpireApp } from "./components/pages/MyEmpireApp";
+import { AppContextProvider } from "./contexts/AppContext/AppContextProvider";
+import { PortofolioContextProvider } from "./contexts/PortfolioContext/PortfolioContextProvider";
+import { AssetContextProvider } from "./contexts/AssetContext/AppContextProvider";
 
 // Register Chart.js to enable chart rendering
 ChartJS.register(
@@ -29,7 +32,18 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/app" element={<MyEmpireApp />} />
+        <Route
+          path="/app"
+          element={
+            <AppContextProvider>
+              <PortofolioContextProvider>
+                <AssetContextProvider>
+                  <MyEmpireApp />
+                </AssetContextProvider>
+              </PortofolioContextProvider>
+            </AppContextProvider>
+          }
+        />
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NoRouteMatch />} />
       </Routes>

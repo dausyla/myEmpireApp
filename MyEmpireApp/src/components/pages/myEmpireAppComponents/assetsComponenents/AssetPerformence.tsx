@@ -1,16 +1,19 @@
 import Table from "react-bootstrap/Table";
-import { usePortfolio } from "../../../../contexts/DataContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { Button } from "react-bootstrap";
+import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 
 export function AssetPerformence() {
-  const { portfolio, editingAssetId, modifyPortfolio } = usePortfolio();
+  const { portfolio, modifyPortfolio } = usePortfolio();
 
-  const currentAsset = portfolio.assets.find(
-    (asset) => asset.id === editingAssetId
+  const { currentAssetId } = useAssetContext();
+
+  const currentAsset = portfolio?.assets.find(
+    (asset) => asset.id === currentAssetId
   );
 
-  if (!currentAsset) {
-    return <div>No asset selected</div>;
+  if (!currentAsset || !portfolio) {
+    return null;
   }
 
   const totalValue = currentAsset.values[currentAsset.values.length - 1]; // Last Value

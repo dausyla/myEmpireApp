@@ -1,24 +1,26 @@
-import { useContext } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
-import { PortofolioContext } from "../../../../contexts/DataContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 
 const random255 = () => {
   return Math.floor(Math.random() * 255);
 };
 
 export function AssetDropdown() {
-  const { editingAssetId, setEditingAssetId, portfolio, modifyPortfolio } =
-    useContext(PortofolioContext);
+  const { portfolio, modifyPortfolio } = usePortfolio();
+  const { currentAssetId, setCurrentAsset } = useAssetContext();
 
-  const currentAsset = portfolio.assets.find(
-    (asset) => asset.id === editingAssetId
+  const currentAsset = portfolio?.assets.find(
+    (asset) => asset.id === currentAssetId
   );
+
+  if (!portfolio || !currentAsset) return null;
 
   const assetsItems = portfolio.assets.map((asset) => (
     <Dropdown.Item
       key={asset.id}
       onClick={() => {
-        setEditingAssetId?.(asset.id);
+        setCurrentAsset(asset.id);
       }}
     >
       {asset.name}
@@ -26,7 +28,11 @@ export function AssetDropdown() {
   ));
 
   const newAsset = () => {
-    const newAssetId = portfolio.assets.length + 1; // Simple ID generation
+    const maxAssetId = portfolio.assets.reduce(
+      (maxId, asset) => (asset.id > maxId ? asset.id : maxId),
+      0
+    );
+    const newAssetId = maxAssetId + 1; // Simple ID generation
     portfolio.assets.push({
       id: newAssetId,
       name: "New Asset",
@@ -43,7 +49,7 @@ export function AssetDropdown() {
       },
     });
     modifyPortfolio(portfolio);
-    setEditingAssetId?.(newAssetId); // Set the new asset as the current
+    setCurrentAsset(newAssetId); // Set the new asset as the current
   };
 
   return (

@@ -1,14 +1,14 @@
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { usePortfolio } from "../../contexts/DataContext/PortfolioContextHook";
+import { usePortfolio } from "../../contexts/PortfolioContext/PortfolioContextHook";
 import { BsCheckSquare, BsPencil, BsXCircle, BsTrash } from "react-icons/bs";
 
 export function EditableDate({ index }: { index: number }) {
   const { portfolio, editDate, deleteDate } = usePortfolio();
 
-  const initialDate = new Date(portfolio.dates[index])
-    .toISOString()
-    .split("T")[0];
+  const initialDate = portfolio
+    ? new Date(portfolio.dates[index]).toISOString().split("T")[0]
+    : new Date().toISOString().split("T")[0]; // Today
 
   const [newDate, setNewDate] = useState(initialDate);
   const [formerDate, setFormerDate] = useState(initialDate);

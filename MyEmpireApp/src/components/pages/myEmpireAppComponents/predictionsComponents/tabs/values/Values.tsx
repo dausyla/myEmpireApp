@@ -1,10 +1,12 @@
 import Table from "react-bootstrap/Table";
-import { usePortfolio } from "../../../../../../contexts/DataContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { ValueRow } from "./ValueRow";
 import { AddDateButton } from "../../../../../utilies/AddDateButton";
 
 export function Values() {
   const { portfolio } = usePortfolio();
+
+  if (!portfolio) return null;
 
   const assetsNames = portfolio.assets.map((asset) => (
     <th key={asset.id}>{asset.name}</th>

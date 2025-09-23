@@ -1,30 +1,29 @@
 import { useEffect, useState, type ReactNode } from "react";
 import type { Portfolio } from "../../types/Assets";
 import { PortofolioContext } from "./PortfolioContextHook";
-import { emptyPortfolio } from "./PortfolioContextTypes";
-
-const STORAGE_KEY = "portfolioData";
+import { useAppContext } from "../AppContext/AppContextHook";
 
 export const PortofolioContextProvider = ({
   children,
 }: {
   children: ReactNode;
 }) => {
-  const [portfolio, setPortfolio] = useState<Portfolio>(emptyPortfolio);
-  const [editingAssetId, setEditingAssetId] = useState<number>(-1);
+  const { currentPortfolioId, portfolios, savePortfolioInLocalStorage } =
+    useAppContext();
+  const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
   const [isModified, setIsModified] = useState(false);
 
   // Load portfolio from localStorage on first render
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        setPortfolio(JSON.parse(saved));
-      } catch (err) {
-        console.error("Failed to parse saved portfolio:", err);
-      }
+    const p = portfolios?.find((p) => p.id === currentPortfolioId);
+    if (p) {
+      setPortfolio(JSON.parse(JSON.stringify(p)));
+      setIsModified(false);
+    } else {
+      setPortfolio(null);
+      setIsModified(false);
     }
-  }, []);
+  }, [currentPortfolioId, portfolios]);
 
   const modifyPortfolio = (newPortfolio: Portfolio) => {
     const cloned = JSON.parse(JSON.stringify(newPortfolio));
@@ -33,8 +32,9 @@ export const PortofolioContextProvider = ({
   };
 
   const savePortfolio = () => {
+    if (!portfolio) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(portfolio));
+      savePortfolioInLocalStorage(portfolio);
       setIsModified(false);
       console.log("Portfolio saved to localStorage ✅");
     } catch (err) {
@@ -43,6 +43,7 @@ export const PortofolioContextProvider = ({
   };
 
   const addDate = (date: number) => {
+    if (!portfolio) return;
     if (portfolio.dates.includes(date)) {
       alert("This date already exists!");
       return;
@@ -61,6 +62,7 @@ export const PortofolioContextProvider = ({
   };
 
   const editDate = (oldDate: number, newDate: number) => {
+    if (!portfolio) return;
     if (portfolio.dates.includes(newDate)) {
       alert("This date already exists!");
       return;
@@ -84,6 +86,7 @@ export const PortofolioContextProvider = ({
   };
 
   const deleteDate = (date: number) => {
+    if (!portfolio) return;
     const index = portfolio.dates.indexOf(date);
     if (index === -1) return;
 
@@ -101,8 +104,6 @@ export const PortofolioContextProvider = ({
       value={{
         portfolio,
         modifyPortfolio,
-        editingAssetId,
-        setEditingAssetId,
         savePortfolio, // expose it to consumers
         isModified,
         addDate,

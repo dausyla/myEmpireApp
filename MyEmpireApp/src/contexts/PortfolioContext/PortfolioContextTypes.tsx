@@ -1,21 +1,19 @@
 import type { Asset, Portfolio } from "../../types/Assets";
 
 export type PortfolioContextType = {
-  portfolio: Portfolio;
+  portfolio: Portfolio | null;
   modifyPortfolio: (portfolio: Portfolio) => void;
   isModified: boolean;
   savePortfolio: () => void;
   addDate: (date: number) => void;
   editDate: (oldDate: number, newDate: number) => void;
   deleteDate: (date: number) => void;
-  editingAssetId?: number;
-  setEditingAssetId?: (id: number) => void;
 };
 
 export const emptyPortfolio: Portfolio = {
   id: "",
-  name: "",
-  description: "",
+  name: "New Portfolio",
+  description: "Portfolio Description",
   assets: [],
   dates: [],
 };
@@ -34,9 +32,9 @@ export const assetsExample: Asset[] = [
   },
 ];
 
-export const portfolioExemple: Portfolio = {
-  id: "1",
-  name: "My Portfolio",
+export const portfolioExample: Portfolio = {
+  id: "",
+  name: "Portfolio Example",
   description: "This is an example portfolio",
   assets: assetsExample,
   dates: [1735689600000, 1738368000000, 1740787200000, 1743465600000],

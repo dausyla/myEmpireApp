@@ -1,14 +1,22 @@
-import { Button } from "react-bootstrap";
+import { Button, NavDropdown } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { usePortfolio } from "../../contexts/DataContext/PortfolioContextHook";
+import { usePortfolio } from "../../contexts/PortfolioContext/PortfolioContextHook";
+import { EditableText } from "../utilies/EditableText";
+import { useAppContext } from "../../contexts/AppContext/AppContextHook";
 
 export function NavBar({
   setCurrentNav,
 }: {
   setCurrentNav: (nav: string) => void;
 }) {
+  const {
+    portfolios,
+    setCurrentPortfolioId,
+    createNewPortfolioExample,
+    createNewPortfolioEmpty,
+  } = useAppContext();
   const { isModified, savePortfolio, portfolio, modifyPortfolio } =
     usePortfolio();
 
@@ -42,6 +50,8 @@ export function NavBar({
     e.target.value = "";
   };
 
+  const portfolioNames = portfolios?.map((p) => p.name);
+
   return (
     <Navbar sticky="top" expand="lg" className="bg-body-tertiary">
       <Container>
@@ -54,17 +64,48 @@ export function NavBar({
             <Nav.Link onClick={() => setCurrentNav("predictions")}>
               Home
             </Nav.Link>
-            <Nav.Link onClick={() => setCurrentNav("predictions")}>
-              Predictions
-            </Nav.Link>
             <Nav.Link onClick={() => setCurrentNav("assets")}>Assets</Nav.Link>
-            <Button
-              onClick={savePortfolio}
-              disabled={!isModified}
-              className="ms-2"
-            >
-              Save
-            </Button>
+            <NavDropdown title="Portfolios" id="basic-nav-dropdown">
+              {portfolios ? (
+                portfolioNames?.map((name, index) => (
+                  <NavDropdown.Item
+                    key={index}
+                    onClick={() => setCurrentPortfolioId(portfolios[index].id)}
+                  >
+                    {name}
+                  </NavDropdown.Item>
+                ))
+              ) : (
+                <></>
+              )}
+              <NavDropdown.Divider />
+              <NavDropdown.Item onClick={() => createNewPortfolioEmpty()}>
+                + New Empty Portfolio
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => createNewPortfolioExample()}>
+                + New Example Portfolio
+              </NavDropdown.Item>
+            </NavDropdown>
+            {portfolio ? (
+              <>
+                <EditableText
+                  value={portfolio.name}
+                  modifyValue={(newName) => {
+                    portfolio.name = newName;
+                    modifyPortfolio(portfolio);
+                  }}
+                />
+                <Button
+                  onClick={savePortfolio}
+                  disabled={!isModified}
+                  className="ms-2"
+                >
+                  Save
+                </Button>{" "}
+              </>
+            ) : (
+              <></>
+            )}
           </Nav>
         </Navbar.Collapse>
         <Navbar.Collapse className="justify-content-end" style={{ gap: 8 }}>

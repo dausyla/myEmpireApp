@@ -2,40 +2,35 @@ import { useEffect, useState } from "react";
 import { Button, InputGroup, Form } from "react-bootstrap";
 import { BsCheckSquare, BsPencil, BsXCircle } from "react-icons/bs";
 
-export function EditableValue({
+export function EditableText({
   value,
   modifyValue,
-  suffix = "$",
+  prefix = undefined,
 }: {
-  value: number;
-  modifyValue: (newValue: number) => void;
-  suffix?: string;
+  value: string;
+  modifyValue: (newValue: string) => void;
+  prefix?: string;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [newValue, setNewValue] = useState(value);
   const [formerValue, setFormerValue] = useState(value);
 
-  // 🔑 Sync local state when `value` changes from parent
+  // 🔄 Sync with external changes
   useEffect(() => {
     setNewValue(value);
+    setFormerValue(value);
   }, [value]);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const parsedValue = Number(e.target.value);
-    if (!isNaN(parsedValue)) {
-      setNewValue(parsedValue);
-      modifyValue(parsedValue);
-    }
-  };
-
   const saveValue = () => {
+    if (newValue.trim() === "") return;
+    modifyValue(newValue);
     setFormerValue(newValue);
     setIsEditing(false);
   };
 
   const cancel = () => {
-    setIsEditing(false);
     setNewValue(formerValue);
+    setIsEditing(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -48,16 +43,12 @@ export function EditableValue({
   };
 
   return (
-    <InputGroup
-      style={{
-        width: "9rem",
-      }}
-      onKeyDown={handleKeyDown}
-    >
+    <InputGroup style={{ width: "12rem" }} onKeyDown={handleKeyDown}>
+      {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}
       <Form.Control
-        onChange={onChange}
         value={newValue}
         readOnly={!isEditing}
+        onChange={(e) => setNewValue(e.target.value)}
         onDoubleClick={() => setIsEditing(true)}
       />
       {isEditing ? (
@@ -74,16 +65,13 @@ export function EditableValue({
           </Button>
         </>
       ) : (
-        <>
-          <InputGroup.Text>{suffix}</InputGroup.Text>
-          <Button
-            onClick={() => setIsEditing(true)}
-            variant="outline-primary"
-            style={{ padding: "0" }}
-          >
-            <BsPencil style={{ margin: "0.4rem" }} />
-          </Button>
-        </>
+        <Button
+          onClick={() => setIsEditing(true)}
+          variant="outline-primary"
+          style={{ padding: "0" }}
+        >
+          <BsPencil style={{ margin: "0.4rem" }} />
+        </Button>
       )}
     </InputGroup>
   );

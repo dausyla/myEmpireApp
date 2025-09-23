@@ -1,17 +1,18 @@
 import Table from "react-bootstrap/Table";
-import { usePortfolio } from "../../../../contexts/DataContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { EditableValue } from "../../../utilies/EditableValue";
+import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 
 export function AssetPredictions() {
-  const { portfolio, editingAssetId, modifyPortfolio } = usePortfolio();
+  const { portfolio, modifyPortfolio } = usePortfolio();
 
-  const currentAsset = portfolio.assets.find(
-    (asset) => asset.id === editingAssetId
+  const { currentAssetId } = useAssetContext();
+
+  const currentAsset = portfolio?.assets.find(
+    (asset) => asset.id === currentAssetId
   );
 
-  if (!currentAsset) {
-    return <div>No asset selected</div>;
-  }
+  if (!portfolio || !currentAsset) return null;
 
   return (
     <Table striped bordered hover>

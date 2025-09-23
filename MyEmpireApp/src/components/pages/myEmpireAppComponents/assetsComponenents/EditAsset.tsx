@@ -1,7 +1,9 @@
-import { useContext, useEffect, useState } from "react";
-import { PortofolioContext } from "../../../../contexts/DataContext/PortfolioContextHook";
-import { Form, InputGroup } from "react-bootstrap";
+import { useContext } from "react";
+import { PortofolioContext } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { Form } from "react-bootstrap";
 import type { Color } from "../../../../types/Assets";
+import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
+import { EditableText } from "../../../utilies/EditableText";
 
 const getColorString = (color: Color) => {
   return `#${((1 << 24) + (color.r << 16) + (color.g << 8) + color.b)
@@ -10,32 +12,14 @@ const getColorString = (color: Color) => {
 };
 
 export function EditAsset() {
-  const { editingAssetId, portfolio, modifyPortfolio } =
-    useContext(PortofolioContext);
+  const { portfolio, modifyPortfolio } = useContext(PortofolioContext);
 
-  const currentAsset = portfolio.assets.find(
-    (asset) => asset.id === editingAssetId
-  );
+  const { currentAssetId } = useAssetContext();
 
-  const [assetName, setAssetName] = useState<string>(
-    currentAsset?.name || "Undefined"
-  );
-  const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAssetName(e.target.value);
-    if (!currentAsset || e.target.value.length > 20) return;
+  const currentAsset =
+    portfolio?.assets.find((asset) => asset.id === currentAssetId) || null;
 
-    if (e.target.value.length === 0) {
-      currentAsset.name = "Undefined";
-    } else {
-      currentAsset.name = e.target.value;
-    }
-    modifyPortfolio(portfolio);
-  };
-  useEffect(() => {
-    if (currentAsset && assetName.length > 0) {
-      setAssetName(currentAsset.name);
-    }
-  }, [currentAsset, assetName]);
+  if (!portfolio) return null;
 
   const onColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!currentAsset) return;
@@ -50,18 +34,20 @@ export function EditAsset() {
   return (
     <div className="m-3">
       {currentAsset ? (
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <InputGroup style={{ width: "20rem" }}>
-            <InputGroup.Text>Name</InputGroup.Text>
-            <Form.Control onChange={onNameChange} value={assetName} />
-          </InputGroup>
-          <InputGroup style={{ width: "5rem" }}>
-            <Form.Control
-              type="color"
-              onChange={onColorChange}
-              value={getColorString(currentAsset.color)}
-            />
-          </InputGroup>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <EditableText
+            value={currentAsset.name}
+            prefix="Name"
+            modifyValue={(newName) => {
+              currentAsset.name = newName;
+              modifyPortfolio(portfolio);
+            }}
+          />
+          <Form.Control
+            type="color"
+            onChange={onColorChange}
+            value={getColorString(currentAsset.color)}
+          />
         </div>
       ) : (
         <></>

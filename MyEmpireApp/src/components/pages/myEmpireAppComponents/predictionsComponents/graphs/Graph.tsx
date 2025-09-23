@@ -1,5 +1,5 @@
 import { Line } from "react-chartjs-2";
-import { usePortfolio } from "../../../../../contexts/DataContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { Form, InputGroup } from "react-bootstrap";
 import { useState } from "react";
 import { getDataset, graphOptions } from "./predictionUtils";
@@ -9,6 +9,8 @@ export function Graphs() {
 
   const [overYears, setOverYears] = useState(2);
   const [detailPrediction, setDetailPrediction] = useState(false);
+
+  if (!portfolio) return null;
 
   const onYearsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
