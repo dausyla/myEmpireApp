@@ -1,4 +1,4 @@
-import { Col, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { AssetDropdown } from "./assetsComponenents/AssetsDropdown";
 import { EditAsset } from "./assetsComponenents/EditAsset";
 import { AssetValuesTable } from "./assetsComponenents/AssetValuesTable";
@@ -12,7 +12,7 @@ export function Assets() {
   if (portfolio.assets.length === 0) return <NoAssetComponent />;
 
   return (
-    <>
+    <Container fluid className="mt-3">
       <Row>
         <Col md={2}>
           <AssetDropdown />
@@ -23,21 +23,29 @@ export function Assets() {
       </Row>
       <Row>
         <Col md={6}>
-          <AssetValuesTable />
+          <Card className="rounded shadow-sm p-2">
+            <AssetValuesTable />
+          </Card>
         </Col>
         <Col>
-          <Row>
-            <Col>
-              <AssetPerformence />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <AssetPredictions />
-            </Col>
-          </Row>
+          <Container fluid>
+            <Row className="mb-3">
+              <Col>
+                <Card className="rounded shadow-sm p-2">
+                  <AssetPerformence />
+                </Card>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Card className="rounded shadow-sm p-2">
+                  <AssetPredictions />
+                </Card>
+              </Col>
+            </Row>
+          </Container>
         </Col>
       </Row>
-    </>
+    </Container>
   );
 }

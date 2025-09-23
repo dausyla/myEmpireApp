@@ -39,11 +39,16 @@ export function EditableValue({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!isEditing) return;
-    if (e.key === "Enter") {
-      saveValue();
-    } else if (e.key === "Escape") {
-      cancel();
+    if (!isEditing) {
+      if (e.key === "Enter") {
+        setIsEditing(true);
+      }
+    } else {
+      if (e.key === "Enter") {
+        saveValue();
+      } else if (e.key === "Escape") {
+        cancel();
+      }
     }
   };
 

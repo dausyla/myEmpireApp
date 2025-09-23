@@ -1,6 +1,6 @@
 import { Line } from "react-chartjs-2";
 import { usePortfolio } from "../../../../../contexts/PortfolioContext/PortfolioContextHook";
-import { Form, InputGroup } from "react-bootstrap";
+import { Card, Form, InputGroup } from "react-bootstrap";
 import { useState } from "react";
 import { getDataset, graphOptions } from "./predictionUtils";
 
@@ -30,7 +30,7 @@ export function Graphs() {
   const dataset = getDataset(portfolio, overYears, detailPrediction);
 
   return (
-    <>
+    <Card className="rounded shadow-sm p-2">
       <div
         style={{
           display: "flex",
@@ -54,6 +54,6 @@ export function Graphs() {
         />
       </div>
       <Line options={graphOptions} data={dataset} />
-    </>
+    </Card>
   );
 }

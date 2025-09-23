@@ -1,18 +1,46 @@
-import Tab from "react-bootstrap/Tab";
-import { Tabs as BSTabs } from "react-bootstrap";
+import { Card, Nav } from "react-bootstrap";
 import { Values } from "./tabs/values/Values";
 import { Predictions } from "./tabs/predictions/Predictions";
+import { Inputs } from "./tabs/inputs/Inputs";
+import { useState } from "react";
+
+type TabType = "values" | "inputs" | "predictions";
 
 export function Tabs() {
+  const [activeTab, setActiveTab] = useState<TabType>("values");
+
   return (
-    <BSTabs variant="tabs" defaultActiveKey="values">
-      <Tab eventKey="title" title="Quick Edit" disabled></Tab>
-      <Tab eventKey="values" title="Values">
-        <Values />
-      </Tab>
-      <Tab eventKey="predictions" title="Predictions">
-        <Predictions />
-      </Tab>
-    </BSTabs>
+    <Card className="rounded shadow-sm">
+      <Card.Header className="bg-white">
+        <Nav variant="tabs" activeKey={activeTab} fill>
+          <Nav.Item>
+            <Nav.Link disabled>Quick Edit</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="values" onClick={() => setActiveTab("values")}>
+              Values
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="inputs" onClick={() => setActiveTab("inputs")}>
+              Inputs
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link
+              eventKey="predictions"
+              onClick={() => setActiveTab("predictions")}
+            >
+              Predictions
+            </Nav.Link>
+          </Nav.Item>
+        </Nav>
+      </Card.Header>
+      <Card.Body>
+        {activeTab === "values" && <Values />}
+        {activeTab === "inputs" && <Inputs />}
+        {activeTab === "predictions" && <Predictions />}
+      </Card.Body>
+    </Card>
   );
 }

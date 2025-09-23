@@ -67,7 +67,7 @@ export function AssetValuesTable() {
   ));
 
   return (
-    <Table striped bordered hover>
+    <Table striped bordered hover responsive>
       <thead>
         <tr>
           <th>Date</th>

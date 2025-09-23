@@ -1,9 +1,9 @@
 import Table from "react-bootstrap/Table";
 import { usePortfolio } from "../../../../../../contexts/PortfolioContext/PortfolioContextHook";
-import { ValueRow } from "./ValueRow";
+import { InputRow } from "./InputRow";
 import { AddDateButton } from "../../../../../utilies/AddDateButton";
 
-export function Values() {
+export function Inputs() {
   const { portfolio } = usePortfolio();
 
   if (!portfolio) return null;
@@ -11,8 +11,8 @@ export function Values() {
   const assetsNames = portfolio.assets.map((asset) => (
     <th key={asset.id}>{asset.name}</th>
   ));
-  const valueRows = portfolio.dates.map((_, index) => (
-    <ValueRow key={index} id={index} />
+  const inputRows = portfolio.dates.map((_, index) => (
+    <InputRow key={index} id={index} />
   ));
 
   return (
@@ -24,7 +24,7 @@ export function Values() {
         </tr>
       </thead>
       <tbody>
-        {valueRows}
+        {inputRows}
         <tr>
           <td>
             <AddDateButton />

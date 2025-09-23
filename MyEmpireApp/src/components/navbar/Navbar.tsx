@@ -85,7 +85,7 @@ export function NavBar({
           </NavDropdown>
           <Nav className="me-auto align-items-center">
             <Nav.Link onClick={() => setCurrentNav("predictions")}>
-              Home
+              Predictions
             </Nav.Link>
             <Nav.Link onClick={() => setCurrentNav("assets")}>Assets</Nav.Link>
           </Nav>
