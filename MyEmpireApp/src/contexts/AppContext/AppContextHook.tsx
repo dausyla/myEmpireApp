@@ -9,6 +9,7 @@ export const AppContext = createContext<AppContextType>({
   savePortfolioInLocalStorage: () => {},
   createNewPortfolioEmpty: () => {},
   createNewPortfolioExample: () => {},
+  deletePortfolio: () => {},
 });
 
 export function useAppContext() {

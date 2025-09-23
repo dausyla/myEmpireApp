@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import { PortofolioContext } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
-import { Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import type { Color } from "../../../../types/Assets";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 import { EditableText } from "../../../utilies/EditableText";
+import { BsTrash } from "react-icons/bs";
 
 const getColorString = (color: Color) => {
   return `#${((1 << 24) + (color.r << 16) + (color.g << 8) + color.b)
@@ -14,7 +15,7 @@ const getColorString = (color: Color) => {
 export function EditAsset() {
   const { portfolio, modifyPortfolio } = useContext(PortofolioContext);
 
-  const { currentAssetId } = useAssetContext();
+  const { currentAssetId, deleteAsset } = useAssetContext();
 
   const currentAsset =
     portfolio?.assets.find((asset) => asset.id === currentAssetId) || null;
@@ -37,7 +38,6 @@ export function EditAsset() {
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <EditableText
             value={currentAsset.name}
-            prefix="Name"
             modifyValue={(newName) => {
               currentAsset.name = newName;
               modifyPortfolio(portfolio);
@@ -48,6 +48,12 @@ export function EditAsset() {
             onChange={onColorChange}
             value={getColorString(currentAsset.color)}
           />
+          <Button
+            variant="outline-danger"
+            onClick={() => deleteAsset(currentAsset.id)}
+          >
+            <BsTrash />
+          </Button>
         </div>
       ) : (
         <></>

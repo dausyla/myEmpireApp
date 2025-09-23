@@ -15,7 +15,7 @@ import { NoRouteMatch } from "./components/pages/NoRouteMatch";
 import { MyEmpireApp } from "./components/pages/MyEmpireApp";
 import { AppContextProvider } from "./contexts/AppContext/AppContextProvider";
 import { PortofolioContextProvider } from "./contexts/PortfolioContext/PortfolioContextProvider";
-import { AssetContextProvider } from "./contexts/AssetContext/AppContextProvider";
+import { AssetContextProvider } from "./contexts/AssetContext/AssetContextProvider";
 
 // Register Chart.js to enable chart rendering
 ChartJS.register(

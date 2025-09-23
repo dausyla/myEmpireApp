@@ -83,6 +83,21 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     setCurrentPortfolioId(newPortfolio.id);
   };
 
+  const deletePortfolio = (id: string) => {
+    if (!portfolios) return;
+    const updatedPortfolios = portfolios.filter((p) => p.id !== id);
+    setPortfolios(updatedPortfolios);
+    localStorage.setItem(
+      PORTFOLIOS_STORAGE_KEY,
+      JSON.stringify(updatedPortfolios)
+    );
+    if (currentPortfolioId === id) {
+      setCurrentPortfolioId(
+        updatedPortfolios.length > 0 ? updatedPortfolios[0].id : null
+      );
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -93,6 +108,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
         savePortfolioInLocalStorage,
         createNewPortfolioEmpty,
         createNewPortfolioExample,
+        deletePortfolio,
       }}
     >
       {children}

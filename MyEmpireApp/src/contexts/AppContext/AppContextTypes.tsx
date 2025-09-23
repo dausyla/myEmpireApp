@@ -8,6 +8,7 @@ export type AppContextType = {
   savePortfolioInLocalStorage: (portfolio: Portfolio) => void;
   createNewPortfolioEmpty: (name?: string) => void;
   createNewPortfolioExample: (name?: string) => void;
+  deletePortfolio: (id: string) => void;
 };
 
 export const PORTFOLIOS_STORAGE_KEY = "myEmpireApp_portfolios";

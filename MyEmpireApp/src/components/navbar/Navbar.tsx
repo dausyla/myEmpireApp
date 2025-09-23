@@ -5,6 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { usePortfolio } from "../../contexts/PortfolioContext/PortfolioContextHook";
 import { EditableText } from "../utilies/EditableText";
 import { useAppContext } from "../../contexts/AppContext/AppContextHook";
+import { BsTrash } from "react-icons/bs";
 
 export function NavBar({
   setCurrentNav,
@@ -16,6 +17,7 @@ export function NavBar({
     setCurrentPortfolioId,
     createNewPortfolioExample,
     createNewPortfolioEmpty,
+    deletePortfolio,
   } = useAppContext();
   const { isModified, savePortfolio, portfolio, modifyPortfolio } =
     usePortfolio();
@@ -60,55 +62,62 @@ export function NavBar({
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="main-nav" />
         <Navbar.Collapse id="main-nav">
+          <NavDropdown title="Portfolios" id="basic-nav-dropdown">
+            {portfolios ? (
+              portfolioNames?.map((name, index) => (
+                <NavDropdown.Item
+                  key={index}
+                  onClick={() => setCurrentPortfolioId(portfolios[index].id)}
+                >
+                  {name}
+                </NavDropdown.Item>
+              ))
+            ) : (
+              <></>
+            )}
+            <NavDropdown.Divider />
+            <NavDropdown.Item onClick={() => createNewPortfolioEmpty()}>
+              + New Empty Portfolio
+            </NavDropdown.Item>
+            <NavDropdown.Item onClick={() => createNewPortfolioExample()}>
+              + New Example Portfolio
+            </NavDropdown.Item>
+          </NavDropdown>
           <Nav className="me-auto align-items-center">
             <Nav.Link onClick={() => setCurrentNav("predictions")}>
               Home
             </Nav.Link>
             <Nav.Link onClick={() => setCurrentNav("assets")}>Assets</Nav.Link>
-            <NavDropdown title="Portfolios" id="basic-nav-dropdown">
-              {portfolios ? (
-                portfolioNames?.map((name, index) => (
-                  <NavDropdown.Item
-                    key={index}
-                    onClick={() => setCurrentPortfolioId(portfolios[index].id)}
-                  >
-                    {name}
-                  </NavDropdown.Item>
-                ))
-              ) : (
-                <></>
-              )}
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={() => createNewPortfolioEmpty()}>
-                + New Empty Portfolio
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => createNewPortfolioExample()}>
-                + New Example Portfolio
-              </NavDropdown.Item>
-            </NavDropdown>
-            {portfolio ? (
-              <>
-                <EditableText
-                  value={portfolio.name}
-                  modifyValue={(newName) => {
-                    portfolio.name = newName;
-                    modifyPortfolio(portfolio);
-                  }}
-                />
-                <Button
-                  onClick={savePortfolio}
-                  disabled={!isModified}
-                  className="ms-2"
-                >
-                  Save
-                </Button>{" "}
-              </>
-            ) : (
-              <></>
-            )}
           </Nav>
         </Navbar.Collapse>
         <Navbar.Collapse className="justify-content-end" style={{ gap: 8 }}>
+          {portfolio ? (
+            <>
+              <EditableText
+                value={portfolio.name}
+                modifyValue={(newName) => {
+                  portfolio.name = newName;
+                  modifyPortfolio(portfolio);
+                }}
+              />
+              <Button
+                onClick={savePortfolio}
+                disabled={!isModified}
+                className="ms-2"
+              >
+                Save
+              </Button>{" "}
+              <Button
+                onClick={() => deletePortfolio(portfolio.id)}
+                variant="outline-danger"
+                className="ms-2"
+              >
+                <BsTrash />
+              </Button>{" "}
+            </>
+          ) : (
+            <></>
+          )}
           <Button
             variant="outline-primary"
             onClick={handleExport}
