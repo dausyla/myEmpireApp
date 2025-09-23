@@ -22,7 +22,7 @@ export function Assets() {
         </Col>
       </Row>
       <Row>
-        <Col md={6}>
+        <Col md={7}>
           <Card className="rounded shadow-sm p-2">
             <AssetValuesTable />
           </Card>

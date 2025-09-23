@@ -5,7 +5,6 @@ import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextH
 
 export function AssetPredictions() {
   const { portfolio, modifyPortfolio } = usePortfolio();
-
   const { currentAssetId } = useAssetContext();
 
   const currentAsset = portfolio?.assets.find(
@@ -15,25 +14,30 @@ export function AssetPredictions() {
   if (!portfolio || !currentAsset) return null;
 
   return (
-    <Table striped bordered hover>
-      <thead>
+    <Table
+      bordered={false}
+      hover
+      className="align-middle text-nowrap shadow-sm"
+    >
+      <thead className="table-light">
         <tr>
-          <th>Monthly Input</th>
-          <th>Estimated APY</th>
+          <th style={{ width: "50%", textAlign: "center" }}>Monthly Input</th>
+          <th style={{ width: "50%", textAlign: "center" }}>Estimated APY</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>
+          <td style={{ textAlign: "right" }}>
             <EditableValue
               value={currentAsset.prediction.monthlyInput}
               modifyValue={(newValue) => {
                 currentAsset.prediction.monthlyInput = newValue;
                 modifyPortfolio(portfolio);
               }}
+              suffix=" $"
             />
           </td>
-          <td>
+          <td style={{ textAlign: "right" }}>
             <EditableValue
               value={100 * currentAsset.prediction.estimatedAPY}
               modifyValue={(newValue) => {

@@ -19,16 +19,18 @@ export function AddDateButton() {
   };
 
   return (
-    <InputGroup style={{ display: "flex", width: "11rem" }}>
+    <InputGroup style={{ display: "flex", minWidth: "10.5rem" }}>
       <Form.Control
         type="date"
         value={newDate}
         onChange={(e) => setNewDate(e.target.value)}
+        className="py-0 px-1"
       />
       <Button
         variant="outline-primary"
         onClick={addDateButton}
         disabled={!newDate}
+        className="py-0 px-1"
       >
         <BsPlus />
       </Button>

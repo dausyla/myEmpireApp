@@ -5,7 +5,6 @@ import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextH
 
 export function AssetPerformence() {
   const { portfolio, modifyPortfolio } = usePortfolio();
-
   const { currentAssetId } = useAssetContext();
 
   const currentAsset = portfolio?.assets.find(
@@ -17,11 +16,8 @@ export function AssetPerformence() {
   }
 
   const totalValue = currentAsset.values[currentAsset.values.length - 1]; // Last Value
-
   const totalInput = currentAsset.inputs.reduce((a, b) => a + b, 0);
-
   const totalInterests = totalValue - totalInput;
-
   const totalGrowth = totalValue / totalInput - 1;
 
   const firstDateAsset = portfolio.dates.find(
@@ -40,36 +36,64 @@ export function AssetPerformence() {
 
   const automatePredictions = () => {
     currentAsset.prediction.monthlyInput =
-      Math.round((100 * totalInput) / timeSpentInYears / 12) / 100; // Round to 2 decimal;
-    currentAsset.prediction.estimatedAPY = Math.round(apy * 100) / 100; // Round to 2 decimals
+      Math.round((100 * totalInput) / timeSpentInYears / 12) / 100; // Round to 2 decimals
+    currentAsset.prediction.estimatedAPY = Math.round(apy * 10000) / 10000; // Round to 2 decimals
     modifyPortfolio(portfolio);
   };
 
   return (
     <>
-      <Table striped bordered hover>
-        <thead>
+      <Table hover className="align-middle  shadow-sm">
+        <thead className="table-light">
           <tr>
-            <th>Total Value</th>
-            <th>Total Input</th>
-            <th>Monthly Input</th>
-            <th>Total Interests</th>
-            <th>Total Growth</th>
-            <th>APY</th>
+            <th style={{ width: "16.6%", textAlign: "center" }}>Total Value</th>
+            <th style={{ width: "16.6%", textAlign: "center" }}>Total Input</th>
+            <th style={{ width: "16.6%", textAlign: "center" }}>
+              Monthly Input
+            </th>
+            <th style={{ width: "16.6%", textAlign: "center" }}>
+              Total Interests
+            </th>
+            <th style={{ width: "16.6%", textAlign: "center" }}>
+              Total Growth
+            </th>
+            <th style={{ width: "16.6%", textAlign: "center" }}>APY</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{totalValue.toFixed(2)} $</td>
-            <td>{totalInput.toFixed(2)} $</td>
-            <td>{(totalInput / timeSpentInYears / 12).toFixed(2)} $</td>
-            <td>{totalInterests.toFixed(2)} $</td>
-            <td>{(100 * totalGrowth).toFixed(2)} %</td>
-            <td>{(100 * apy).toFixed(2)} %</td>
+            <td style={{ textAlign: "right" }}>{totalValue.toFixed(2)} $</td>
+            <td style={{ textAlign: "right" }}>{totalInput.toFixed(2)} $</td>
+            <td style={{ textAlign: "right" }}>
+              {(totalInput / timeSpentInYears / 12).toFixed(2)} $
+            </td>
+            <td
+              style={{ textAlign: "right" }}
+              className={`text-${totalInterests > 0 ? "success" : "danger"}`}
+            >
+              {totalInterests.toFixed(2)} $
+            </td>
+            <td
+              style={{ textAlign: "right" }}
+              className={`text-${totalGrowth > 0 ? "success" : "danger"}`}
+            >
+              {(100 * totalGrowth).toFixed(2)} %
+            </td>
+            <td
+              style={{ textAlign: "right" }}
+              className={`text-${apy > 0 ? "success" : "danger"}`}
+            >
+              {(100 * apy).toFixed(2)} %
+            </td>
           </tr>
         </tbody>
       </Table>
-      <Button onClick={automatePredictions}>Automate Predictions</Button>
+
+      <div>
+        <Button variant="outline-primary" onClick={automatePredictions}>
+          Automate Predictions
+        </Button>
+      </div>
     </>
   );
 }

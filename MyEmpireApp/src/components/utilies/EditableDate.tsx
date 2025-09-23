@@ -16,24 +16,35 @@ export function EditableDate({ index }: { index: number }) {
 
   const saveValue = () => {
     if (!newDate) return;
-
     const newDateTimestamp = new Date(newDate).getTime();
     const formerDateTimestamp = new Date(formerDate).getTime();
 
-    editDate(formerDateTimestamp, newDateTimestamp);
-
-    setFormerDate(newDate);
+    if (newDateTimestamp !== formerDateTimestamp) {
+      editDate(formerDateTimestamp, newDateTimestamp);
+      setFormerDate(newDate);
+    }
     setIsEditing(false);
+    (document.activeElement as HTMLElement)?.blur();
   };
 
   const cancel = () => {
     setIsEditing(false);
     setNewDate(formerDate);
+    (document.activeElement as HTMLElement)?.blur();
   };
 
   const remove = () => {
     const timestamp = new Date(formerDate).getTime();
     deleteDate(timestamp);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!isEditing) {
+      if (e.key === "Enter") setIsEditing(true);
+    } else {
+      if (e.key === "Enter") saveValue();
+      else if (e.key === "Escape") cancel();
+    }
   };
 
   useEffect(() => {
@@ -42,25 +53,21 @@ export function EditableDate({ index }: { index: number }) {
   }, [initialDate]);
 
   return (
-    <InputGroup style={{ display: "flex", width: "12rem" }}>
+    <InputGroup style={{ minWidth: "10.5rem" }} onKeyDown={handleKeyDown}>
       <Form.Control
         type="date"
         value={newDate}
         onChange={(e) => setNewDate(e.target.value)}
         readOnly={!isEditing}
-        onDoubleClick={() => setIsEditing(true)}
+        className="py-0 px-1"
       />
       {isEditing ? (
         <>
-          <Button
-            variant="success"
-            onClick={saveValue}
-            style={{ padding: "0" }}
-          >
-            <BsCheckSquare style={{ margin: "0.4rem" }} />
+          <Button variant="success" onClick={saveValue} className="py-0 px-1">
+            <BsCheckSquare />
           </Button>
-          <Button variant="danger" onClick={cancel} style={{ padding: "0" }}>
-            <BsXCircle style={{ margin: "0.4rem" }} />
+          <Button variant="danger" onClick={cancel} className="py-0 px-1">
+            <BsXCircle />
           </Button>
         </>
       ) : (
@@ -68,16 +75,16 @@ export function EditableDate({ index }: { index: number }) {
           <Button
             onClick={() => setIsEditing(true)}
             variant="outline-primary"
-            style={{ padding: "0" }}
+            className="py-0 px-1"
           >
-            <BsPencil style={{ margin: "0.4rem" }} />
+            <BsPencil />
           </Button>
           <Button
             onClick={remove}
             variant="outline-danger"
-            style={{ padding: "0" }}
+            className="py-0 px-1"
           >
-            <BsTrash style={{ margin: "0.4rem" }} />
+            <BsTrash />
           </Button>
         </>
       )}

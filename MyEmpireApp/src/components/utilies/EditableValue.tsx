@@ -12,81 +12,75 @@ export function EditableValue({
   suffix?: string;
 }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [newValue, setNewValue] = useState(value);
-  const [formerValue, setFormerValue] = useState(value);
+  const [newValue, setNewValue] = useState<string>(value.toString());
+  const [formerValue, setFormerValue] = useState<string>(value.toString());
 
-  // 🔑 Sync local state when `value` changes from parent
   useEffect(() => {
-    setNewValue(value);
+    setNewValue(value.toString());
   }, [value]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const parsedValue = Number(e.target.value);
-    if (!isNaN(parsedValue)) {
-      setNewValue(parsedValue);
-      modifyValue(parsedValue);
-    }
+    setNewValue(e.target.value); // keep raw string
   };
 
   const saveValue = () => {
-    setFormerValue(newValue);
+    const parsed = Number(newValue);
+    if (!isNaN(parsed)) {
+      modifyValue(parsed);
+      setFormerValue(newValue);
+    } else {
+      setNewValue(formerValue); // rollback if invalid
+    }
     setIsEditing(false);
+    (document.activeElement as HTMLElement)?.blur();
   };
 
   const cancel = () => {
     setIsEditing(false);
     setNewValue(formerValue);
+    (document.activeElement as HTMLElement)?.blur();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!isEditing) {
-      if (e.key === "Enter") {
-        setIsEditing(true);
-      }
+      if (e.key === "Enter") setIsEditing(true);
     } else {
-      if (e.key === "Enter") {
-        saveValue();
-      } else if (e.key === "Escape") {
-        cancel();
-      }
+      if (e.key === "Enter") saveValue();
+      else if (e.key === "Escape") cancel();
     }
   };
 
   return (
     <InputGroup
       style={{
-        width: "9rem",
+        minWidth: "7rem",
       }}
       onKeyDown={handleKeyDown}
     >
       <Form.Control
         onChange={onChange}
         value={newValue}
-        readOnly={!isEditing}
-        onDoubleClick={() => setIsEditing(true)}
+        onClick={() => setIsEditing(true)}
+        className="text-end py-0 px-1"
       />
       {isEditing ? (
         <>
-          <Button
-            variant="success"
-            onClick={saveValue}
-            style={{ padding: "0" }}
-          >
-            <BsCheckSquare style={{ margin: "0.4rem" }} />
+          <Button variant="success" onClick={saveValue} className="py-0 px-1">
+            <BsCheckSquare />
           </Button>
-          <Button variant="danger" onClick={cancel} style={{ padding: "0" }}>
-            <BsXCircle style={{ margin: "0.4rem" }} />
+          <Button variant="danger" onClick={cancel} className="py-0 px-1">
+            <BsXCircle />
           </Button>
         </>
       ) : (
         <>
-          <InputGroup.Text>{suffix}</InputGroup.Text>
+          <InputGroup.Text className="py-0 px-1">{suffix}</InputGroup.Text>
           <Button
             onClick={() => setIsEditing(true)}
             variant="outline-primary"
-            style={{ padding: "0" }}
+            className="py-0 px-1"
           >
-            <BsPencil style={{ margin: "0.4rem" }} />
+            <BsPencil />
           </Button>
         </>
       )}
