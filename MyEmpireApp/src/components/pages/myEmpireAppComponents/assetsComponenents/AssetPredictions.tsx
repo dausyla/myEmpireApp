@@ -14,11 +14,7 @@ export function AssetPredictions() {
   if (!portfolio || !currentAsset) return null;
 
   return (
-    <Table
-      bordered={false}
-      hover
-      className="align-middle text-nowrap shadow-sm"
-    >
+    <Table bordered={false} hover className="align-middle text-nowrap ">
       <thead className="table-light">
         <tr>
           <th style={{ width: "50%", textAlign: "center" }}>Monthly Input</th>

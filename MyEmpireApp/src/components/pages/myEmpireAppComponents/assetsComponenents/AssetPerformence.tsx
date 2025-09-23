@@ -43,7 +43,7 @@ export function AssetPerformence() {
 
   return (
     <>
-      <Table hover className="align-middle  shadow-sm">
+      <Table hover className="align-middle ">
         <thead className="table-light">
           <tr>
             <th style={{ width: "16.6%", textAlign: "center" }}>Total Value</th>

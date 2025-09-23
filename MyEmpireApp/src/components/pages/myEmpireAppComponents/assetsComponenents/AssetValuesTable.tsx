@@ -3,6 +3,7 @@ import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioCon
 import { EditableValue } from "../../../utilies/EditableValue";
 import { EditableDate } from "../../../utilies/EditableDate";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
+import { AddDateButton } from "../../../utilies/AddDateButton";
 
 export function AssetValuesTable() {
   const { portfolio, modifyPortfolio } = usePortfolio();
@@ -87,7 +88,7 @@ export function AssetValuesTable() {
       bordered={false}
       hover
       responsive
-      className="align-middle shadow-sm text-nowrap"
+      className="align-middle text-nowrap"
     >
       <thead className="table-light">
         <tr>
@@ -98,7 +99,14 @@ export function AssetValuesTable() {
           <th style={{ width: "20%", textAlign: "right" }}>Percentage</th>
         </tr>
       </thead>
-      <tbody>{rows}</tbody>
+      <tbody>
+        {rows}
+        <tr>
+          <td>
+            <AddDateButton />
+          </td>
+        </tr>
+      </tbody>
     </Table>
   );
 }

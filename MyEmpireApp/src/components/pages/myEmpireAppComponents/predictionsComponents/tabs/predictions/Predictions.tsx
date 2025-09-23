@@ -33,7 +33,7 @@ export function Predictions() {
   ));
 
   return (
-    <Table striped bordered hover responsive>
+    <Table hover responsive size="sm" className="align-middle text-nowrap">
       <thead>
         <tr>
           <th>Asset</th>
