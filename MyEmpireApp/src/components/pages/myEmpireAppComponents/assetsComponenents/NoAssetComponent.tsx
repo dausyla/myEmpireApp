@@ -18,7 +18,7 @@ export function NoAssetComponent() {
       <Card style={{ width: "22rem" }} className="shadow">
         <Card.Header>No Assets Found</Card.Header>
         <Card.Body>
-          <Card.Title>Create a New Portfolio</Card.Title>
+          <Card.Title>Create a New Asset</Card.Title>
           <Form.Group className="mb-3">
             <Form.Control
               type="text"

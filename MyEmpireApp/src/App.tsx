@@ -30,7 +30,7 @@ ChartJS.register(
 
 function App() {
   return (
-    <Router>
+    <Router basename="/myEmpireApp">
       <Routes>
         <Route
           path="/app"
