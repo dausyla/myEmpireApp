@@ -9,6 +9,9 @@ import {
   Title,
   Tooltip,
   Legend,
+  ArcElement,
+  Filler,
+  BarElement,
 } from "chart.js";
 import { Home } from "./components/pages/Home";
 import { NoRouteMatch } from "./components/pages/NoRouteMatch";
@@ -23,6 +26,9 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  ArcElement,
+  BarElement,
+  Filler,
   Title,
   Tooltip,
   Legend

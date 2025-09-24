@@ -84,6 +84,9 @@ export function NavBar({
             </NavDropdown.Item>
           </NavDropdown>
           <Nav className="me-auto align-items-center">
+            <Nav.Link onClick={() => setCurrentNav("dashboard")}>
+              Dashboard
+            </Nav.Link>
             <Nav.Link onClick={() => setCurrentNav("predictions")}>
               Predictions
             </Nav.Link>

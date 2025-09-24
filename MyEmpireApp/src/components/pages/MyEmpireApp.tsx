@@ -5,9 +5,10 @@ import { Assets } from "./myEmpireAppComponents/Assets";
 import { usePortfolio } from "../../contexts/PortfolioContext/PortfolioContextHook";
 import { Button, Card, Form } from "react-bootstrap";
 import { useAppContext } from "../../contexts/AppContext/AppContextHook";
+import { Dashboard } from "./myEmpireAppComponents/Dashboard";
 
 export function MyEmpireApp() {
-  const [currentNav, setCurrentNav] = useState("predictions");
+  const [currentNav, setCurrentNav] = useState("dashboard");
   const { portfolio } = usePortfolio();
   const { createNewPortfolioEmpty, createNewPortfolioExample } =
     useAppContext();
@@ -30,6 +31,7 @@ export function MyEmpireApp() {
 
       {portfolio ? (
         <>
+          {currentNav === "dashboard" && <Dashboard />}
           {currentNav === "predictions" && <Predictions />}
           {currentNav === "assets" && <Assets />}
         </>
