@@ -10,8 +10,8 @@ export function getDataset(
   overYears: number,
   detail: boolean = false
 ) {
-  const datasets = portfolio.assets.flatMap((asset) =>
-    getDatasetForAsset(asset, overYears, detail)
+  const datasets = portfolio.assets.flatMap((asset, i) =>
+    getDatasetForAsset(asset, overYears, i, detail)
   );
 
   const data = {
@@ -45,6 +45,7 @@ function getDates(dates: number[], overYears: number) {
 function getDatasetForAsset(
   asset: Asset,
   overYears: number,
+  index: number,
   detail: boolean = false
 ) {
   const color = getColorString(asset.color);
@@ -73,21 +74,23 @@ function getDatasetForAsset(
     interests.push(newValue - inputs[inputs.length - 1]);
   }
 
-  return detail
+  const fill = index === 0 ? true : "-1"; // fill to the previous dataset
+
+  const res = detail
     ? [
         {
           label: `${asset.name} - Inputs`,
           data: inputs,
           borderColor: color,
           backgroundColor: fadedColor,
-          fill: true,
+          fill,
         },
         {
           label: `${asset.name} - Interests`,
           data: interests,
           borderColor: color,
           backgroundColor: fadedColor,
-          fill: true,
+          fill,
         },
       ]
     : [
@@ -96,9 +99,11 @@ function getDatasetForAsset(
           data: totalValues,
           borderColor: color,
           backgroundColor: fadedColor,
-          fill: true,
+          fill,
         },
       ];
+
+  return res;
 }
 
 export const graphOptions = {
@@ -112,7 +117,7 @@ export const graphOptions = {
   },
   plugins: {
     filler: {
-      propagate: false,
+      // propagate: false,
     },
     legend: {
       position: "top" as const,

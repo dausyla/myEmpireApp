@@ -25,3 +25,12 @@ export type Portfolio = {
   assets: Asset[];
   dates: number[];
 };
+
+export type AssetPerformance = {
+  totalValue: number;
+  totalInput: number;
+  totalInterests: number;
+  totalGrowth: number;
+  apy: number;
+  timeSpentInYears: number;
+};

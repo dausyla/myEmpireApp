@@ -18,7 +18,7 @@ export const assetsExample: Asset[] = [
       estimatedAPY: 0.065,
       monthlyInput: 1500,
     },
-    color: { r: 255, g: 204, b: 0 }, // Yellow
+    color: { r: 255, g: 0, b: 0 }, // Red
   },
   {
     id: 2,

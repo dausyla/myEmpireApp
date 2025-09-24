@@ -2,6 +2,7 @@ import Table from "react-bootstrap/Table";
 import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { Button } from "react-bootstrap";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
+import { getAssetPerformence } from "../../../utilies/utilsFunctions";
 
 export function AssetPerformence() {
   const { portfolio, modifyPortfolio } = usePortfolio();
@@ -15,24 +16,14 @@ export function AssetPerformence() {
     return null;
   }
 
-  const totalValue = currentAsset.values[currentAsset.values.length - 1]; // Last Value
-  const totalInput = currentAsset.inputs.reduce((a, b) => a + b, 0);
-  const totalInterests = totalValue - totalInput;
-  const totalGrowth = totalValue / totalInput - 1;
-
-  const firstDateAsset = portfolio.dates.find(
-    (_, index) => currentAsset.values[index] > 0
-  );
-
-  if (!firstDateAsset) {
-    return <div>No values recorded for this asset.</div>;
-  }
-
-  const timeSpentInYears =
-    (portfolio.dates[portfolio.dates.length - 1] - firstDateAsset) /
-    (1000 * 60 * 60 * 24 * 365);
-
-  const apy = totalGrowth / timeSpentInYears;
+  const {
+    totalValue,
+    totalInput,
+    totalInterests,
+    totalGrowth,
+    apy,
+    timeSpentInYears,
+  } = getAssetPerformence(currentAsset, portfolio.dates);
 
   const automatePredictions = () => {
     currentAsset.prediction.monthlyInput =
