@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import type { Portfolio } from "../../types/Assets";
+import type { Portfolio } from "../../types/PortfolioTypes";
 import { PortofolioContext } from "./PortfolioContextHook";
 import { useAppContext } from "../AppContext/AppContextHook";
 

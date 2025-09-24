@@ -1,4 +1,4 @@
-import type { Portfolio } from "../../types/Assets";
+import type { Portfolio } from "../../types/PortfolioTypes";
 
 export type AppContextType = {
   currentPortfolioId: string | null;

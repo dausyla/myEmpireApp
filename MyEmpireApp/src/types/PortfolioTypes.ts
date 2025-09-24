@@ -15,7 +15,7 @@ export type Asset = {
   values: number[];
   inputs: number[];
   prediction: Prediction;
-  color: Color; // Optional color for the asset
+  color: Color;
 };
 
 export type Portfolio = {

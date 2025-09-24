@@ -1,5 +1,5 @@
-import type { Color, Portfolio } from "../../../../../types/Assets";
-import type { Asset } from "../../../../../types/Assets";
+import type { Color, Portfolio } from "../../../../../types/PortfolioTypes";
+import type { Asset } from "../../../../../types/PortfolioTypes";
 
 export function getDataset(
   portfolio: Portfolio,

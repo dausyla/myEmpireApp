@@ -1,11 +1,11 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { AppContext } from "./AppContextHook";
 import { PORTFOLIOS_STORAGE_KEY } from "./AppContextTypes";
-import type { Portfolio } from "../../types/Assets";
+import type { Portfolio } from "../../types/PortfolioTypes";
 import {
   emptyPortfolio,
   portfolioExample,
-} from "../PortfolioContext/PortfolioContextTypes";
+} from "../../types/PortfolioExamples";
 
 export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentPortfolioId, setCurrentPortfolioId] = useState<string | null>(

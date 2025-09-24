@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { PortofolioContext } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { Button, Form } from "react-bootstrap";
-import type { Color } from "../../../../types/Assets";
+import type { Color } from "../../../../types/PortfolioTypes";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 import { EditableText } from "../../../utilies/EditableText";
 import { BsTrash } from "react-icons/bs";
