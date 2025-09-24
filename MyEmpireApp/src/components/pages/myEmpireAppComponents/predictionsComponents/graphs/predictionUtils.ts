@@ -1,5 +1,9 @@
-import type { Color, Portfolio } from "../../../../../types/PortfolioTypes";
+import type { Portfolio } from "../../../../../types/PortfolioTypes";
 import type { Asset } from "../../../../../types/PortfolioTypes";
+import {
+  getColorString,
+  getFadedColor,
+} from "../../../../utilies/utilsFunctions";
 
 export function getDataset(
   portfolio: Portfolio,
@@ -118,12 +122,4 @@ export const graphOptions = {
       text: "Portfolio Value Over Time",
     },
   },
-};
-
-const getFadedColor = (color: Color, alpha: number = 0.5) => {
-  return `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`; // Return a string in rgba format with alpha
-};
-
-const getColorString = (c: Color) => {
-  return `rgba(${c.r}, ${c.g}, ${c.b})`; // Return a string in rgba format
 };

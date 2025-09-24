@@ -1,5 +1,6 @@
 import { Pie } from "react-chartjs-2";
 import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { getColorString } from "../../../utilies/utilsFunctions";
 
 export function InterestsRepartition() {
   const { portfolio } = usePortfolio();
@@ -12,6 +13,8 @@ export function InterestsRepartition() {
     return value - inputs;
   });
 
+  const colors = portfolio.assets.map((a) => getColorString(a.color));
+
   return (
     <Pie
       data={{
@@ -19,13 +22,7 @@ export function InterestsRepartition() {
         datasets: [
           {
             data,
-            backgroundColor: [
-              "#FFCE56",
-              "#FF6384",
-              "#36A2EB",
-              "#4BC0C0",
-              "#9966FF",
-            ],
+            backgroundColor: colors,
           },
         ],
       }}
@@ -33,8 +30,12 @@ export function InterestsRepartition() {
         responsive: true,
         maintainAspectRatio: false, // let it fill the container
         plugins: {
+          title: {
+            display: true,
+            text: "Interests Repartition",
+          },
           legend: {
-            position: "top",
+            position: "right",
           },
         },
       }}

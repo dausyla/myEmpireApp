@@ -1,5 +1,6 @@
 import { Pie } from "react-chartjs-2";
 import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { getColorString } from "../../../utilies/utilsFunctions";
 
 export function AssetRepartition() {
   const { portfolio } = usePortfolio();
@@ -8,6 +9,8 @@ export function AssetRepartition() {
   const labels = portfolio.assets.map((a) => a.name);
   const data = portfolio.assets.map((a) => a.values[a.values.length - 1]);
 
+  const colors = portfolio.assets.map((a) => getColorString(a.color));
+
   return (
     <Pie
       data={{
@@ -15,13 +18,7 @@ export function AssetRepartition() {
         datasets: [
           {
             data,
-            backgroundColor: [
-              "#36A2EB",
-              "#FF6384",
-              "#FFCE56",
-              "#4BC0C0",
-              "#9966FF",
-            ],
+            backgroundColor: colors,
           },
         ],
       }}
@@ -29,8 +26,12 @@ export function AssetRepartition() {
         responsive: true,
         maintainAspectRatio: false, // let it fill the container
         plugins: {
+          title: {
+            display: true,
+            text: "Asset Repartition",
+          },
           legend: {
-            position: "top",
+            position: "left",
           },
         },
       }}
