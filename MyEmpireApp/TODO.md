@@ -1,2 +1,5 @@
-- Home page
-- 404 page
+- Detail Inputs (with descriptions)
+- Inputs => Transactions
+- Performence over a time
+- currency ($/euro)
+- Groups?

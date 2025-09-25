@@ -46,6 +46,14 @@ export function Graphs() {
           />
           <InputGroup.Text>years</InputGroup.Text>
         </InputGroup>
+        {/* <InputGroup>
+          <Button variant="outline-primary" onClick={() => {}}>
+            Automate Monthly Inputs
+          </Button>
+          <Button variant="outline-primary" onClick={() => {}}>
+            Automate Monthly Inputs
+          </Button>
+        </InputGroup> */}
         <Form.Check
           type="switch"
           label="Detail Prediction"

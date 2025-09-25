@@ -10,7 +10,7 @@ export function Tabs() {
   const [activeTab, setActiveTab] = useState<TabType>("values");
 
   return (
-    <Card className="rounded shadow-sm">
+    <Card className="rounded shadow-sm p-2 mb-2" style={{ height: "80%" }}>
       <Card.Header className="bg-white">
         <Nav variant="tabs" activeKey={activeTab} fill>
           <Nav.Item>
@@ -36,7 +36,7 @@ export function Tabs() {
           </Nav.Item>
         </Nav>
       </Card.Header>
-      <Card.Body>
+      <Card.Body style={{ height: "80%", overflowY: "auto" }}>
         {activeTab === "values" && <Values />}
         {activeTab === "inputs" && <Inputs />}
         {activeTab === "predictions" && <Predictions />}

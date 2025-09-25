@@ -16,6 +16,7 @@ export type Asset = {
   inputs: number[];
   prediction: Prediction;
   color: Color;
+  countFirstInput?: boolean;
 };
 
 export type Portfolio = {
