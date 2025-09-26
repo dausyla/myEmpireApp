@@ -2,4 +2,4 @@
 - Inputs => Transactions
 - Performence over a time
 - currency ($/euro)
-- Groups?
+- Groups? => Arborescence comme dans vs code

@@ -1,18 +1,9 @@
 import { Bubble } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  LinearScale,
-  PointElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
 import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
 import {
   getAssetPerformence,
   getFadedColor,
 } from "../../../utilies/utilsFunctions";
-
-ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
 
 export function InterestsRepartition() {
   const { portfolio } = usePortfolio();
