@@ -16,6 +16,16 @@ export const getAssetPerformence: (
   asset: Asset,
   dates: number[]
 ) => AssetPerformance = (asset: Asset, dates: number[]) => {
+  if (dates.length === 0) {
+    return {
+      totalValue: 0,
+      totalInput: 0,
+      totalInterests: 0,
+      totalGrowth: 0,
+      apy: 0,
+      timeSpentInYears: 0,
+    };
+  }
   const totalValue = asset.values[asset.values.length - 1]; // Last Value
   const totalInput = asset.inputs.reduce((a, b) => a + b, 0);
   const totalGrowth = totalValue / totalInput - 1;
