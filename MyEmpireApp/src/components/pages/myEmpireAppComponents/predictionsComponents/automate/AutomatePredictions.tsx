@@ -26,8 +26,10 @@ export function AutomatePredictions() {
         ? perf.totalInput
         : perf.totalInput - (firstInput || 0);
       const monthlyInput =
-        Math.round((100 * totalMonthlyInput) / perf.timeSpentInYears / 12) /
-        100; // Round to 2 decimals
+        perf.timeSpentInYears === 0
+          ? 0
+          : Math.round((100 * totalMonthlyInput) / perf.timeSpentInYears / 12) /
+            100; // Round to 2 decimals
 
       asset.prediction.monthlyInput = monthlyInput;
     });
