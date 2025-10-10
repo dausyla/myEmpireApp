@@ -7,6 +7,7 @@ import { MyEmpireApp } from "./components/pages/MyEmpireApp";
 import { AppContextProvider } from "./contexts/AppContext/AppContextProvider";
 import { PortofolioContextProvider } from "./contexts/PortfolioContext/PortfolioContextProvider";
 import { AssetContextProvider } from "./contexts/AssetContext/AssetContextProvider";
+import { DateContextProvider } from "./contexts/DateContext/DateContextProvider";
 
 // Register Chart.js to enable chart rendering
 ChartJS.register(...registerables);
@@ -21,7 +22,9 @@ function App() {
             <AppContextProvider>
               <PortofolioContextProvider>
                 <AssetContextProvider>
-                  <MyEmpireApp />
+                  <DateContextProvider>
+                    <MyEmpireApp />
+                  </DateContextProvider>
                 </AssetContextProvider>
               </PortofolioContextProvider>
             </AppContextProvider>

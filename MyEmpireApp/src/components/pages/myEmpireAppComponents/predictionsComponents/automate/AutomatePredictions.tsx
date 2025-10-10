@@ -1,15 +1,17 @@
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { usePortfolio } from "../../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { getAssetPerformence } from "../../../../utilies/utilsFunctions";
+import { useAssetContext } from "../../../../../contexts/AssetContext/AssetContextHook";
 
 export function AutomatePredictions() {
   const { portfolio, modifyPortfolio } = usePortfolio();
+  const { mapAssets } = useAssetContext();
 
   if (!portfolio) {
     return null;
   }
   const automateAllApys = () => {
-    portfolio.assets.forEach((asset) => {
+    mapAssets((asset) => {
       const perf = getAssetPerformence(asset, portfolio.dates);
       asset.prediction.estimatedAPY = Math.round(perf.apy * 10000) / 10000; // Round to 2 decimals
     });
@@ -17,7 +19,7 @@ export function AutomatePredictions() {
   };
 
   const automateAllMonthlyInputs = () => {
-    portfolio.assets.forEach((asset) => {
+    mapAssets((asset) => {
       const perf = getAssetPerformence(asset, portfolio.dates);
 
       const firstInput = asset.inputs.find((v) => v > 0);

@@ -5,11 +5,7 @@ import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextH
 
 export function AssetPredictions() {
   const { portfolio, modifyPortfolio } = usePortfolio();
-  const { currentAssetId } = useAssetContext();
-
-  const currentAsset = portfolio?.assets.find(
-    (asset) => asset.id === currentAssetId
-  );
+  const { currentAsset } = useAssetContext();
 
   if (!portfolio || !currentAsset) return null;
 

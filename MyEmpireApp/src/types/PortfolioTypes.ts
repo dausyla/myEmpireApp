@@ -9,6 +9,15 @@ export type Color = {
   b: number;
 };
 
+export type Directory = {
+  id: number;
+  name: string;
+  isOpened: boolean;
+  subDirs: Directory[];
+  subAssets: Asset[];
+  parentDirId: number;
+};
+
 export type Asset = {
   id: number;
   name: string;
@@ -17,14 +26,17 @@ export type Asset = {
   prediction: Prediction;
   color: Color;
   countFirstInput?: boolean;
+  parentDirID: number;
 };
 
 export type Portfolio = {
   id: string;
   name: string;
   description: string;
-  assets: Asset[];
+  root: Directory;
   dates: number[];
+  assetNumber: number;
+  dirNumber: number;
 };
 
 export type AssetPerformance = {

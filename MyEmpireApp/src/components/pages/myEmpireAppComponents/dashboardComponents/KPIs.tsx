@@ -1,18 +1,21 @@
 import { Card, Row, Col, Container } from "react-bootstrap";
 import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 
 export function KPIs() {
   const { portfolio } = usePortfolio();
+  const { mapAssets } = useAssetContext();
   if (!portfolio) return null;
 
-  const totalValue = portfolio.assets.reduce(
-    (acc, asset) => acc + asset.values[asset.values.length - 1],
-    0
-  );
-  const totalInput = portfolio.assets.reduce(
-    (acc, asset) => acc + asset.inputs.reduce((a, b) => a + b, 0),
-    0
-  );
+  let totalValue = 0;
+  mapAssets((asset) => {
+    totalValue += asset.values[asset.values.length - 1];
+  });
+
+  let totalInput = 0;
+  mapAssets((asset) => {
+    totalInput += asset.inputs.reduce((a, b) => a + b, 0);
+  });
   const interests = totalValue - totalInput;
   const apy = (totalInput > 0 ? (interests / totalInput) * 100 : 0).toFixed(2);
 

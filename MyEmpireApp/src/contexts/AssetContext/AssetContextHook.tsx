@@ -2,10 +2,17 @@ import { createContext, useContext } from "react";
 import type { AssetContextType } from "./AssetContextTypes";
 
 export const AssetContext = createContext<AssetContextType>({
-  currentAssetId: null,
+  currentAsset: undefined,
   setCurrentAsset: () => {},
+
+  getAsset: () => undefined,
   addNewAsset: () => {},
   deleteAsset: () => {},
+  mapAssets: () => {},
+
+  getDir: () => undefined,
+  addNewDir: () => {},
+  deleteDir: () => {},
 });
 
 export function useAssetContext() {

@@ -4,16 +4,19 @@ import {
   getAssetPerformence,
   getFadedColor,
 } from "../../../utilies/utilsFunctions";
+import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
+import type { AssetPerformance } from "../../../../types/PortfolioTypes";
 
 export function InterestsRepartition() {
   const { portfolio } = usePortfolio();
+  const { mapAssets } = useAssetContext();
   if (!portfolio) return null;
 
-  const labels = portfolio.assets.map((a) => a.name);
+  const labels: string[] = [];
+  mapAssets((a) => labels.push(a.name));
 
-  const performances = portfolio.assets.map((a) =>
-    getAssetPerformence(a, portfolio.dates)
-  );
+  const performances: AssetPerformance[] = [];
+  mapAssets((a) => performances.push(getAssetPerformence(a, portfolio.dates)));
 
   const maxValue = Math.max(...performances.map((p) => p.totalValue), 1); // avoid division by zero
 
@@ -31,6 +34,8 @@ export function InterestsRepartition() {
     };
   });
 
+  const colors: string[] = [];
+  mapAssets((a) => colors.push(getFadedColor(a.color)));
   const data = {
     datasets: [
       {
@@ -40,7 +45,7 @@ export function InterestsRepartition() {
           y: p.y,
           r: p.r,
         })),
-        backgroundColor: portfolio.assets.map((a) => getFadedColor(a.color)),
+        backgroundColor: colors,
       },
     ],
   };

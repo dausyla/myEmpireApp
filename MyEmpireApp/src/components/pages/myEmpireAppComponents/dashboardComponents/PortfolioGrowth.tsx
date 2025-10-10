@@ -1,43 +1,63 @@
 import { Chart } from "react-chartjs-2";
 import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { getColorString, getFadedColor } from "../../../utilies/utilsFunctions";
+import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 
 export function PortfolioGrowth() {
   const { portfolio } = usePortfolio();
+  const { mapAssets } = useAssetContext();
   if (!portfolio) return null;
 
   const labels = portfolio.dates.map((d) => new Date(d).toLocaleDateString());
 
-  const inputsPerAsset = portfolio.assets.map((asset) =>
-    asset.inputs.reduce((acc, input, i) => {
-      if (i === 0) {
-        acc.push(input);
-      } else {
-        acc.push(acc[i - 1] + input);
-      }
-      return acc;
-    }, [] as number[])
+  const inputsPerAsset: { inputs: number[]; name: string; color: string }[] =
+    [];
+  mapAssets((asset) =>
+    inputsPerAsset.push({
+      inputs: asset.inputs.reduce((acc, input, i) => {
+        if (i === 0) {
+          acc.push(input);
+        } else {
+          acc.push(acc[i - 1] + input);
+        }
+        return acc;
+      }, [] as number[]),
+      name: asset.name,
+      color: getFadedColor(asset.color),
+    })
   );
+
+  const assetValuesLine: {
+    type: "line";
+    label: string;
+    data: number[];
+    borderColor: string;
+    backgroundColor: string;
+    fill: boolean;
+    tension: number;
+  }[] = [];
+  mapAssets((a) => {
+    assetValuesLine.push({
+      type: "line" as const,
+      label: a.name,
+      data: a.values,
+      borderColor: getColorString(a.color),
+      backgroundColor: getColorString(a.color),
+      fill: false,
+      tension: 0.2,
+    });
+  });
 
   // datasets: one line per asset value + one bar for inputs
   const datasets = [
-    // Asset values lines
-    ...portfolio.assets.map((asset) => ({
-      type: "line" as const,
-      label: asset.name,
-      data: asset.values,
-      borderColor: getColorString(asset.color),
-      backgroundColor: getColorString(asset.color),
-      fill: false,
-      tension: 0.2,
-    })),
+    ...assetValuesLine,
     // Asset inputs stacked bar per date
-    ...inputsPerAsset.map((inputs, index) => ({
+    ...inputsPerAsset.map((a) => ({
       type: "bar" as const,
-      label: `${portfolio.assets[index].name} Inputs`,
-      data: inputs,
-      backgroundColor: getFadedColor(portfolio.assets[index].color, 0.5),
-      borderColor: getFadedColor(portfolio.assets[index].color, 0.5),
+      label: `${a.name} Inputs`,
+      data: a.inputs,
+      backgroundColor: a.color,
+      borderColor: a.color,
       borderWidth: 1,
       // stack: "Inputs",
     })),

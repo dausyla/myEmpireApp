@@ -1,5 +1,4 @@
 import { Col, Container, Row } from "react-bootstrap";
-import { Tabs } from "./predictionsComponents/Tabs";
 import { Graphs } from "./predictionsComponents/graphs/Graph";
 import { AutomatePredictions } from "./predictionsComponents/automate/AutomatePredictions";
 
@@ -15,7 +14,7 @@ export function Predictions() {
               height: "100%",
             }}
           >
-            <Tabs />
+            {/* <Tabs /> */}
             <AutomatePredictions />
           </div>
         </Col>

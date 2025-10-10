@@ -1,30 +1,10 @@
-import type { Portfolio } from "../../../../../types/PortfolioTypes";
 import type { Asset } from "../../../../../types/PortfolioTypes";
 import {
   getColorString,
   getFadedColor,
 } from "../../../../utilies/utilsFunctions";
 
-export function getDataset(
-  portfolio: Portfolio,
-  overYears: number,
-  detail: boolean = false
-) {
-  const datasets = portfolio.assets.flatMap((asset, i) =>
-    getDatasetForAsset(asset, overYears, i, detail)
-  );
-
-  const data = {
-    labels: getDates(portfolio.dates, overYears).map(
-      (date) => new Date(date).toISOString().split("T")[0]
-    ),
-    datasets,
-  };
-
-  return data;
-}
-
-function getDates(dates: number[], overYears: number) {
+export function getDates(dates: number[], overYears: number) {
   if (dates.length === 0) return [];
 
   const lastDate = new Date(dates[dates.length - 1]);
@@ -42,10 +22,9 @@ function getDates(dates: number[], overYears: number) {
   return [...dates, ...newDates];
 }
 
-function getDatasetForAsset(
+export function getDatasetForAsset(
   asset: Asset,
   overYears: number,
-  index: number,
   detail: boolean = false
 ) {
   const color = getColorString(asset.color);
@@ -74,7 +53,7 @@ function getDatasetForAsset(
     interests.push(newValue - inputs[inputs.length - 1]);
   }
 
-  const fill = index === 0 ? true : "-1"; // fill to the previous dataset
+  const fill = "-1"; // fill to the previous dataset
 
   const res = detail
     ? [

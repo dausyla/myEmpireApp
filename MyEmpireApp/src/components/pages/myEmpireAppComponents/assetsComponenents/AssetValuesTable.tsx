@@ -7,11 +7,7 @@ import { AddDateButton } from "../../../utilies/AddDateButton";
 
 export function AssetValuesTable() {
   const { portfolio, modifyPortfolio } = usePortfolio();
-  const { currentAssetId } = useAssetContext();
-
-  const currentAsset = portfolio?.assets.find(
-    (asset) => asset.id === currentAssetId
-  );
+  const { currentAsset } = useAssetContext();
 
   if (!portfolio || !currentAsset) return null;
 

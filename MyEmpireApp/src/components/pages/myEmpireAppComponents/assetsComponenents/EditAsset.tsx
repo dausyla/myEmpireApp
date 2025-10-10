@@ -15,10 +15,7 @@ const getColorString = (color: Color) => {
 export function EditAsset() {
   const { portfolio, modifyPortfolio } = useContext(PortofolioContext);
 
-  const { currentAssetId, deleteAsset } = useAssetContext();
-
-  const currentAsset =
-    portfolio?.assets.find((asset) => asset.id === currentAssetId) || null;
+  const { currentAsset, deleteAsset } = useAssetContext();
 
   if (!portfolio) return null;
 

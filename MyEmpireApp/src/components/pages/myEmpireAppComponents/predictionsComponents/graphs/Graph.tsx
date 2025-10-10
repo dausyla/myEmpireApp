@@ -2,10 +2,12 @@ import { Line } from "react-chartjs-2";
 import { usePortfolio } from "../../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { Card, Form, InputGroup } from "react-bootstrap";
 import { useState } from "react";
-import { getDataset, graphOptions } from "./predictionUtils";
+import { getDatasetForAsset, getDates, graphOptions } from "./predictionUtils";
+import { useAssetContext } from "../../../../../contexts/AssetContext/AssetContextHook";
 
 export function Graphs() {
   const { portfolio } = usePortfolio();
+  const { mapAssets } = useAssetContext();
 
   const [overYears, setOverYears] = useState(2);
   const [detailPrediction, setDetailPrediction] = useState(false);
@@ -27,7 +29,23 @@ export function Graphs() {
     }
   };
 
-  const dataset = getDataset(portfolio, overYears, detailPrediction);
+  const datasets: {
+    label: string;
+    data: number[];
+    borderColor: string;
+    backgroundColor: string;
+    fill: string;
+  }[] = [];
+  mapAssets((asset) => {
+    datasets.push(...getDatasetForAsset(asset, overYears, detailPrediction));
+  });
+
+  const data = {
+    labels: getDates(portfolio.dates, overYears).map(
+      (date) => new Date(date).toISOString().split("T")[0]
+    ),
+    datasets,
+  };
 
   return (
     <Card className="rounded shadow-sm p-2">
@@ -61,7 +79,7 @@ export function Graphs() {
           onChange={() => setDetailPrediction(!detailPrediction)}
         />
       </div>
-      <Line options={graphOptions} data={dataset} />
+      <Line options={graphOptions} data={data} />
     </Card>
   );
 }

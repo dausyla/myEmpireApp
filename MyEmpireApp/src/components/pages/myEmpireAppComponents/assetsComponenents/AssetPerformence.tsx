@@ -6,11 +6,7 @@ import { getAssetPerformence } from "../../../utilies/utilsFunctions";
 
 export function AssetPerformence() {
   const { portfolio, modifyPortfolio } = usePortfolio();
-  const { currentAssetId } = useAssetContext();
-
-  const currentAsset = portfolio?.assets.find(
-    (asset) => asset.id === currentAssetId
-  );
+  const { currentAsset } = useAssetContext();
 
   const countFirstInput = currentAsset?.countFirstInput || false;
 
@@ -57,6 +53,25 @@ export function AssetPerformence() {
           <tr>
             <th style={{ width: "16.6%", textAlign: "center" }}>Total Value</th>
             <th style={{ width: "16.6%", textAlign: "center" }}>Total Input</th>
+            <th style={{ width: "16.6%", textAlign: "center" }}>APY</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style={{ textAlign: "right" }}>{totalValue.toFixed(2)} $</td>
+            <td style={{ textAlign: "right" }}>{totalInput.toFixed(2)} $</td>
+            <td
+              style={{ textAlign: "right" }}
+              className={`text-${apy > 0 ? "success" : "danger"}`}
+            >
+              {(100 * apy).toFixed(2)} %
+            </td>
+          </tr>
+        </tbody>
+      </Table>
+      <Table hover className="align-middle ">
+        <thead className="table-light">
+          <tr>
             <th style={{ width: "16.6%", textAlign: "center" }}>
               Monthly Input
             </th>
@@ -66,13 +81,10 @@ export function AssetPerformence() {
             <th style={{ width: "16.6%", textAlign: "center" }}>
               Total Growth
             </th>
-            <th style={{ width: "16.6%", textAlign: "center" }}>APY</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td style={{ textAlign: "right" }}>{totalValue.toFixed(2)} $</td>
-            <td style={{ textAlign: "right" }}>{totalInput.toFixed(2)} $</td>
             <td style={{ textAlign: "right" }}>{monthlyInput} $</td>
             <td
               style={{ textAlign: "right" }}
@@ -85,12 +97,6 @@ export function AssetPerformence() {
               className={`text-${totalGrowth > 0 ? "success" : "danger"}`}
             >
               {(100 * totalGrowth).toFixed(2)} %
-            </td>
-            <td
-              style={{ textAlign: "right" }}
-              className={`text-${apy > 0 ? "success" : "danger"}`}
-            >
-              {(100 * apy).toFixed(2)} %
             </td>
           </tr>
         </tbody>

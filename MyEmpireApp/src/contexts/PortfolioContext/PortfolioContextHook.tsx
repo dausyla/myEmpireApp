@@ -6,9 +6,6 @@ export const PortofolioContext = createContext<PortfolioContextType>({
   modifyPortfolio: () => {},
   savePortfolio: () => {},
   isModified: false,
-  addDate: () => {},
-  editDate: () => {},
-  deleteDate: () => {},
 });
 
 export function usePortfolio() {

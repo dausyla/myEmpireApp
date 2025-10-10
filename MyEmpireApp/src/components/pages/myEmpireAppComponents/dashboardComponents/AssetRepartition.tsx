@@ -1,15 +1,19 @@
 import { Pie } from "react-chartjs-2";
 import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { getColorString } from "../../../utilies/utilsFunctions";
+import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 
 export function AssetRepartition() {
   const { portfolio } = usePortfolio();
+  const { mapAssets } = useAssetContext();
   if (!portfolio) return null;
 
-  const labels = portfolio.assets.map((a) => a.name);
-  const data = portfolio.assets.map((a) => a.values[a.values.length - 1]);
-
-  const colors = portfolio.assets.map((a) => getColorString(a.color));
+  const labels: string[] = [];
+  mapAssets((a) => labels.push(a.name));
+  const data: number[] = [];
+  mapAssets((a) => data.push(a.values[a.values.length - 1]));
+  const colors: string[] = [];
+  mapAssets((a) => colors.push(getColorString(a.color)));
 
   return (
     <Pie

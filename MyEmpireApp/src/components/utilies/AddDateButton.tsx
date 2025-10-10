@@ -1,10 +1,10 @@
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { useState } from "react";
-import { usePortfolio } from "../../contexts/PortfolioContext/PortfolioContextHook";
 import { BsPlus } from "react-icons/bs";
+import { useDateContext } from "../../contexts/DateContext/DateContextHook";
 
 export function AddDateButton() {
-  const { addDate } = usePortfolio();
+  const { addDate } = useDateContext();
 
   const [newDate, setNewDate] = useState("");
 
