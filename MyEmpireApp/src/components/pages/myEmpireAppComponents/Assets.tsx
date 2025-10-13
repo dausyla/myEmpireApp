@@ -5,7 +5,7 @@ import { AssetPerformence } from "./assetsComponenents/AssetPerformence";
 import { AssetPredictions } from "./assetsComponenents/AssetPredictions";
 import { usePortfolio } from "../../../contexts/PortfolioContext/PortfolioContextHook";
 import { NoAssetComponent } from "./assetsComponenents/NoAssetComponent";
-import { AssetHierarchy } from "../../utilies/AssetHierarchy";
+import { AssetHierarchy } from "../../utilies/AssetHierarchy/AssetHierarchy";
 
 export function Assets() {
   const { portfolio } = usePortfolio();
@@ -16,7 +16,9 @@ export function Assets() {
     <Container fluid className="mt-3">
       <Row>
         <Col md={2}>
-          <AssetHierarchy />
+          <Card className="rounded shadow-sm p-2">
+            <AssetHierarchy />
+          </Card>
         </Col>
         <Col md={6}>
           <Card className="rounded shadow-sm p-2">

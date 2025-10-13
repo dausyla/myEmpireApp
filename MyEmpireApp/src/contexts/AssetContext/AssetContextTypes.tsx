@@ -5,11 +5,23 @@ export type AssetContextType = {
   setCurrentAsset: (asset: Asset | undefined) => void;
 
   getAsset: (assetId: number) => Asset | undefined;
-  addNewAsset: (name?: string, dirId?: number) => void;
-  deleteAsset: (assetId: number) => void;
+  addNewAsset: ({
+    name,
+    fromDir,
+  }: {
+    name?: string;
+    fromDir?: Directory;
+  }) => void;
+  deleteAsset: (asset: Asset) => void;
   mapAssets: (fn: (asset: Asset) => void, fromDir?: Directory) => void;
 
   getDir: (dirId: number) => Directory | undefined;
-  addNewDir: (name?: string, dirId?: number) => void;
-  deleteDir: (dirId: number) => void;
+  addNewDir: ({
+    name,
+    fromDir,
+  }: {
+    name?: string;
+    fromDir?: Directory;
+  }) => void;
+  deleteDir: (dir: Directory) => void;
 };

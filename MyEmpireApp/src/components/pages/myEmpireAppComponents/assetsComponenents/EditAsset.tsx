@@ -47,7 +47,7 @@ export function EditAsset() {
           />
           <Button
             variant="outline-danger"
-            onClick={() => deleteAsset(currentAsset.id)}
+            onClick={() => deleteAsset(currentAsset)}
           >
             <BsTrash />
           </Button>

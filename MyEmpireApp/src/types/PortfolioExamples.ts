@@ -81,7 +81,7 @@ const cryptoDir: Directory = {
   isOpened: true,
   subAssets: [assetExampleBitcoin, assetExampleEthereum],
   subDirs: [],
-  parentDirId: 1,
+  parentDirId: 0,
 };
 const stockDir: Directory = {
   name: "Stocks",
@@ -89,7 +89,7 @@ const stockDir: Directory = {
   isOpened: false,
   subAssets: [assetExampleSNP500],
   subDirs: [],
-  parentDirId: 1,
+  parentDirId: 0,
 };
 const rootDir: Directory = {
   id: 0,

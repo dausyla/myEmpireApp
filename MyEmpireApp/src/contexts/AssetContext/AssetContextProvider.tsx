@@ -9,6 +9,10 @@ export const AssetContextProvider = ({ children }: { children: ReactNode }) => {
   );
   const { portfolio, modifyPortfolio } = usePortfolio();
 
+  /*  ############
+      #   DIRS   #
+      ############ */
+
   const getDirRec: (
     dirId: number,
     current: Directory
@@ -24,6 +28,47 @@ export const AssetContextProvider = ({ children }: { children: ReactNode }) => {
     if (!portfolio) return undefined;
     return getDirRec(dirId, portfolio.root);
   };
+  const addNewDir = ({
+    name = "New Directory",
+    fromDir,
+  }: {
+    name?: string;
+    fromDir?: Directory;
+  }) => {
+    if (!portfolio) return;
+    if (!fromDir) fromDir = portfolio.root;
+    fromDir.isOpened = true;
+    const newDirId = portfolio.dirNumber + 1;
+    fromDir.subDirs.push({
+      id: newDirId,
+      name: name,
+      isOpened: true,
+      subDirs: [],
+      subAssets: [],
+      parentDirId: fromDir.id,
+    });
+    portfolio.dirNumber += 1;
+    modifyPortfolio(portfolio);
+  };
+  const deleteDirRec = (dir: Directory, parentDir: Directory) => {
+    dir.subAssets.forEach((a) => deleteAsset(a));
+    dir.subDirs.forEach((d) => deleteDirRec(d, dir));
+    parentDir.subDirs = parentDir.subDirs.filter((d) => d.id !== dir.id);
+    if (portfolio) portfolio.dirNumber -= 1;
+  };
+  const deleteDir = (dir: Directory) => {
+    if (!portfolio) return;
+    if (dir.id === 0) return; // Root
+    const parentDir = getDir(dir.parentDirId);
+    console.log(parentDir);
+    if (!parentDir) return;
+    deleteDirRec(dir, parentDir);
+    modifyPortfolio(portfolio);
+  };
+
+  /*  ##############
+      #   ASSETS   #
+      ############## */
   const getAssetRec: (
     assetId: number,
     current: Directory
@@ -36,44 +81,22 @@ export const AssetContextProvider = ({ children }: { children: ReactNode }) => {
     }
     return undefined;
   };
-  const addNewDir = (name: string = "New Directory", dirId: number = 1) => {
-    if (!portfolio) return;
-    const dir = getDir(dirId);
-    if (!dir) return;
-    const newDirId = portfolio.dirNumber + 1;
-    dir.subDirs.push({
-      id: newDirId,
-      name: name,
-      isOpened: true,
-      subDirs: [],
-      subAssets: [],
-      parentDirId: dir.id,
-    });
-    portfolio.dirNumber += 1;
-    modifyPortfolio(portfolio);
-  };
-  const deleteDir = (dirId: number) => {
-    if (!portfolio) return;
-    if (dirId === 0) return; // Root
-    const dir = getDir(dirId);
-    if (!dir) return;
-    const parentDir = getDir(dir.parentDirId);
-    if (!parentDir) return;
-
-    dir.subDirs = dir.subDirs.filter((d) => d.id !== dirId);
-    portfolio.dirNumber -= 1;
-  };
-
   const getAsset = (assetId: number) => {
     if (!portfolio) return undefined;
     return getAssetRec(assetId, portfolio.root);
   };
-  const addNewAsset = (name: string = "New Asset", dirId: number = 0) => {
+  const addNewAsset = ({
+    name = "New Asset",
+    fromDir,
+  }: {
+    name?: string;
+    fromDir?: Directory;
+  }) => {
     if (!portfolio) return;
-    const dir = getDir(dirId);
-    if (!dir) return;
+    if (!fromDir) fromDir = portfolio.root;
+    fromDir.isOpened = true;
     const newAssetId = portfolio.assetNumber + 1;
-    dir.subAssets.push({
+    fromDir.subAssets.push({
       id: newAssetId,
       name: name,
       values: portfolio.dates.map(() => 0), // Initialize with zeros
@@ -87,20 +110,18 @@ export const AssetContextProvider = ({ children }: { children: ReactNode }) => {
         g: random255(),
         b: random255(),
       },
-      parentDirID: dirId,
+      parentDirID: fromDir.id,
     });
     portfolio.assetNumber += 1;
     modifyPortfolio(portfolio);
-    setCurrentAsset(dir.subAssets[-1]); // Set the new asset as the current
+    setCurrentAsset(fromDir.subAssets[-1]); // Set the new asset as the current
   };
-  const deleteAsset = (assetId: number) => {
+  const deleteAsset = (asset: Asset) => {
     if (!portfolio) return;
-    const asset = getAsset(assetId);
-    if (!asset) return;
-    const dir = getDir(asset?.parentDirID);
+    const dir = getDir(asset.parentDirID);
     if (!dir) return;
 
-    dir.subAssets = dir.subAssets.filter((a) => a.id !== assetId);
+    dir.subAssets = dir.subAssets.filter((a) => a.id !== asset.id);
     portfolio.assetNumber -= 1;
 
     if (currentAsset == asset) {
