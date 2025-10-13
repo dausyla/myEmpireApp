@@ -6,8 +6,8 @@ import { InterestsRepartition } from "./dashboardComponents/InterestsRepartition
 
 export function Dashboard() {
   return (
-    <Container fluid className="py-3" style={{ height: "90vh" }}>
-      <Row className="h-100">
+    <Container fluid className="h-100 p-2">
+      <Row className="h-100 m-0">
         <Col md={8}>
           <div
             style={{

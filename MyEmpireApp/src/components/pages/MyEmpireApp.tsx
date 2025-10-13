@@ -18,12 +18,12 @@ export function MyEmpireApp() {
     <>
       <NavBar setCurrentNav={setCurrentNav} />
 
-      <Container>
-        <Row>
-          <Col md={2}>
+      <Container fluid className="p-0" style={{ height: "90vh" }}>
+        <Row className="h-100 m-0">
+          <Col md={2} className="h-100 p-0">
             <AssetHierarchy />
           </Col>
-          <Col>
+          <Col className="h-100 p-0">
             {currentNav === "dashboard" && <Dashboard />}
             {currentNav === "predictions" && <Predictions />}
             {currentNav === "assets" && <Assets />}

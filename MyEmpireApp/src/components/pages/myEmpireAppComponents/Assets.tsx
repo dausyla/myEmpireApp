@@ -12,8 +12,8 @@ export function Assets() {
   if (portfolio.assetNumber === 0) return <NoAssetComponent />;
 
   return (
-    <Container fluid className="mt-3">
-      <Row>
+    <Container fluid className="h-100 p-2">
+      <Row className="m-0">
         <Col md={6}>
           <Card className="rounded shadow-sm p-2">
             <AssetValuesTable />

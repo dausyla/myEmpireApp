@@ -4,8 +4,8 @@ import { AutomatePredictions } from "./predictionsComponents/automate/AutomatePr
 
 export function Predictions() {
   return (
-    <Container fluid className="py-3" style={{ height: "90vh" }}>
-      <Row>
+    <Container fluid className="h-100 p-2">
+      <Row className="m-0">
         <Col md={4}>
           <div
             style={{
