@@ -1,7 +1,8 @@
-import { ListGroup } from "react-bootstrap";
-import { FaFileAlt } from "react-icons/fa";
+import { Button, ButtonGroup, ListGroup } from "react-bootstrap";
+import { FaFileAlt, FaTrash } from "react-icons/fa";
 import type { Asset } from "../../../types/PortfolioTypes";
 import { useAssetContext } from "../../../contexts/AssetContext/AssetContextHook";
+import { useState } from "react";
 
 export function AssetItem({
   asset,
@@ -10,7 +11,13 @@ export function AssetItem({
   asset: Asset;
   depth: number;
 }) {
-  const { setCurrentAsset } = useAssetContext();
+  const { setCurrentAsset, deleteAsset } = useAssetContext();
+  const [hovered, setHovered] = useState(false);
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    deleteAsset(asset);
+  };
   return (
     <ListGroup.Item
       key={asset.id}
@@ -20,10 +27,27 @@ export function AssetItem({
       }}
       action
       onClick={() => setCurrentAsset(asset)}
-      className="d-flex align-items-center"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="d-flex align-items-center justify-content-between"
     >
-      <FaFileAlt className="text-secondary me-2" />
-      {asset.name}
+      <div className="d-flex align-items-center">
+        <FaFileAlt className="text-secondary me-2" />
+        {asset.name}
+      </div>
+      {/* Action buttons (visible on hover) */}
+      {hovered && (
+        <ButtonGroup size="sm">
+          <Button
+            variant="light"
+            title="Supprimer le dossier"
+            className="p-0"
+            onClick={handleDelete}
+          >
+            <FaTrash className="text-danger m-1" />
+          </Button>
+        </ButtonGroup>
+      )}
     </ListGroup.Item>
   );
 }

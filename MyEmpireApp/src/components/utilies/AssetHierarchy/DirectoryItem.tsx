@@ -21,7 +21,7 @@ export function DirectoryItem({
   const [hovered, setHovered] = useState(false);
 
   const handleAddDir = (e: React.MouseEvent) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent toggleDirectory()
     addNewDir({ fromDir: dir });
   };
 
