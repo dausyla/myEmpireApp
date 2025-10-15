@@ -9,7 +9,7 @@ export function NoAssetComponent() {
 
   const handleCreate = () => {
     if (!newName.trim()) return;
-    addNewAsset(newName.trim());
+    addNewAsset({ name: newName.trim() });
     setNewName("");
   };
 
