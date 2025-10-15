@@ -1,21 +1,40 @@
-import { Container, ListGroup } from "react-bootstrap";
+import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
 import { usePortfolio } from "../../../contexts/PortfolioContext/PortfolioContextHook";
-import type { Directory } from "../../../types/PortfolioTypes";
 import { DirectoryItem } from "./DirectoryItem";
+import { FaFileAlt, FaFolder } from "react-icons/fa";
+import { useAssetContext } from "../../../contexts/AssetContext/AssetContextHook";
 
 export function AssetHierarchy() {
-  const { portfolio, modifyPortfolio } = usePortfolio();
+  const { portfolio } = usePortfolio();
+  const { addNewAsset, addNewDir } = useAssetContext();
   if (!portfolio) return null;
 
-  const toggleDirectory = (dir: Directory) => {
-    dir.isOpened = !dir.isOpened;
-    modifyPortfolio(portfolio);
-  };
-
   return (
-    <Container fluid className="h-100 p-0" style={{ backgroundColor: "red" }}>
-      <ListGroup variant="flush" className="rounded-2">
-        <DirectoryItem dir={portfolio.root} toggleDirectory={toggleDirectory} />
+    <Container fluid className="h-100 p-1 bg-body-tertiary">
+      <Row className="p-1">
+        <Col className="p-0">
+          <Button
+            size="sm"
+            variant="outline-primary"
+            onClick={() => addNewAsset({})}
+          >
+            New Asset&nbsp;
+            <FaFileAlt />
+          </Button>
+        </Col>
+        <Col className="p-0">
+          <Button
+            size="sm"
+            variant="outline-success"
+            onClick={() => addNewDir({})}
+          >
+            New Dir&nbsp;
+            <FaFolder />
+          </Button>
+        </Col>
+      </Row>
+      <ListGroup variant="flush" className="">
+        <DirectoryItem dir={portfolio.root} />
       </ListGroup>
     </Container>
   );

@@ -55,7 +55,7 @@ export function NavBar({
   const portfolioNames = portfolios?.map((p) => p.name);
 
   return (
-    <Navbar sticky="top" expand="lg" className="bg-body-tertiary">
+    <Navbar sticky="top" expand="lg" className="bg-body-tertiary shadow-sm">
       <Container>
         <Navbar.Brand onClick={() => setCurrentNav("predictions")}>
           MyEmpireApp

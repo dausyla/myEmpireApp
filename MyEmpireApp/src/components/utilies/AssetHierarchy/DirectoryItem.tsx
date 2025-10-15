@@ -5,20 +5,24 @@ import { AnimatePresence, motion } from "framer-motion";
 import { AssetItem } from "./AssetItem";
 import { useAssetContext } from "../../../contexts/AssetContext/AssetContextHook";
 import { useState } from "react";
+import { usePortfolio } from "../../../contexts/PortfolioContext/PortfolioContextHook";
 
 interface DirectoryItemProps {
   dir: Directory;
   depth?: number;
-  toggleDirectory: (dir: Directory) => void;
 }
 
-export function DirectoryItem({
-  dir,
-  depth = 0,
-  toggleDirectory,
-}: DirectoryItemProps) {
+export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
+  const { portfolio, modifyPortfolio } = usePortfolio();
   const { addNewAsset, addNewDir, deleteDir } = useAssetContext();
   const [hovered, setHovered] = useState(false);
+
+  if (!portfolio) return null;
+
+  const toggleDirectory = () => {
+    dir.isOpened = !dir.isOpened;
+    modifyPortfolio(portfolio);
+  };
 
   const handleAddDir = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent toggleDirectory()
@@ -36,12 +40,7 @@ export function DirectoryItem({
   };
 
   const subDirs = dir.subDirs.map((sub) => (
-    <DirectoryItem
-      key={sub.id}
-      dir={sub}
-      depth={depth + 1}
-      toggleDirectory={toggleDirectory}
-    />
+    <DirectoryItem key={sub.id} dir={sub} depth={depth + 1} />
   ));
 
   const subAssets = dir.subAssets.map((a) => (
@@ -54,16 +53,18 @@ export function DirectoryItem({
       {dir.id !== 0 && (
         <ListGroup.Item
           action
-          onClick={() => toggleDirectory(dir)}
+          onClick={() => toggleDirectory()}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
-          className="d-flex align-items-center justify-content-between"
+          className={`d-flex align-items-center justify-content-between bg-body${
+            hovered ? "" : "-tertiary"
+          }`}
           style={{
+            paddingTop: "2px",
+            paddingBottom: "2px",
             paddingLeft: `${depth * 16}px`,
-            background: "light",
             border: "none",
-            cursor: "pointer",
-            transition: "background-color 0.2s",
+            borderRadius: 0,
           }}
         >
           <div className="d-flex align-items-center">
