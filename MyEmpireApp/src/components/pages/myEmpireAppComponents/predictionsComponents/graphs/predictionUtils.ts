@@ -1,8 +1,8 @@
-import type { Asset } from "../../../../../types/PortfolioTypes";
-import {
-  getColorString,
-  getFadedColor,
-} from "../../../../utilies/utilsFunctions";
+import type {
+  Asset,
+  Color,
+  Directory,
+} from "../../../../../types/PortfolioTypes";
 
 export function getDates(dates: number[], overYears: number) {
   if (dates.length === 0) return [];
@@ -22,14 +22,17 @@ export function getDates(dates: number[], overYears: number) {
   return [...dates, ...newDates];
 }
 
-export function getDatasetForAsset(
-  asset: Asset,
-  overYears: number,
-  detail: boolean = false
-) {
-  const color = getColorString(asset.color);
-  const fadedColor = getFadedColor(asset.color, 0.5);
+type AssetPrediction = {
+  id: number;
+  totalValues: number[];
+  inputs: number[];
+  interests: number[];
+};
 
+function getPredictionsForAsset(
+  asset: Asset,
+  overYears: number
+): AssetPrediction {
   const inputs = asset.inputs.reduce<number[]>((acc, input, i) => {
     if (i === 0) {
       acc.push(input);
@@ -52,46 +55,96 @@ export function getDatasetForAsset(
     inputs.push(inputs[inputs.length - 1] + monthlyInput);
     interests.push(newValue - inputs[inputs.length - 1]);
   }
+  return { id: asset.id, totalValues, inputs, interests };
+}
 
-  const fill = "-1"; // fill to the previous dataset
+export type Prediction = {
+  name: string;
+  color: Color;
+  totalValues: number[];
+  interests: number[];
+  inputs: number[];
+};
 
-  const res = detail
-    ? [
-        {
-          label: `${asset.name} - Inputs`,
-          data: inputs,
-          borderColor: color,
-          backgroundColor: fadedColor,
-          fill,
-        },
-        {
-          label: `${asset.name} - Interests`,
-          data: interests,
-          borderColor: color,
-          backgroundColor: fadedColor,
-          fill,
-        },
-      ]
-    : [
-        {
-          label: asset.name,
-          data: totalValues,
-          borderColor: color,
-          backgroundColor: fadedColor,
-          fill,
-        },
-      ];
+function getClosedDirectoryPredictions(dir: Directory, overYears: number) {
+  const res: Prediction = {
+    name: dir.name,
+    color: { r: 80, g: 200, b: 0 },
+    totalValues: [],
+    interests: [],
+    inputs: [],
+  };
+
+  dir.subDirs.forEach((d) => {
+    const pred = getClosedDirectoryPredictions(d, overYears);
+    if (pred) {
+      if (res.totalValues.length == 0) {
+        // first asset
+        res.totalValues = pred.totalValues;
+        res.inputs = pred.inputs;
+        res.interests = pred.interests;
+      } else {
+        for (let i = 0; i < res.totalValues.length; i++) {
+          res.totalValues[i] += pred.totalValues[i];
+          res.inputs[i] += pred.inputs[i];
+          res.interests[i] += pred.interests[i];
+        }
+      }
+    }
+  });
+
+  dir.subAssets.forEach((a) => {
+    const pred = getPredictionsForAsset(a, overYears);
+    if (res.totalValues.length == 0) {
+      // first asset
+      res.totalValues = pred.totalValues;
+      res.inputs = pred.inputs;
+      res.interests = pred.interests;
+    } else {
+      for (let i = 0; i < res.totalValues.length; i++) {
+        res.totalValues[i] += pred.totalValues[i];
+        res.inputs[i] += pred.inputs[i];
+        res.interests[i] += pred.interests[i];
+      }
+    }
+  });
+
+  return res.totalValues.length > 0 ? res : null;
+}
+
+export function getDirectoryPredictions(
+  from: Directory,
+  overYears: number
+): Prediction[] {
+  const res: Prediction[] = [];
+
+  if (from.isOpened) {
+    from.subDirs.forEach((d) =>
+      res.push(...getDirectoryPredictions(d, overYears))
+    );
+    from.subAssets.forEach((a) => {
+      const prediction = getPredictionsForAsset(a, overYears);
+      res.push({
+        name: a.name,
+        color: a.color,
+        ...prediction,
+      });
+    });
+  } else {
+    const closed = getClosedDirectoryPredictions(from, overYears);
+    // closed == null => no assets inside
+    if (closed) res.push(closed);
+  }
 
   return res;
 }
 
 export const graphOptions = {
   responsive: true,
-  maintainAspectRatio: true,
+  maintainAspectRatio: false,
   scales: {
     y: {
       stacked: true,
-      min: 0,
     },
   },
   plugins: {
