@@ -1,6 +1,6 @@
 import Table from "react-bootstrap/Table";
 import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
-import { EditableValue } from "../../../utilies/EditableValue";
+import { EditableValue } from "../../../../utilies/EditableValue";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 
 export function AssetPredictions() {

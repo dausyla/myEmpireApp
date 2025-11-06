@@ -1,8 +1,8 @@
 import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
-import { usePortfolio } from "../../../contexts/PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../../contexts/PortfolioContext/PortfolioContextHook";
 import { DirectoryItem } from "./DirectoryItem";
 import { FaFileAlt, FaFolder } from "react-icons/fa";
-import { useAssetContext } from "../../../contexts/AssetContext/AssetContextHook";
+import { useAssetContext } from "../../contexts/AssetContext/AssetContextHook";
 
 export function AssetHierarchy() {
   const { portfolio } = usePortfolio();

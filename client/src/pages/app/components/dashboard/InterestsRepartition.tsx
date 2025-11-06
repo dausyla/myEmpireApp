@@ -3,7 +3,7 @@ import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioCon
 import {
   getAssetPerformence,
   getFadedColor,
-} from "../../../utilies/utilsFunctions";
+} from "../../../../utilies/utilsFunctions";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 import type { AssetPerformance } from "../../../../types/PortfolioTypes";
 

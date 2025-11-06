@@ -1,8 +1,8 @@
 import { Container, Row, Col, Card } from "react-bootstrap";
-import { KPIs } from "./dashboardComponents/KPIs";
-import { AssetRepartition } from "./dashboardComponents/AssetRepartition";
-import { PortfolioGrowth } from "./dashboardComponents/PortfolioGrowth";
-import { InterestsRepartition } from "./dashboardComponents/InterestsRepartition";
+import { KPIs } from "./KPIs";
+import { AssetRepartition } from "./AssetRepartition";
+import { PortfolioGrowth } from "./PortfolioGrowth";
+import { InterestsRepartition } from "./InterestsRepartition";
 
 export function Dashboard() {
   return (

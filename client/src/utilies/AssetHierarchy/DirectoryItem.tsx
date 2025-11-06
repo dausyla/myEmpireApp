@@ -1,11 +1,11 @@
 import { ListGroup, ButtonGroup, Button } from "react-bootstrap";
-import type { Directory } from "../../../types/PortfolioTypes";
+import type { Directory } from "../../types/PortfolioTypes";
 import { FaFolder, FaFolderOpen, FaTrash, FaFileAlt } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import { AssetItem } from "./AssetItem";
-import { useAssetContext } from "../../../contexts/AssetContext/AssetContextHook";
+import { useAssetContext } from "../../contexts/AssetContext/AssetContextHook";
 import { useState } from "react";
-import { usePortfolio } from "../../../contexts/PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../../contexts/PortfolioContext/PortfolioContextHook";
 
 interface DirectoryItemProps {
   dir: Directory;

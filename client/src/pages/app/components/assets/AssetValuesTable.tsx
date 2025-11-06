@@ -1,9 +1,9 @@
 import Table from "react-bootstrap/Table";
 import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
-import { EditableValue } from "../../../utilies/EditableValue";
-import { EditableDate } from "../../../utilies/EditableDate";
+import { EditableValue } from "../../../../utilies/EditableValue";
+import { EditableDate } from "../../../../utilies/EditableDate";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
-import { AddDateButton } from "../../../utilies/AddDateButton";
+import { AddDateButton } from "../../../../utilies/AddDateButton";
 
 export function AssetValuesTable() {
   const { portfolio, modifyPortfolio } = usePortfolio();

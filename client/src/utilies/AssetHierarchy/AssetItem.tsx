@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, ListGroup } from "react-bootstrap";
 import { FaFileAlt, FaTrash } from "react-icons/fa";
-import type { Asset } from "../../../types/PortfolioTypes";
-import { useAssetContext } from "../../../contexts/AssetContext/AssetContextHook";
+import type { Asset } from "../../types/PortfolioTypes";
+import { useAssetContext } from "../../contexts/AssetContext/AssetContextHook";
 import { useState } from "react";
 
 export function AssetItem({

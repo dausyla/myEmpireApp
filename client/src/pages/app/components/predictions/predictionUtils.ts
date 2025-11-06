@@ -2,7 +2,7 @@ import type {
   Asset,
   Color,
   Directory,
-} from "../../../../../types/PortfolioTypes";
+} from "../../../../types/PortfolioTypes";
 
 export function getDates(dates: number[], overYears: number) {
   if (dates.length === 0) return [];

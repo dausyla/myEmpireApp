@@ -1,6 +1,6 @@
 import { Chart } from "react-chartjs-2";
 import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
-import { getColorString, getFadedColor } from "../../../utilies/utilsFunctions";
+import { getColorString, getFadedColor } from "../../../../utilies/utilsFunctions";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 
 export function PortfolioGrowth() {

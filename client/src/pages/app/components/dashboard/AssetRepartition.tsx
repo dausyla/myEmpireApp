@@ -1,6 +1,6 @@
 import { Pie } from "react-chartjs-2";
 import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
-import { getColorString } from "../../../utilies/utilsFunctions";
+import { getColorString } from "../../../../utilies/utilsFunctions";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 
 export function AssetRepartition() {

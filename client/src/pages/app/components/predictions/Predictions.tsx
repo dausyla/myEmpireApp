@@ -1,5 +1,5 @@
-import { Col, Container, Row } from "react-bootstrap";
-import { Graphs } from "./predictionsComponents/graphs/Graph";
+import {  Container  } from "react-bootstrap";
+import { Graphs } from "./Graph";
 
 export function Predictions() {
   return (

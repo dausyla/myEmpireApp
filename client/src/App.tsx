@@ -1,9 +1,9 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { registerables, Chart as ChartJS } from "chart.js";
-import { Home } from "./components/pages/Home";
-import { NoRouteMatch } from "./components/pages/NoRouteMatch";
-import { MyEmpireApp } from "./components/pages/MyEmpireApp";
+import { Home } from "./pages/home/Home";
+import { NoRouteMatch } from "./pages/NoRouteMatch";
+import { MyEmpireApp } from "./pages/app/MyEmpireApp";
 import { AppContextProvider } from "./contexts/AppContext/AppContextProvider";
 import { PortofolioContextProvider } from "./contexts/PortfolioContext/PortfolioContextProvider";
 import { AssetContextProvider } from "./contexts/AssetContext/AssetContextProvider";

@@ -1,10 +1,10 @@
 import { Card, Col, Container, Row } from "react-bootstrap";
-import { EditAsset } from "./assetsComponenents/EditAsset";
-import { AssetValuesTable } from "./assetsComponenents/AssetValuesTable";
-import { AssetPerformence } from "./assetsComponenents/AssetPerformence";
-import { AssetPredictions } from "./assetsComponenents/AssetPredictions";
-import { usePortfolio } from "../../../contexts/PortfolioContext/PortfolioContextHook";
-import { NoAssetComponent } from "./assetsComponenents/NoAssetComponent";
+import { EditAsset } from "./EditAsset";
+import { AssetValuesTable } from "./AssetValuesTable";
+import { AssetPerformence } from "./AssetPerformence";
+import { AssetPredictions } from "./AssetPredictions";
+import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { NoAssetComponent } from "./NoAssetComponent";
 
 export function Assets() {
   const { portfolio } = usePortfolio();
