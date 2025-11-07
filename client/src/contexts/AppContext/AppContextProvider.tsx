@@ -6,10 +6,11 @@ import {
   emptyPortfolio,
   portfolioExample,
 } from "../../types/PortfolioExamples";
+import type { User } from "../../types/AuthTypes";
 
 export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentPortfolioId, setCurrentPortfolioId] = useState<string | null>(
-    null
+    null,
   );
   const [portfolios, setPortfolios] = useState<Portfolio[] | null>(null);
 
@@ -53,7 +54,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     try {
       localStorage.setItem(
         PORTFOLIOS_STORAGE_KEY,
-        JSON.stringify(updatedPortfolios)
+        JSON.stringify(updatedPortfolios),
       );
       console.log("Portfolio saved to localStorage ✅");
     } catch (err) {
@@ -89,14 +90,28 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     setPortfolios(updatedPortfolios);
     localStorage.setItem(
       PORTFOLIOS_STORAGE_KEY,
-      JSON.stringify(updatedPortfolios)
+      JSON.stringify(updatedPortfolios),
     );
     if (currentPortfolioId === id) {
       setCurrentPortfolioId(
-        updatedPortfolios.length > 0 ? updatedPortfolios[0].id : null
+        updatedPortfolios.length > 0 ? updatedPortfolios[0].id : null,
       );
     }
   };
+
+  // Login
+
+  const [user, setUser] = useState<User | undefined>(undefined);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      // Optionnel : valider le token via /me
+      fetch("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
+        .then((r) => r.json())
+        .then(setUser);
+    }
+  }, []);
 
   return (
     <AppContext.Provider
@@ -109,6 +124,8 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
         createNewPortfolioEmpty,
         createNewPortfolioExample,
         deletePortfolio,
+        user,
+        setUser,
       }}
     >
       {children}

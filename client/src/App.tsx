@@ -8,6 +8,9 @@ import { AppContextProvider } from "./contexts/AppContext/AppContextProvider";
 import { PortofolioContextProvider } from "./contexts/PortfolioContext/PortfolioContextProvider";
 import { AssetContextProvider } from "./contexts/AssetContext/AssetContextProvider";
 import { DateContextProvider } from "./contexts/DateContext/DateContextProvider";
+import { LoginPage } from "./pages/login/LoginPage";
+import { AuthContext } from "./contexts/AuthContext/AuthContextHook";
+import { AuthContextProvider } from "./contexts/AuthContext/AuthContextProvider";
 
 // Register Chart.js to enable chart rendering
 ChartJS.register(...registerables);
@@ -15,24 +18,27 @@ ChartJS.register(...registerables);
 function App() {
   return (
     <Router basename="/myEmpireApp">
-      <Routes>
-        <Route
-          path="/app"
-          element={
-            <AppContextProvider>
-              <PortofolioContextProvider>
-                <AssetContextProvider>
-                  <DateContextProvider>
-                    <MyEmpireApp />
-                  </DateContextProvider>
-                </AssetContextProvider>
-              </PortofolioContextProvider>
-            </AppContextProvider>
-          }
-        />
-        <Route path="/" element={<Home />} />
-        <Route path="*" element={<NoRouteMatch />} />
-      </Routes>
+      <AuthContextProvider>
+        <Routes>
+          <Route
+            path="/app"
+            element={
+              <AppContextProvider>
+                <PortofolioContextProvider>
+                  <AssetContextProvider>
+                    <DateContextProvider>
+                      <MyEmpireApp />
+                    </DateContextProvider>
+                  </AssetContextProvider>
+                </PortofolioContextProvider>
+              </AppContextProvider>
+            }
+          />
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="*" element={<NoRouteMatch />} />
+        </Routes>
+      </AuthContextProvider>
     </Router>
   );
 }

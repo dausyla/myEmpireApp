@@ -10,6 +10,7 @@ export const AppContext = createContext<AppContextType>({
   createNewPortfolioEmpty: () => {},
   createNewPortfolioExample: () => {},
   deletePortfolio: () => {},
+  setUser: () => {},
 });
 
 export function useAppContext() {
