@@ -9,8 +9,8 @@ import { PortofolioContextProvider } from "./contexts/PortfolioContext/Portfolio
 import { AssetContextProvider } from "./contexts/AssetContext/AssetContextProvider";
 import { DateContextProvider } from "./contexts/DateContext/DateContextProvider";
 import { LoginPage } from "./pages/login/LoginPage";
-import { AuthContext } from "./contexts/AuthContext/AuthContextHook";
 import { AuthContextProvider } from "./contexts/AuthContext/AuthContextProvider";
+import { ProtectedRoute } from "./utilies/ProtectedPage";
 
 // Register Chart.js to enable chart rendering
 ChartJS.register(...registerables);
@@ -23,15 +23,17 @@ function App() {
           <Route
             path="/app"
             element={
-              <AppContextProvider>
-                <PortofolioContextProvider>
-                  <AssetContextProvider>
-                    <DateContextProvider>
-                      <MyEmpireApp />
-                    </DateContextProvider>
-                  </AssetContextProvider>
-                </PortofolioContextProvider>
-              </AppContextProvider>
+              <ProtectedRoute>
+                <AppContextProvider>
+                  <PortofolioContextProvider>
+                    <AssetContextProvider>
+                      <DateContextProvider>
+                        <MyEmpireApp />
+                      </DateContextProvider>
+                    </AssetContextProvider>
+                  </PortofolioContextProvider>
+                </AppContextProvider>
+              </ProtectedRoute>
             }
           />
           <Route path="/" element={<Home />} />

@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { usePortfolio } from "../../../contexts/PortfolioContext/PortfolioContextHook";
-import { EditableText } from "../../../utilies/EditableText";
+import { EditableText } from "../../../utilies/components/EditableText";
 import { useAppContext } from "../../../contexts/AppContext/AppContextHook";
 import { BsTrash } from "react-icons/bs";
 

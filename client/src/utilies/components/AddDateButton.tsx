@@ -1,7 +1,7 @@
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { useState } from "react";
 import { BsPlus } from "react-icons/bs";
-import { useDateContext } from "../contexts/DateContext/DateContextHook";
+import { useDateContext } from "../../contexts/DateContext/DateContextHook";
 
 export function AddDateButton() {
   const { addDate } = useDateContext();
