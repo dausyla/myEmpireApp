@@ -7,7 +7,8 @@ export const ENDPOINTS = {
     SIGNUP: `${API_BASE}/auth/signup`,
     GOOGLE: `${API_BASE}/auth/google`,
     LOGOUT: `${API_BASE}/auth/logout`,
-    ME: `${API_BASE}/auth/me`,
+    // /wallet/me because it's using backend middleware from wallet routes
+    ME: `${API_BASE}/wallets/me`,
   },
 
   // WALLETS

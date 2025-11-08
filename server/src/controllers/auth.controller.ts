@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { supabase } from '../db/supabase';
+import { Request, Response } from "express";
+import { supabase } from "../db/supabase";
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -29,18 +29,18 @@ export const signup = async (req: Request, res: Response) => {
   if (error) return res.status(400).json({ error: error.message });
 
   // Créer l'utilisateur dans ta table users
-  await supabase.from('users').insert({
+  await supabase.from("users").insert({
     id: data.user?.id,
     username,
     premium: false,
   });
 
-  res.json({ message: 'Check your email to confirm!' });
+  res.json({ message: "Check your email to confirm!" });
 };
 
 export const loginWithGoogle = async (req: Request, res: Response) => {
   const { data } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
+    provider: "google",
     options: { redirectTo: `${process.env.CLIENT_URL}/app` },
   });
 

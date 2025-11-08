@@ -6,6 +6,7 @@ export const AuthContext = createContext<AuthContextType>({
   signup: () => {},
   google: () => {},
   logout: () => {},
+  isFetchingUser: true,
 });
 
 export function useAuthContext() {

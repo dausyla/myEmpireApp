@@ -7,17 +7,14 @@ import { useNavigate } from "react-router-dom";
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | undefined>(undefined);
+  const [isFetchingUser, setFetchingUser] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      // Optionnel : valider le token via /me
-      fetch("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
-        .then((r) => r.json())
-        .then(setUser);
-    }
+    api<User>(ENDPOINTS.AUTH.ME)
+      .then(setUser)
+      .then(() => setFetchingUser(false));
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -74,6 +71,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         google,
         logout,
         user,
+        isFetchingUser,
       }}
     >
       {children}

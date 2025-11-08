@@ -5,5 +5,6 @@ export type AuthContextType = {
   signup: (email: string, password: string, username: string) => void;
   google: () => void;
   logout: (email: string, password: string, username: string) => void;
+  isFetchingUser: boolean;
   user?: User; // undefined <=> not logged in
 };

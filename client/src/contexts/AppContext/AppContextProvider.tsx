@@ -6,7 +6,6 @@ import {
   emptyPortfolio,
   portfolioExample,
 } from "../../types/PortfolioExamples";
-import type { User } from "../../types/AuthTypes";
 
 export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentPortfolioId, setCurrentPortfolioId] = useState<string | null>(
@@ -99,20 +98,6 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Login
-
-  const [user, setUser] = useState<User | undefined>(undefined);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      // Optionnel : valider le token via /me
-      fetch("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
-        .then((r) => r.json())
-        .then(setUser);
-    }
-  }, []);
-
   return (
     <AppContext.Provider
       value={{
@@ -124,8 +109,6 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
         createNewPortfolioEmpty,
         createNewPortfolioExample,
         deletePortfolio,
-        user,
-        setUser,
       }}
     >
       {children}
