@@ -1,13 +1,15 @@
 import { createContext, useContext } from "react";
 import { type PortfolioContextType } from "./PortfolioContextTypes";
 
-export const PortofolioContext = createContext<PortfolioContextType>({
+export const PortfolioContext = createContext<PortfolioContextType>({
   portfolio: null,
+  portfolioList: [],
   modifyPortfolio: () => {},
-  savePortfolio: () => {},
-  isModified: false,
+  createPortfolio: () => {},
+  getPortfolio: () => {},
+  getPortfolioTitles: () => {},
 });
 
 export function usePortfolio() {
-  return useContext(PortofolioContext);
+  return useContext(PortfolioContext);
 }

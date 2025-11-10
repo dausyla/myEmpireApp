@@ -4,7 +4,6 @@ import { registerables, Chart as ChartJS } from "chart.js";
 import { Home } from "./pages/home/Home";
 import { NoRouteMatch } from "./pages/NoRouteMatch";
 import { MyEmpireApp } from "./pages/app/MyEmpireApp";
-import { AppContextProvider } from "./contexts/AppContext/AppContextProvider";
 import { PortofolioContextProvider } from "./contexts/PortfolioContext/PortfolioContextProvider";
 import { AssetContextProvider } from "./contexts/AssetContext/AssetContextProvider";
 import { DateContextProvider } from "./contexts/DateContext/DateContextProvider";
@@ -24,15 +23,13 @@ function App() {
             path="/app"
             element={
               <ProtectedRoute>
-                <AppContextProvider>
-                  <PortofolioContextProvider>
-                    <AssetContextProvider>
-                      <DateContextProvider>
-                        <MyEmpireApp />
-                      </DateContextProvider>
-                    </AssetContextProvider>
-                  </PortofolioContextProvider>
-                </AppContextProvider>
+                <PortofolioContextProvider>
+                  <AssetContextProvider>
+                    <DateContextProvider>
+                      <MyEmpireApp />
+                    </DateContextProvider>
+                  </AssetContextProvider>
+                </PortofolioContextProvider>
               </ProtectedRoute>
             }
           />

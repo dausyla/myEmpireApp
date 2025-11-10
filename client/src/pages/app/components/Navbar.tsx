@@ -4,7 +4,6 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { usePortfolio } from "../../../contexts/PortfolioContext/PortfolioContextHook";
 import { EditableText } from "../../../utilies/components/EditableText";
-import { useAppContext } from "../../../contexts/AppContext/AppContextHook";
 import { BsTrash } from "react-icons/bs";
 
 export function NavBar({
@@ -12,15 +11,7 @@ export function NavBar({
 }: {
   setCurrentNav: (nav: string) => void;
 }) {
-  const {
-    portfolios,
-    setCurrentPortfolioId,
-    createNewPortfolioExample,
-    createNewPortfolioEmpty,
-    deletePortfolio,
-  } = useAppContext();
-  const { isModified, savePortfolio, portfolio, modifyPortfolio } =
-    usePortfolio();
+  const { portfolio, modifyPortfolio, portfolioList } = usePortfolio();
 
   const handleExport = () => {
     const blob = new Blob([JSON.stringify(portfolio, null, 2)], {
@@ -52,7 +43,7 @@ export function NavBar({
     e.target.value = "";
   };
 
-  const portfolioNames = portfolios?.map((p) => p.name);
+  const portfolioNames = portfolioList?.map((p) => p.title);
 
   return (
     <Navbar sticky="top" expand="lg" className="bg-body-tertiary shadow-sm">
@@ -63,25 +54,16 @@ export function NavBar({
         <Navbar.Toggle aria-controls="main-nav" />
         <Navbar.Collapse id="main-nav">
           <NavDropdown title="Portfolios" id="basic-nav-dropdown">
-            {portfolios ? (
-              portfolioNames?.map((name, index) => (
-                <NavDropdown.Item
-                  key={index}
-                  onClick={() => setCurrentPortfolioId(portfolios[index].id)}
-                >
-                  {name}
-                </NavDropdown.Item>
-              ))
-            ) : (
-              <></>
-            )}
+            {portfolioNames?.map((name, index) => (
+              <NavDropdown.Item
+                key={index}
+                // TODO
+                // onClick={() => setCurrentPortfolioId(portfolios[index].id)}
+              >
+                {name}
+              </NavDropdown.Item>
+            ))}
             <NavDropdown.Divider />
-            <NavDropdown.Item onClick={() => createNewPortfolioEmpty()}>
-              + New Empty Portfolio
-            </NavDropdown.Item>
-            <NavDropdown.Item onClick={() => createNewPortfolioExample()}>
-              + New Example Portfolio
-            </NavDropdown.Item>
           </NavDropdown>
           <Nav className="me-auto align-items-center">
             <Nav.Link onClick={() => setCurrentNav("dashboard")}>
@@ -104,14 +86,8 @@ export function NavBar({
                 }}
               />
               <Button
-                onClick={savePortfolio}
-                disabled={!isModified}
-                className="ms-2"
-              >
-                Save
-              </Button>{" "}
-              <Button
-                onClick={() => deletePortfolio(portfolio.id)}
+                // TODO
+                // onClick={() => deletePortfolio(portfolio.id)}
                 variant="outline-danger"
                 className="ms-2"
               >

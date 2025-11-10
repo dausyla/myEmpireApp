@@ -12,7 +12,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api<User>(ENDPOINTS.AUTH.ME)
+    api<User>(ENDPOINTS.AUTH.ME, "GET")
       .then(setUser)
       .then(() => setFetchingUser(false));
   }, []);
@@ -21,7 +21,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     try {
       const data = await api<{ token: string; user: User }>(
         ENDPOINTS.AUTH.LOGIN,
-        { method: "POST", body: JSON.stringify({ email, password }) },
+        "POST",
+        { email, password },
       );
 
       localStorage.setItem("token", data.token);
@@ -35,7 +36,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     try {
       const data = await api<{ token: string; user: User }>(
         ENDPOINTS.AUTH.SIGNUP,
-        { body: JSON.stringify({ email, password, username }) },
+        "POST",
+        { email, password, username },
       );
 
       localStorage.setItem("token", data.token);
@@ -52,7 +54,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     try {
       const data = await api<{ token: string; user: User }>(
         ENDPOINTS.AUTH.LOGOUT,
-        { body: JSON.stringify({ email, password }) },
+        "POST",
+        { email, password },
       );
 
       localStorage.setItem("token", data.token);

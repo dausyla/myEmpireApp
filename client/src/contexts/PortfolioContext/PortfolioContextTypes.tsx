@@ -1,8 +1,10 @@
-import type { Portfolio } from "../../types/PortfolioTypes";
+import type { Portfolio, PortfolioList } from "../../types/PortfolioTypes";
 
 export type PortfolioContextType = {
   portfolio: Portfolio | null;
+  portfolioList: PortfolioList;
   modifyPortfolio: (portfolio: Portfolio) => void;
-  isModified: boolean;
-  savePortfolio: () => void;
+  createPortfolio: (title: string, description: string) => void;
+  getPortfolioTitles: () => void;
+  getPortfolio: (walletId: number) => void;
 };

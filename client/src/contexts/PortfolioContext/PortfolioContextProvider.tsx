@@ -1,57 +1,66 @@
 import { useEffect, useState, type ReactNode } from "react";
-import type { Portfolio } from "../../types/PortfolioTypes";
-import { PortofolioContext } from "./PortfolioContextHook";
-import { useAppContext } from "../AppContext/AppContextHook";
+import type { Portfolio, PortfolioList } from "../../types/PortfolioTypes";
+import { PortfolioContext } from "./PortfolioContextHook";
+import { useAuthContext } from "../AuthContext/AuthContextHook";
+import { api } from "../../utilies/api/api";
+import { ENDPOINTS } from "../../utilies/api/endpoints";
+import toast from "react-hot-toast";
 
 export const PortofolioContextProvider = ({
   children,
 }: {
   children: ReactNode;
 }) => {
-  const { currentPortfolioId, portfolios, savePortfolioInLocalStorage } =
-    useAppContext();
+  const { user } = useAuthContext();
   const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
-  const [isModified, setIsModified] = useState(false);
+  const [portfolioList, setPortfolioList] = useState<PortfolioList>([]);
 
-  // Load portfolio from localStorage on first render
+  const createPortfolio = (title: string, description?: string) => {
+    if (!user?.premium && portfolio) {
+      toast.error(
+        "You already have a portfolio, upgrade your account to be able to have other ones",
+      );
+    }
+
+    if (!description) description = "My wallet description.";
+
+    api<Portfolio>(ENDPOINTS.WALLETS.CREATE, "POST", {
+      title,
+      description,
+    }).then(setPortfolio);
+  };
+
+  const getPortfolioTitles = () => {
+    api<PortfolioList>(ENDPOINTS.WALLETS.LIST, "GET").then(setPortfolioList);
+  };
+
+  const getPortfolio = (walletId: number) => {
+    api<Portfolio>(ENDPOINTS.WALLETS.GET(`${walletId}`), "GET").then(
+      setPortfolio,
+    );
+  };
+
+  const modifyPortfolio = () => {
+    // TODO later
+  };
+
+  // When app starts, fetch the user portfolios
   useEffect(() => {
-    const p = portfolios?.find((p) => p.id === currentPortfolioId);
-    if (p) {
-      setPortfolio(JSON.parse(JSON.stringify(p)));
-      setIsModified(false);
-    } else {
-      setPortfolio(null);
-      setIsModified(false);
-    }
-  }, [currentPortfolioId, portfolios]);
-
-  const modifyPortfolio = (newPortfolio: Portfolio) => {
-    const cloned = JSON.parse(JSON.stringify(newPortfolio));
-    setPortfolio(cloned);
-    setIsModified(true);
-  };
-
-  const savePortfolio = () => {
-    if (!portfolio) return;
-    try {
-      savePortfolioInLocalStorage(portfolio);
-      setIsModified(false);
-      console.log("Portfolio saved to localStorage ✅");
-    } catch (err) {
-      console.error("Failed to save portfolio:", err);
-    }
-  };
+    getPortfolioTitles();
+  }, []);
 
   return (
-    <PortofolioContext.Provider
+    <PortfolioContext.Provider
       value={{
         portfolio,
+        portfolioList,
+        createPortfolio,
+        getPortfolio,
+        getPortfolioTitles,
         modifyPortfolio,
-        savePortfolio, // expose it to consumers
-        isModified,
       }}
     >
       {children}
-    </PortofolioContext.Provider>
+    </PortfolioContext.Provider>
   );
 };

@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { PortofolioContext } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
 import { Button, Form } from "react-bootstrap";
 import type { Color } from "../../../../types/PortfolioTypes";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
@@ -13,7 +12,7 @@ const getColorString = (color: Color) => {
 };
 
 export function EditAsset() {
-  const { portfolio, modifyPortfolio } = useContext(PortofolioContext);
+  const { portfolio, modifyPortfolio } = usePortfolio();
 
   const { currentAsset, deleteAsset } = useAssetContext();
 

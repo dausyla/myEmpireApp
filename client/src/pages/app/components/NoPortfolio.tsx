@@ -1,22 +1,22 @@
 import { Button, Card, Form } from "react-bootstrap";
-import { useAppContext } from "../../../contexts/AppContext/AppContextHook";
 import { useState } from "react";
+import { usePortfolio } from "../../../contexts/PortfolioContext/PortfolioContextHook";
 
 export function NoPortfolio() {
-  const { createNewPortfolioEmpty, createNewPortfolioExample } =
-    useAppContext();
-  const [useExample, setUseExample] = useState(false);
+  const { createPortfolio } = usePortfolio();
+
+  // TODO
+  // const [useExample, setUseExample] = useState(false);
 
   const [newName, setNewName] = useState("");
+  const [newDesc, setNewDesc] = useState("");
 
   const handleCreate = () => {
-    if (!newName.trim()) return;
-    if (useExample) {
-      createNewPortfolioExample(newName.trim());
-    } else {
-      createNewPortfolioEmpty(newName.trim());
-    }
+    const name = !newName.trim() ? "New Portfolio" : newName;
+    const desc = !newDesc.trim() ? "Portfolio Description" : newDesc;
+    createPortfolio(name, desc);
   };
+
   return (
     <>
       <div className="d-flex justify-content-center align-items-center mt-5">
@@ -37,8 +37,21 @@ export function NoPortfolio() {
                 }}
               />
 
+              <Form.Control
+                type="text"
+                value={newDesc}
+                onChange={(e) => setNewDesc(e.target.value)}
+                placeholder="Enter a description"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleCreate();
+                  }
+                }}
+              />
+
               {/* Option to choose between empty or example portfolio put on the right */}
-              <Form.Check
+              {/* <Form.Check
                 type="checkbox"
                 reverse
                 label="Use Example Portfolio"
@@ -46,7 +59,7 @@ export function NoPortfolio() {
                 style={{ justifyItems: "right" }}
                 checked={useExample}
                 onChange={() => setUseExample(!useExample)}
-              />
+              /> */}
             </Form.Group>
 
             <Button

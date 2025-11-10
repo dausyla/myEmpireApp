@@ -7,14 +7,10 @@ import { Dashboard } from "./components/dashboard/Dashboard";
 import { NoPortfolio } from "./components/NoPortfolio";
 import { Col, Container, Row } from "react-bootstrap";
 import { AssetHierarchy } from "../../utilies/AssetHierarchy/AssetHierarchy";
-import { useAppContext } from "../../contexts/AppContext/AppContextHook";
 
 export function MyEmpireApp() {
   const [currentNav, setCurrentNav] = useState("dashboard");
   const { portfolio } = usePortfolio();
-  const { user } = useAppContext();
-  if (!user) {
-  }
 
   if (!portfolio) return <NoPortfolio />;
 

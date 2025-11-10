@@ -11,10 +11,14 @@ export const login = async (req: Request, res: Response) => {
 
   if (error) return res.status(400).json({ error: error.message });
 
-  const token = data.session?.access_token;
-  const user = data.user;
+  const { data: user } = await supabase
+    .from("users")
+    .select()
+    .eq("id", data.user.id);
 
-  res.json({ token, user: { id: user.id, email: user.email } });
+  const token = data.session?.access_token;
+
+  res.json({ token, user });
 };
 
 export const signup = async (req: Request, res: Response) => {
