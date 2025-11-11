@@ -1,5 +1,5 @@
 import { Card, Row, Col, Container } from "react-bootstrap";
-import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../contexts/WalletContext/WalletContextHook";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 
 export function KPIs() {

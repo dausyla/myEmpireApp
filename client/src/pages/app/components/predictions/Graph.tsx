@@ -1,5 +1,5 @@
 import { Line } from "react-chartjs-2";
-import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../contexts/WalletContext/WalletContextHook";
 import { Card, Form, InputGroup } from "react-bootstrap";
 import { useState } from "react";
 import {
@@ -38,7 +38,7 @@ export function Graphs() {
 
   const assetsPredictions: Prediction[] = getDirectoryPredictions(
     portfolio.root,
-    overYears
+    overYears,
   );
 
   type Dataset = {
@@ -51,7 +51,7 @@ export function Graphs() {
 
   const data = {
     labels: getDates(portfolio.dates, overYears).map(
-      (date) => new Date(date).toISOString().split("T")[0]
+      (date) => new Date(date).toISOString().split("T")[0],
     ),
     datasets: assetsPredictions.reduce(
       (acc: Dataset[], ap: Prediction, i: number) => {
@@ -81,7 +81,7 @@ export function Graphs() {
         }
         return acc;
       },
-      [] as Dataset[]
+      [] as Dataset[],
     ),
   };
 

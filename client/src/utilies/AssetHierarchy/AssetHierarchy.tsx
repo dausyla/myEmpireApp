@@ -1,5 +1,5 @@
 import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
-import { usePortfolio } from "../../contexts/PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../../contexts/WalletContext/WalletContextHook";
 import { DirectoryItem } from "./DirectoryItem";
 import { FaFileAlt, FaFolder } from "react-icons/fa";
 import { useAssetContext } from "../../contexts/AssetContext/AssetContextHook";

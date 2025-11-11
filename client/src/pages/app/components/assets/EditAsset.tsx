@@ -1,6 +1,6 @@
-import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../contexts/WalletContext/WalletContextHook";
 import { Button, Form } from "react-bootstrap";
-import type { Color } from "../../../../types/PortfolioTypes";
+import type { Color } from "../../../../types/WalletTypes";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 import { EditableText } from "../../../../utilies/components/EditableText";
 import { BsTrash } from "react-icons/bs";

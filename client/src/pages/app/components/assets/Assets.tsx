@@ -3,7 +3,7 @@ import { EditAsset } from "./EditAsset";
 import { AssetValuesTable } from "./AssetValuesTable";
 import { AssetPerformence } from "./AssetPerformence";
 import { AssetPredictions } from "./AssetPredictions";
-import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../contexts/WalletContext/WalletContextHook";
 import { NoAssetComponent } from "./NoAssetComponent";
 
 export function Assets() {

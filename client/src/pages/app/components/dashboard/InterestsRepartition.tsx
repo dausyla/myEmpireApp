@@ -1,11 +1,11 @@
 import { Bubble } from "react-chartjs-2";
-import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../contexts/WalletContext/WalletContextHook";
 import {
   getAssetPerformence,
   getFadedColor,
 } from "../../../../utilies/utilsFunctions";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
-import type { AssetPerformance } from "../../../../types/PortfolioTypes";
+import type { AssetPerformance } from "../../../../types/WalletTypes";
 
 export function InterestsRepartition() {
   const { portfolio } = usePortfolio();
@@ -60,7 +60,7 @@ export function InterestsRepartition() {
           label: (ctx: any) => {
             const p = points[ctx.dataIndex].meta;
             return `${p.label} → APY ${p.apy.toFixed(
-              2
+              2,
             )}%, Monthly: ${p.interest.toFixed(2)}$`;
           },
         },

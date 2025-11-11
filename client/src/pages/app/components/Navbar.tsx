@@ -2,7 +2,7 @@ import { Button, NavDropdown } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { usePortfolio } from "../../../contexts/PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../../../contexts/WalletContext/WalletContextHook";
 import { EditableText } from "../../../utilies/components/EditableText";
 import { BsTrash } from "react-icons/bs";
 

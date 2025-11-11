@@ -1,8 +1,4 @@
-import type {
-  Asset,
-  Color,
-  Directory,
-} from "../../../../types/PortfolioTypes";
+import type { Asset, Color, Directory } from "../../../../types/WalletTypes";
 
 export function getDates(dates: number[], overYears: number) {
   if (dates.length === 0) return [];
@@ -31,7 +27,7 @@ type AssetPrediction = {
 
 function getPredictionsForAsset(
   asset: Asset,
-  overYears: number
+  overYears: number,
 ): AssetPrediction {
   const inputs = asset.inputs.reduce<number[]>((acc, input, i) => {
     if (i === 0) {
@@ -114,13 +110,13 @@ function getClosedDirectoryPredictions(dir: Directory, overYears: number) {
 
 export function getDirectoryPredictions(
   from: Directory,
-  overYears: number
+  overYears: number,
 ): Prediction[] {
   const res: Prediction[] = [];
 
   if (from.isOpened) {
     from.subDirs.forEach((d) =>
-      res.push(...getDirectoryPredictions(d, overYears))
+      res.push(...getDirectoryPredictions(d, overYears)),
     );
     from.subAssets.forEach((a) => {
       const prediction = getPredictionsForAsset(a, overYears);

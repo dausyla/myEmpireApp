@@ -1,5 +1,5 @@
 import Table from "react-bootstrap/Table";
-import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../contexts/WalletContext/WalletContextHook";
 import { EditableValue } from "../../../../utilies/components/EditableValue";
 import { EditableDate } from "../../../../utilies/components/EditableDate";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";

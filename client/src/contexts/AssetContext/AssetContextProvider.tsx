@@ -1,11 +1,11 @@
 import { useState, type ReactNode } from "react";
 import { AssetContext } from "./AssetContextHook";
-import { usePortfolio } from "../PortfolioContext/PortfolioContextHook";
-import type { Asset, Directory } from "../../types/PortfolioTypes";
+import { usePortfolio } from "../WalletContext/WalletContextHook";
+import type { Asset, Directory } from "../../types/WalletTypes";
 
 export const AssetContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentAsset, setCurrentAsset] = useState<Asset | undefined>(
-    undefined
+    undefined,
   );
   const { portfolio, modifyPortfolio } = usePortfolio();
 
@@ -15,7 +15,7 @@ export const AssetContextProvider = ({ children }: { children: ReactNode }) => {
 
   const getDirRec: (
     dirId: number,
-    current: Directory
+    current: Directory,
   ) => Directory | undefined = (dirId: number, current: Directory) => {
     if (current.id === dirId) return current;
     for (let i = 0; i < current.subDirs.length; i++) {
@@ -71,7 +71,7 @@ export const AssetContextProvider = ({ children }: { children: ReactNode }) => {
       ############## */
   const getAssetRec: (
     assetId: number,
-    current: Directory
+    current: Directory,
   ) => Asset | undefined = (assetId: number, current: Directory) => {
     const asset = current.subAssets.find((a) => a.id === assetId);
     if (asset) return asset;

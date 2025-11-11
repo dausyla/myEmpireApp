@@ -1,4 +1,4 @@
-import type { Asset, Directory } from "../../types/PortfolioTypes";
+import type { Asset, Directory } from "../../types/WalletTypes";
 
 export type AssetContextType = {
   currentAsset: Asset | undefined;

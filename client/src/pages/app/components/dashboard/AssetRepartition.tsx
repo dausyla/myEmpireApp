@@ -1,5 +1,5 @@
 import { Pie } from "react-chartjs-2";
-import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../../../../contexts/WalletContext/WalletContextHook";
 import { getColorString } from "../../../../utilies/utilsFunctions";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 

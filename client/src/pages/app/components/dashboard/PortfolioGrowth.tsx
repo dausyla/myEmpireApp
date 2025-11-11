@@ -1,6 +1,9 @@
 import { Chart } from "react-chartjs-2";
-import { usePortfolio } from "../../../../contexts/PortfolioContext/PortfolioContextHook";
-import { getColorString, getFadedColor } from "../../../../utilies/utilsFunctions";
+import { usePortfolio } from "../../../../contexts/WalletContext/WalletContextHook";
+import {
+  getColorString,
+  getFadedColor,
+} from "../../../../utilies/utilsFunctions";
 import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 
 export function PortfolioGrowth() {
@@ -24,7 +27,7 @@ export function PortfolioGrowth() {
       }, [] as number[]),
       name: asset.name,
       color: getFadedColor(asset.color),
-    })
+    }),
   );
 
   const assetValuesLine: {

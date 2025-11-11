@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { usePortfolio } from "../PortfolioContext/PortfolioContextHook";
+import { usePortfolio } from "../WalletContext/WalletContextHook";
 import { DateContext } from "./DateContextHook";
 import { useAssetContext } from "../AssetContext/AssetContextHook";
 

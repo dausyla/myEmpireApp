@@ -1,8 +1,4 @@
-import type {
-  Asset,
-  AssetPerformance,
-  Color,
-} from "../types/PortfolioTypes";
+import type { Asset, AssetPerformance, Color } from "../types/WalletTypes";
 
 export const getFadedColor = (color: Color, alpha: number = 0.5) => {
   return `rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})`; // Return a string in rgba format with alpha
@@ -14,7 +10,7 @@ export const getColorString = (c: Color) => {
 
 export const getAssetPerformence: (
   asset: Asset,
-  dates: number[]
+  dates: number[],
 ) => AssetPerformance = (asset: Asset, dates: number[]) => {
   if (dates.length === 0) {
     return {
