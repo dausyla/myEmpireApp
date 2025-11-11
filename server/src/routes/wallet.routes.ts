@@ -13,7 +13,7 @@ const router = Router();
 router.get("/me", requireAuth, me);
 
 router.post("/createWallet", requireAuth, createWallet);
-router.get("/getWallets", requireAuth, getWallet);
+router.get("/getWallets", requireAuth, getWallets);
 router.get("/:walletId", requireAuth, getWallet);
 router.post("/:walletId/batch", requireAuth, batchUpdate);
 
