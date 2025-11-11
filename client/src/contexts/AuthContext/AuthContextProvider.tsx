@@ -14,7 +14,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     api<User>(ENDPOINTS.AUTH.ME, "GET")
       .then(setUser)
-      .then(() => setFetchingUser(false));
+      .finally(() => setFetchingUser(false));
   }, []);
 
   const login = async (email: string, password: string) => {

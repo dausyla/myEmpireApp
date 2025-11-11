@@ -10,13 +10,11 @@ import { requireAuth } from "../middleware/auth";
 
 const router = Router();
 
-router.use(requireAuth);
+router.get("/me", requireAuth, me);
 
-router.get("/me", me);
-
-router.post("/createWallet", getWallets);
-router.get("/getWallets", createWallet);
-router.get("/:walletId", getWallet);
-router.post("/:walletId/batch", batchUpdate);
+router.post("/createWallet", requireAuth, createWallet);
+router.get("/getWallets", requireAuth, getWallet);
+router.get("/:walletId", requireAuth, getWallet);
+router.post("/:walletId/batch", requireAuth, batchUpdate);
 
 export default router;

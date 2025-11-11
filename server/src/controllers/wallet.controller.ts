@@ -207,19 +207,16 @@ export const createWallet = async (req: Request, res: Response) => {
 
   // 1. Check premium + wallet count
   try {
-    const { data: user } = await supabase
-      .from("users")
-      .select("premium")
-      .eq("id", userId)
-      .single();
+    const user = (req as any).user;
 
-    if (!user?.premium) {
+    if (!user.premium) {
       const { count } = await supabase
         .from("wallets")
         .select("*", { count: "exact", head: true })
         .eq("user_id", userId);
 
       if (count && count >= 1) {
+        console.log("User not premium already have wallet");
         return res
           .status(403)
           .json({ error: "free users limited to 1 wallet" });
