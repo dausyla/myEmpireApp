@@ -40,10 +40,6 @@ export const WalletContextProvider = ({
     );
   };
 
-  const modifyWallet = () => {
-    // TODO later
-  };
-
   // When app starts, fetch the user wallets
   useEffect(() => {
     getWalletList();
@@ -53,11 +49,11 @@ export const WalletContextProvider = ({
     <WalletContext.Provider
       value={{
         wallet,
+        setWallet,
         walletList,
         createWallet,
         getWallet,
         getWalletList,
-        modifyWallet,
       }}
     >
       {children}

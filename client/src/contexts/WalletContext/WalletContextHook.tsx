@@ -3,8 +3,8 @@ import { type WalletContextType } from "./WalletContextTypes";
 
 export const WalletContext = createContext<WalletContextType>({
   wallet: null,
+  setWallet: () => {},
   walletList: null,
-  modifyWallet: () => {},
   createWallet: () => {},
   getWallet: () => {},
   getWalletList: () => {},

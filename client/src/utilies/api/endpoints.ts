@@ -14,10 +14,10 @@ export const ENDPOINTS = {
   // WALLETS
   WALLETS: {
     LIST: `${API_BASE}/wallets/getWallets`,
-    GET: (id: string) => `${API_BASE}/wallets/${id}`,
+    GET: (id: number) => `${API_BASE}/wallets/${id}`,
     CREATE: `${API_BASE}/wallets/createWallet`,
-    BATCH: (id: string) => `${API_BASE}/wallets/${id}/batch`,
-    EXPORT: (id: string) => `${API_BASE}/wallets/${id}/export`,
+    BATCH: (id: number) => `${API_BASE}/wallets/${id}/batch`,
+    EXPORT: (id: number) => `${API_BASE}/wallets/${id}/export`,
   },
 
   // DATES

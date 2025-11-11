@@ -6,7 +6,7 @@ import { NoRouteMatch } from "./pages/NoRouteMatch";
 import { MyEmpireApp } from "./pages/app/MyEmpireApp";
 import { WalletContextProvider } from "./contexts/WalletContext/WalletContextProvider";
 import { AssetContextProvider } from "./contexts/AssetContext/AssetContextProvider";
-import { DateContextProvider } from "./contexts/DateContext/DateContextProvider";
+import { DateContextProvider } from "./contexts/BatchContext/BatchContextProvider";
 import { LoginPage } from "./pages/login/LoginPage";
 import { AuthContextProvider } from "./contexts/AuthContext/AuthContextProvider";
 import { ProtectedRoute } from "./utilies/ProtectedPage";

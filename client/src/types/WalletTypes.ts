@@ -75,3 +75,14 @@ export type WalletList = {
   title: string;
   description: string;
 }[];
+
+// A batch response is all the inserted new rows
+// Like this, we can fetch their ids and fix the tempId of the optimistic UI
+export type BatchResponse = (
+  | RecurringTransaction
+  | Asset
+  | Directory
+  | AssetValue
+  | WalletDate
+  | Transaction
+)[];
