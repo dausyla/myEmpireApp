@@ -1,3 +1,5 @@
+// Data structure used in Frontend & Backend
+
 export type Wallet = {
   id: number;
   title: string;
@@ -58,7 +60,6 @@ export type RecurringTransaction = {
   created_at: string;
 };
 
-// Optional: Full nested response from API
 export type WalletResponse = {
   wallet: Wallet;
   dates: WalletDate[];
@@ -68,3 +69,20 @@ export type WalletResponse = {
     transactions: Transaction[];
   })[];
 };
+
+export type WalletList = {
+  id: number;
+  title: string;
+  description: string;
+}[];
+
+// A batch response is all the inserted new rows
+// Like this, we can fetch their ids and fix the tempId of the optimistic UI
+export type BatchResponse = (
+  | RecurringTransaction
+  | Asset
+  | Directory
+  | AssetValue
+  | WalletDate
+  | Transaction
+)[];

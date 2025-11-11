@@ -1,6 +1,6 @@
 // src/context/optimisticHelpers.ts
+import type { BatchOp } from "../../types/BatchOpType";
 import type { WalletResponse } from "../../types/WalletTypes";
-import type { BatchOp } from "./BatchContextTypes";
 
 export const applyInsert = (
   draft: WalletResponse,

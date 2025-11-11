@@ -1,14 +1,7 @@
 import { createContext, useContext } from "react";
 import type { BatchContextType } from "./BatchContextTypes";
 
-export const BatchContext = createContext<BatchContextType>({
-  queue: [],
-  addTransaction: () => {},
-  updateTransaction: () => {},
-  deleteTransaction: () => {},
-  addAssetValue: () => {},
-  flush: async () => {},
-});
+export const BatchContext = createContext<BatchContextType | null>(null);
 
 export const useBatch = () => {
   const ctx = useContext(BatchContext);

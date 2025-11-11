@@ -1,14 +1,9 @@
 import { Request, Response } from "express";
 import { supabase } from "../db/supabase";
 import { BatchChange } from "../types";
-import {
-  Asset,
-  Directory,
-  Portfolio,
-  PortfolioList,
-  Prediction,
-} from "../types/FrontendPortfolioTypes";
-import { buildFrontendWallet } from "../utils/wallet.utils";
+import { buildWallet } from "../utils/wallet.utils";
+import { WalletList } from "../types/WalletTypes";
+import { BatchOp } from "../types/BatchOpType";
 
 export const getWallet = async (req: Request, res: Response) => {
   const { walletId } = req.params;
@@ -20,7 +15,7 @@ export const getWallet = async (req: Request, res: Response) => {
   }
 
   try {
-    const portfolio = await buildFrontendWallet(wid, userId);
+    const portfolio = await buildWallet(wid, userId);
     res.json(portfolio);
   } catch (err: any) {
     console.error(err);
@@ -40,7 +35,7 @@ export const getWallets = async (req: Request, res: Response) => {
 
     if (error) throw error;
 
-    const list: PortfolioList = data.map((w) => ({
+    const list: WalletList = data.map((w) => ({
       id: w.id,
       title: w.title,
       description: w.description || "",
@@ -101,86 +96,79 @@ export const createWallet = async (req: Request, res: Response) => {
 
 export const batchUpdate = async (req: Request, res: Response) => {
   const { walletId } = req.params;
-  const { changes, userId } = req.body as {
-    changes: BatchChange[];
-    userId: string;
-  };
+  const userId = (req as any).user.id;
+  const ops: BatchOp[] = req.body;
 
-  // Vérifie que le wallet appartient à l'user
+  // 1. Validate wallet ownership
   const { data: wallet } = await supabase
     .from("wallets")
-    .select()
+    .select("id")
     .eq("id", walletId)
     .eq("user_id", userId)
     .single();
 
-  if (!wallet) return res.status(404).json({ error: "Wallet not found" });
+  if (!wallet) {
+    return res.status(404).json({ error: "Wallet not found" });
+  }
 
-  const client = supabase; // transaction implicite via batch
+  const results: any[] = [];
 
   try {
-    for (const change of changes) {
-      if (change.type === "update_value") {
-        const { assetId, dateIndex, value } = change;
+    for (const op of ops) {
+      // === INSERT ===
+      if (op.op === "insert") {
+        let data: any = op.data;
 
-        const { data: dateRow } = await client
-          .from("wallet_dates")
-          .select("id")
-          .eq("wallet_id", walletId)
-          .eq("index", dateIndex)
+        // Auto-fill wallet_id where needed
+        if (op.table === "wallet_dates") {
+          data = { ...data, wallet_id: walletId };
+        }
+        if (op.table === "dirs") {
+          data = { ...data, wallet_id: walletId };
+        }
+
+        const { data: row, error } = await supabase
+          .from(op.table)
+          .insert(data)
+          .select()
           .single();
 
-        if (!dateRow) continue;
+        if (error) throw error;
 
-        await client
-          .from("asset_values")
-          .upsert(
-            { asset_id: assetId, date_id: dateRow.id, value },
-            { onConflict: "asset_id,date_id" },
-          );
+        // We push the inserted row so that the frontend
+        // can update the ID of this object
+        results.push(row);
       }
 
-      if (change.type === "add_transaction") {
-        const { assetId, dateIndex, amount, transType } = change;
-
-        const { data: dateRow } = await client
-          .from("wallet_dates")
-          .select("id")
-          .eq("wallet_id", walletId)
-          .eq("index", dateIndex)
+      // === UPDATE ===
+      else if (op.op === "update") {
+        const { data: row, error } = await supabase
+          .from(op.table)
+          .update(op.data)
+          .eq("id", op.id)
+          .select()
           .single();
 
-        if (!dateRow) continue;
-
-        await client.from("transactions").insert({
-          asset_id: assetId,
-          date_id: dateRow.id,
-          amount,
-          type: transType,
-        });
+        if (error) throw error;
       }
 
-      if (change.type === "add_date") {
-        const { date, index } = change;
-
-        // Appelle la fonction SQL
-        const { data, error } = await client.rpc("insert_wallet_date", {
-          p_wallet_id: Number(walletId),
-          p_date: date,
-          p_index: index ?? null,
-        });
-
-        if (error) {
-          console.error("Error inserting date:", error);
-          continue;
+      // === DELETE ===
+      else if (op.op === "delete") {
+        // Only delete if real ID (tempId ignored)
+        if (op.id > 0) {
+          const { error } = await supabase
+            .from(op.table)
+            .delete()
+            .eq("id", op.id);
+          if (error) throw error;
         }
       }
     }
 
-    res.json({ success: true });
-  } catch (error: any) {
-    console.error(error);
-    res.status(500).json({ error: error.message });
+    res.json(results);
+  } catch (err: any) {
+    console.error("Batch error:", err);
+    res.status(500).json({ error: err.message || "Batch failed" });
   }
 };
 
