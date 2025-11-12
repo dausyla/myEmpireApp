@@ -1,6 +1,6 @@
 // src/utils/buildWallet.ts
 import { supabase } from "../db/supabase";
-import { WalletResponse } from "../types/wallet.types";
+import { WalletResponse } from "../types/WalletTypes";
 
 export const buildWallet = async (
   walletID: number,

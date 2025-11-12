@@ -4,6 +4,11 @@ import { BatchChange } from "../types";
 import { buildWallet } from "../utils/wallet.utils";
 import { WalletList } from "../types/WalletTypes";
 import { BatchOp } from "../types/BatchOpType";
+import {
+  deleteOperation,
+  insertOperation,
+  updateOperation,
+} from "../utils/batch.utils";
 
 export const getWallet = async (req: Request, res: Response) => {
   const { walletId } = req.params;
@@ -96,6 +101,11 @@ export const createWallet = async (req: Request, res: Response) => {
 
 export const batchUpdate = async (req: Request, res: Response) => {
   const { walletId } = req.params;
+  const wid = Number(walletId);
+  if (!Number.isInteger(wid)) {
+    return res.status(400).json({ error: "invalid wallet id" });
+  }
+
   const userId = (req as any).user.id;
   const ops: BatchOp[] = req.body;
 
@@ -117,51 +127,18 @@ export const batchUpdate = async (req: Request, res: Response) => {
     for (const op of ops) {
       // === INSERT ===
       if (op.op === "insert") {
-        let data: any = op.data;
-
-        // Auto-fill wallet_id where needed
-        if (op.table === "wallet_dates") {
-          data = { ...data, wallet_id: walletId };
-        }
-        if (op.table === "dirs") {
-          data = { ...data, wallet_id: walletId };
-        }
-
-        const { data: row, error } = await supabase
-          .from(op.table)
-          .insert(data)
-          .select()
-          .single();
-
-        if (error) throw error;
-
-        // We push the inserted row so that the frontend
-        // can update the ID of this object
-        results.push(row);
+        // We send the created row so the frontend can update its id in the DB
+        results.push(await insertOperation(op, wid));
       }
 
       // === UPDATE ===
       else if (op.op === "update") {
-        const { data: row, error } = await supabase
-          .from(op.table)
-          .update(op.data)
-          .eq("id", op.id)
-          .select()
-          .single();
-
-        if (error) throw error;
+        await updateOperation(op);
       }
 
       // === DELETE ===
       else if (op.op === "delete") {
-        // Only delete if real ID (tempId ignored)
-        if (op.id > 0) {
-          const { error } = await supabase
-            .from(op.table)
-            .delete()
-            .eq("id", op.id);
-          if (error) throw error;
-        }
+        await deleteOperation(op);
       }
     }
 
