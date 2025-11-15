@@ -1,56 +1,92 @@
+// AssetValuesTable.tsx
 import Table from "react-bootstrap/Table";
-import { usePortfolio } from "../../../../contexts/WalletContext/WalletContextHook";
 import { EditableValue } from "../../../../utilies/components/EditableValue";
-import { EditableDate } from "../../../../utilies/components/EditableDate";
-import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
-import { AddDateButton } from "../../../../utilies/components/AddDateButton";
+import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
+import { useApp } from "../../../../contexts/AppContext/AppContextHook";
+import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 
 export function AssetValuesTable() {
-  const { portfolio, modifyPortfolio } = usePortfolio();
-  const { currentAsset } = useAssetContext();
+  const { wallet } = useWallet();
+  const { currentItem } = useApp();
+  const { updateAssetValue, addAssetValue } = useBatch();
 
-  if (!portfolio || !currentAsset) return null;
+  if (!wallet || !currentItem || "wallet_id" in currentItem) return null;
 
-  const rows = portfolio.dates.map((_, index) => {
-    const gain =
+  const asset = wallet.assets.find((a) => a.id === currentItem.id);
+  if (!asset) return null;
+
+  const dates = wallet.dates.sort((a, b) => a.index - b.index);
+  const valuesMap = new Map(asset.values.map((v) => [v.date_id, v]));
+  // const txMap = new Map(asset.transactions.map((t) => [t.date_id, t]));
+
+  let lastValue = 0;
+
+  const rows = dates.map((date, index) => {
+    const valueEntry = valuesMap.get(date.id);
+    const currentValue = valueEntry?.value ?? lastValue;
+    if (valueEntry) lastValue = currentValue;
+
+    const inputs =
+      asset.transactions
+        .filter(
+          (t) =>
+            t.date_id === date.id && ["deposit", "reward"].includes(t.type),
+        )
+        .reduce((sum, t) => sum + t.amount, 0) -
+      asset.transactions
+        .filter(
+          (t) =>
+            t.date_id === date.id && ["withdrawal", "fee"].includes(t.type),
+        )
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    const prevValue =
       index === 0
         ? null
-        : currentAsset.values[index] -
-          currentAsset.values[index - 1] -
-          currentAsset.inputs[index];
-
+        : (valuesMap.get(dates[index - 1].id)?.value ?? lastValue);
+    const gain = prevValue !== null ? currentValue - prevValue - inputs : null;
     const percentage =
-      index === 0 || currentAsset.values[index - 1] === 0
-        ? null
-        : (gain! / currentAsset.values[index - 1]) * 100;
+      prevValue !== null && prevValue > 0 && gain !== null
+        ? (gain / prevValue) * 100
+        : null;
 
     return (
-      <tr key={index}>
+      <tr key={date.id}>
         {/* Date */}
         <td className="text-center align-middle">
-          <EditableDate index={index} />
+          {/* <EditableDate dateId={date.id} /> */}
+          {date.date}
         </td>
 
         {/* Value */}
         <td className="text-end align-middle">
-          <EditableValue
-            value={currentAsset.values[index]}
-            modifyValue={(newValue) => {
-              currentAsset.values[index] = newValue;
-              modifyPortfolio(portfolio);
-            }}
-          />
+          {valueEntry ? (
+            <EditableValue
+              value={currentValue}
+              modifyValue={(newValue) =>
+                updateAssetValue(valueEntry.id, { value: newValue })
+              }
+            />
+          ) : (
+            <span
+              className="text-muted cursor-pointer"
+              onClick={() =>
+                addAssetValue({
+                  asset_id: asset.id,
+                  date_id: date.id,
+                  value: lastValue,
+                })
+              }
+              style={{ cursor: "pointer" }}
+            >
+              {currentValue.toFixed(2)}
+            </span>
+          )}
         </td>
 
         {/* Inputs */}
         <td className="text-end align-middle">
-          <EditableValue
-            value={currentAsset.inputs[index]}
-            modifyValue={(newValue) => {
-              currentAsset.inputs[index] = newValue;
-              modifyPortfolio(portfolio);
-            }}
-          />
+          {inputs !== 0 ? inputs.toFixed(2) : "—"}
         </td>
 
         {/* Gains */}
@@ -79,28 +115,30 @@ export function AssetValuesTable() {
   });
 
   return (
-    <Table
-      size="sm"
-      bordered={false}
-      hover
-      responsive
-      className="align-middle text-nowrap"
-    >
+    <Table size="sm" hover responsive className="align-middle text-nowrap">
       <thead className="table-light">
         <tr>
-          <th style={{ width: "20%", textAlign: "center" }}>Date</th>
-          <th style={{ width: "20%", textAlign: "center" }}>Values</th>
-          <th style={{ width: "20%", textAlign: "center" }}>Inputs</th>
-          <th style={{ width: "20%", textAlign: "right" }}>Gains</th>
-          <th style={{ width: "20%", textAlign: "right" }}>Percentage</th>
+          <th className="text-center" style={{ width: "20%" }}>
+            Date
+          </th>
+          <th className="text-center" style={{ width: "20%" }}>
+            Value
+          </th>
+          <th className="text-center" style={{ width: "20%" }}>
+            Net Input
+          </th>
+          <th className="text-end" style={{ width: "20%" }}>
+            Gain
+          </th>
+          <th className="text-end" style={{ width: "20%" }}>
+            %
+          </th>
         </tr>
       </thead>
       <tbody>
         {rows}
         <tr>
-          <td>
-            <AddDateButton />
-          </td>
+          <td colSpan={5}>AddDateButton</td>
         </tr>
       </tbody>
     </Table>

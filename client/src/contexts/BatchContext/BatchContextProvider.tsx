@@ -1,7 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useWallet } from "../WalletContext/WalletContextHook";
 import {
-  type BatchResponse,
   type Asset,
   type AssetValue,
   type Directory,
@@ -18,7 +17,7 @@ import {
   applyInsert,
   applyUpdate,
 } from "./BatchOptimisticFunctions";
-import type { BatchOp } from "../../types/BatchOpType";
+import type { BatchOp, BatchResponse } from "../../types/BatchOpType";
 
 export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
   const { wallet, setWallet } = useWallet();
@@ -85,8 +84,24 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // === Asset Values ===
+  const addAssetValue = (value: Omit<AssetValue, "id" | "created_at">) => {
+    const op: BatchOp = { op: "insert", table: "asset_values", data: value };
+    addToQueue(withTempId(op));
+  };
   const updateAssetValue = (id: number, updates: Partial<AssetValue>) => {
     addToQueue({ op: "update", table: "asset_values", id, data: updates });
+  };
+  const deleteAssetValue = (id: number) => {
+    const pending = queue.find(
+      (q) => q.op === "insert" && q.table === "asset_values" && q.tempId === id,
+    );
+    if (pending) {
+      // Operation not sent yet, we can remove it from the queue as we delete it
+      setQueue((q) => q.filter((x) => x !== pending));
+      applyOptimistic([{ op: "delete", table: "asset_values", id }]);
+    } else {
+      addToQueue({ op: "delete", table: "asset_values", id });
+    }
   };
 
   // === Dates ===
@@ -113,7 +128,12 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // === Assets ===
-  const addAsset = (asset: Omit<Asset, "id" | "created_at">) => {
+  const addAsset = (
+    asset: Omit<
+      Asset,
+      "id" | "created_at" | "recurring_transactions" | "transactions" | "values"
+    >,
+  ) => {
     const op: BatchOp = { op: "insert", table: "assets", data: asset };
     addToQueue(withTempId(op));
   };
@@ -207,6 +227,8 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
     try {
       const res = await api<BatchResponse>(
         ENDPOINTS.WALLETS.BATCH(wallet.wallet.id),
+        "POST",
+        currentQueue,
       );
 
       const results = res as any[];
@@ -257,7 +279,9 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
         addTransaction,
         updateTransaction,
         deleteTransaction,
+        addAssetValue,
         updateAssetValue,
+        deleteAssetValue,
         addDate,
         updateDate,
         deleteDate,

@@ -5,9 +5,9 @@ export const WalletContext = createContext<WalletContextType>({
   wallet: null,
   setWallet: () => {},
   walletList: null,
-  createWallet: () => {},
-  getWallet: () => {},
-  getWalletList: () => {},
+  createWallet: async () => {},
+  getWallet: async () => {},
+  getWalletList: async () => {},
 });
 
 export function useWallet() {

@@ -20,6 +20,16 @@ export const applyInsert = (
     }
   }
 
+  if (op.table === "asset_values") {
+    const asset = draft.assets.find((a) => a.id === op.data.asset_id);
+    if (asset) {
+      asset.values.push({
+        ...op.data,
+        id: tempId,
+      } as any);
+    }
+  }
+
   if (op.table === "wallet_dates") {
     draft.dates.push({
       ...op.data,

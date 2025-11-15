@@ -4,6 +4,7 @@ import { AuthContext } from "./AuthContextHook";
 import { ENDPOINTS } from "../../utilies/api/endpoints";
 import { api } from "../../utilies/api/api";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | undefined>(undefined);
@@ -14,6 +15,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     api<User>(ENDPOINTS.AUTH.ME, "GET")
       .then(setUser)
+      .catch((e) => {
+        toast.error(e);
+        navigate("/login");
+      })
       .finally(() => setFetchingUser(false));
   }, []);
 

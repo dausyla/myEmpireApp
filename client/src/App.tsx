@@ -5,11 +5,12 @@ import { Home } from "./pages/home/Home";
 import { NoRouteMatch } from "./pages/NoRouteMatch";
 import { MyEmpireApp } from "./pages/app/MyEmpireApp";
 import { WalletContextProvider } from "./contexts/WalletContext/WalletContextProvider";
-import { AssetContextProvider } from "./contexts/AssetContext/AssetContextProvider";
-import { DateContextProvider } from "./contexts/BatchContext/BatchContextProvider";
 import { LoginPage } from "./pages/login/LoginPage";
 import { AuthContextProvider } from "./contexts/AuthContext/AuthContextProvider";
 import { ProtectedRoute } from "./utilies/ProtectedPage";
+import { BatchContextProvider } from "./contexts/BatchContext/BatchContextProvider";
+import { DataContextProvider } from "./contexts/DataContext/DataContextProvider";
+import { AppContextProvider } from "./contexts/AppContext/AppContextProvider";
 
 // Register Chart.js to enable chart rendering
 ChartJS.register(...registerables);
@@ -24,11 +25,13 @@ function App() {
             element={
               <ProtectedRoute>
                 <WalletContextProvider>
-                  <AssetContextProvider>
-                    <DateContextProvider>
-                      <MyEmpireApp />
-                    </DateContextProvider>
-                  </AssetContextProvider>
+                  <BatchContextProvider>
+                    <DataContextProvider>
+                      <AppContextProvider>
+                        <MyEmpireApp />
+                      </AppContextProvider>
+                    </DataContextProvider>
+                  </BatchContextProvider>
                 </WalletContextProvider>
               </ProtectedRoute>
             }

@@ -15,7 +15,7 @@ export const WalletContextProvider = ({
   const [wallet, setWallet] = useState<WalletResponse | null>(null);
   const [walletList, setWalletList] = useState<WalletList | null>(null);
 
-  const createWallet = (title: string, description?: string) => {
+  const createWallet = async (title: string, description?: string) => {
     if (!user?.premium && wallet) {
       toast.error(
         "You already have a wallet, upgrade your account to be able to have other ones",
@@ -24,26 +24,33 @@ export const WalletContextProvider = ({
 
     if (!description) description = "My wallet description.";
 
-    api<WalletResponse>(ENDPOINTS.WALLETS.CREATE, "POST", {
+    await api<WalletResponse>(ENDPOINTS.WALLETS.CREATE, "POST", {
       title,
       description,
     }).then(setWallet);
   };
 
-  const getWalletList = () => {
-    api<WalletList>(ENDPOINTS.WALLETS.LIST, "GET").then(setWalletList);
+  const getWalletList = async () => {
+    const wl = await api<WalletList>(ENDPOINTS.WALLETS.LIST, "GET");
+    setWalletList(wl);
   };
 
-  const getWallet = (walletId: number) => {
-    api<WalletResponse>(ENDPOINTS.WALLETS.GET(`${walletId}`), "GET").then(
-      setWallet,
-    );
+  const getWallet = async (walletId: number) => {
+    const w = await api<WalletResponse>(ENDPOINTS.WALLETS.GET(walletId), "GET");
+    setWallet(w);
   };
 
   // When app starts, fetch the user wallets
   useEffect(() => {
     getWalletList();
   }, []);
+
+  // If found a wallet list but no wallet selected, select first one
+  useEffect(() => {
+    if (walletList && !wallet && walletList.length > 0) {
+      getWallet(walletList[0].id);
+    }
+  }, [walletList]);
 
   return (
     <WalletContext.Provider

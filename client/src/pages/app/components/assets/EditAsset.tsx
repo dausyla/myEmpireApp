@@ -1,59 +1,171 @@
-import { usePortfolio } from "../../../../contexts/WalletContext/WalletContextHook";
-import { Button, Form } from "react-bootstrap";
-import type { Color } from "../../../../types/WalletTypes";
-import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
-import { EditableText } from "../../../../utilies/components/EditableText";
-import { BsTrash } from "react-icons/bs";
-
-const getColorString = (color: Color) => {
-  return `#${((1 << 24) + (color.r << 16) + (color.g << 8) + color.b)
-    .toString(16)
-    .slice(1)}`;
-};
+// EditAsset.tsx
+import { useState, useEffect } from "react";
+import { Card, Form, Button, InputGroup } from "react-bootstrap";
+import { useApp } from "../../../../contexts/AppContext/AppContextHook";
+import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
+import type { RecurringTransaction } from "../../../../types/WalletTypes";
 
 export function EditAsset() {
-  const { portfolio, modifyPortfolio } = usePortfolio();
+  const { currentItem } = useApp();
+  const { updateAsset, addRecurring, updateRecurring, deleteRecurring } =
+    useBatch();
 
-  const { currentAsset, deleteAsset } = useAssetContext();
+  const [name, setName] = useState("");
+  const [color, setColor] = useState("#3B82F6");
+  const [apy, setApy] = useState<string>("");
+  const [recurrings, setRecurrings] = useState<
+    (RecurringTransaction & { tempId?: string })[]
+  >([]);
 
-  if (!portfolio) return null;
+  useEffect(() => {
+    if (!currentItem || "wallet_id" in currentItem) return;
 
-  const onColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!currentAsset) return;
-    const colorValue = e.target.value;
-    const r = parseInt(colorValue.slice(1, 3), 16);
-    const g = parseInt(colorValue.slice(3, 5), 16);
-    const b = parseInt(colorValue.slice(5, 7), 16);
-    currentAsset.color = { r, g, b };
-    modifyPortfolio(portfolio);
+    setName(currentItem.name);
+    setColor(currentItem.color);
+    setApy(currentItem.estimated_apy?.toString() ?? "");
+    setRecurrings(currentItem.recurring_transactions ?? []);
+  }, [currentItem]);
+
+  if (!currentItem || "wallet_id" in currentItem) return null;
+
+  const handleSaveAsset = () => {
+    updateAsset(currentItem.id, {
+      name,
+      color,
+      estimated_apy: apy === "" ? 0 : parseFloat(apy),
+    });
+  };
+
+  const addNewRecurring = () => {
+    const tempId = `temp-${Date.now()}`;
+    const newRt: RecurringTransaction & { tempId: string } = {
+      id: 0,
+      asset_id: currentItem.id,
+      amount: 0,
+      period: "monthly",
+      created_at: "",
+      tempId,
+    };
+    setRecurrings([...recurrings, newRt]);
+    addRecurring(newRt);
+  };
+
+  const updateRt = (
+    index: number,
+    field: keyof RecurringTransaction,
+    value: any,
+  ) => {
+    const updated = [...recurrings];
+    updated[index] = { ...updated[index], [field]: value };
+    setRecurrings(updated);
+
+    const rt = updated[index];
+    if (rt.tempId) {
+      addRecurring({
+        asset_id: rt.asset_id,
+        amount: rt.amount,
+        period: rt.period,
+      });
+    } else {
+      updateRecurring(rt.id, { [field]: value });
+    }
+  };
+
+  const removeRt = (index: number) => {
+    const rt = recurrings[index];
+    if (!rt.tempId && rt.id > 0) deleteRecurring(rt.id);
+    setRecurrings(recurrings.filter((_, i) => i !== index));
   };
 
   return (
-    <div className="m-3">
-      {currentAsset ? (
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <EditableText
-            value={currentAsset.name}
-            modifyValue={(newName) => {
-              currentAsset.name = newName;
-              modifyPortfolio(portfolio);
-            }}
-          />
+    <Card className="h-100">
+      <Card.Header>
+        <strong>Edit Asset</strong>
+      </Card.Header>
+      <Card.Body className="d-flex flex-column gap-3">
+        {/* Asset Fields */}
+        <Form.Group>
+          <Form.Label>Name</Form.Label>
           <Form.Control
-            type="color"
-            onChange={onColorChange}
-            value={getColorString(currentAsset.color)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onBlur={handleSaveAsset}
           />
-          <Button
-            variant="outline-danger"
-            onClick={() => deleteAsset(currentAsset)}
-          >
-            <BsTrash />
-          </Button>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Color</Form.Label>
+          <div className="d-flex gap-2 align-items-center">
+            <Form.Control
+              type="color"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              onBlur={handleSaveAsset}
+              style={{ width: 60, height: 38, padding: 1 }}
+            />
+            <Form.Control
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              onBlur={handleSaveAsset}
+              style={{ flex: 1 }}
+            />
+          </div>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Estimated APY (%)</Form.Label>
+          <Form.Control
+            type="number"
+            value={apy}
+            onChange={(e) => setApy(e.target.value)}
+            onBlur={handleSaveAsset}
+            placeholder="Leave empty for none"
+          />
+        </Form.Group>
+
+        {/* Recurring Transactions */}
+        <div>
+          <div className="d-flex justify-content-between align-items-center mb-2">
+            <strong>Recurring Transactions</strong>
+            <Button size="sm" onClick={addNewRecurring}>
+              + Add
+            </Button>
+          </div>
+
+          {recurrings.length === 0 ? (
+            <p className="text-muted small">No recurring transactions</p>
+          ) : (
+            <div className="d-flex flex-column gap-2">
+              {recurrings.map((rt, i) => (
+                <InputGroup key={rt.tempId ?? rt.id} size="sm">
+                  <Form.Control
+                    type="number"
+                    value={rt.amount}
+                    onChange={(e) =>
+                      updateRt(i, "amount", parseFloat(e.target.value) || 0)
+                    }
+                    style={{ maxWidth: 100 }}
+                  />
+                  <Form.Select
+                    value={rt.period}
+                    onChange={(e) =>
+                      updateRt(i, "period", e.target.value as any)
+                    }
+                  >
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="yearly">Yearly</option>
+                  </Form.Select>
+                  <Button variant="outline-danger" onClick={() => removeRt(i)}>
+                    ×
+                  </Button>
+                </InputGroup>
+              ))}
+            </div>
+          )}
         </div>
-      ) : (
-        <></>
-      )}
-    </div>
+      </Card.Body>
+    </Card>
   );
 }

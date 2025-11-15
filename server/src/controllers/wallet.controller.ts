@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { supabase } from "../db/supabase";
-import { BatchChange } from "../types";
 import { buildWallet } from "../utils/wallet.utils";
 import { WalletList } from "../types/WalletTypes";
 import { BatchOp } from "../types/BatchOpType";
@@ -92,7 +91,20 @@ export const createWallet = async (req: Request, res: Response) => {
 
     if (error) throw error;
 
-    res.status(201).json(wallet);
+    // 3. Create Root Dir
+    const { data: rootDir, error: dirError } = await supabase
+      .from("dirs")
+      .insert({
+        wallet_id: wallet.id,
+        name: wallet.title,
+        description: wallet.description,
+      })
+      .select()
+      .single();
+
+    if (dirError) throw dirError;
+
+    res.status(201).json({ ...wallet, assets: [], dirs: [rootDir] });
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ error: err.message || "server error" });

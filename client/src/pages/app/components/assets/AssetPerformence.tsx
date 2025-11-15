@@ -1,132 +1,69 @@
 import Table from "react-bootstrap/Table";
-import { usePortfolio } from "../../../../contexts/WalletContext/WalletContextHook";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
-import { getAssetPerformence } from "../../../../utilies/utilsFunctions";
+import { useApp } from "../../../../contexts/AppContext/AppContextHook";
+import { useData } from "../../../../contexts/DataContext/DataContextHook";
 
 export function AssetPerformence() {
-  const { portfolio, modifyPortfolio } = usePortfolio();
-  const { currentAsset } = useAssetContext();
+  const { currentItem } = useApp();
+  const { getAssetPerformance } = useData();
 
-  const countFirstInput = currentAsset?.countFirstInput || false;
-
-  if (!currentAsset || !portfolio) {
+  if (!currentItem || "wallet_id" in currentItem) {
     return null;
   }
 
-  const {
-    totalValue,
-    totalInput,
-    totalInterests,
-    totalGrowth,
-    apy,
-    timeSpentInYears,
-  } = getAssetPerformence(currentAsset, portfolio.dates);
+  const perf = getAssetPerformance(currentItem.id);
 
-  const firstInput = currentAsset.inputs.find((v) => v > 0);
-  const totalMonthlyInput = countFirstInput
-    ? totalInput
-    : totalInput - (firstInput || 0);
-  const monthlyInput =
-    timeSpentInYears === 0
-      ? 0
-      : Math.round((100 * totalMonthlyInput) / timeSpentInYears / 12) / 100; // Round to 2 decimals
-
-  const toggleCountFirstInput = () => {
-    currentAsset.countFirstInput = !countFirstInput;
-    modifyPortfolio(portfolio);
-  };
-
-  const automateMonthlyApy = () => {
-    currentAsset.prediction.estimatedAPY = Math.round(apy * 10000) / 10000; // Round to 2 decimals
-    modifyPortfolio(portfolio);
-  };
-  const automateMonthlyInputs = () => {
-    currentAsset.prediction.monthlyInput = monthlyInput;
-    modifyPortfolio(portfolio);
-  };
+  if (!perf) return null;
 
   return (
     <>
       <Table hover className="align-middle ">
         <thead className="table-light">
           <tr>
-            <th style={{ width: "16.6%", textAlign: "center" }}>Total Value</th>
-            <th style={{ width: "16.6%", textAlign: "center" }}>Total Input</th>
-            <th style={{ width: "16.6%", textAlign: "center" }}>APY</th>
+            <th style={{ textAlign: "center" }}>Total Value</th>
+            <th style={{ textAlign: "center" }}>Time Spent</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td style={{ textAlign: "right" }}>{totalValue.toFixed(2)} $</td>
-            <td style={{ textAlign: "right" }}>{totalInput.toFixed(2)} $</td>
-            <td
-              style={{ textAlign: "right" }}
-              className={`text-${apy > 0 ? "success" : "danger"}`}
-            >
-              {(100 * apy).toFixed(2)} %
-            </td>
+            <td style={{ textAlign: "right" }}>{perf.totalValue} $</td>
+            <td style={{ textAlign: "right" }}>{perf.timeSpent} days</td>
           </tr>
         </tbody>
       </Table>
       <Table hover className="align-middle ">
         <thead className="table-light">
           <tr>
-            <th style={{ width: "16.6%", textAlign: "center" }}>
-              Monthly Input
-            </th>
-            <th style={{ width: "16.6%", textAlign: "center" }}>
-              Total Interests
-            </th>
-            <th style={{ width: "16.6%", textAlign: "center" }}>
-              Total Growth
-            </th>
+            <th style={{ textAlign: "center" }}>Total Deposit</th>
+            <th style={{ textAlign: "center" }}>Total Withdrawal</th>
+            <th style={{ textAlign: "center" }}>Total Fees</th>
+            <th style={{ textAlign: "center" }}>Total Rewards</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td style={{ textAlign: "right" }}>{monthlyInput} $</td>
-            <td
-              style={{ textAlign: "right" }}
-              className={`text-${totalInterests > 0 ? "success" : "danger"}`}
-            >
-              {totalInterests.toFixed(2)} $
-            </td>
-            <td
-              style={{ textAlign: "right" }}
-              className={`text-${totalGrowth > 0 ? "success" : "danger"}`}
-            >
-              {(100 * totalGrowth).toFixed(2)} %
-            </td>
+            <td style={{ textAlign: "right" }}>{perf.totalDeposit} $</td>
+            <td style={{ textAlign: "right" }}>{perf.totalWithdrawal} $</td>
+            <td style={{ textAlign: "right" }}>{perf.totalFees} $</td>
+            <td style={{ textAlign: "right" }}>{perf.totalRewards} $</td>
           </tr>
         </tbody>
       </Table>
-
-      <Container>
-        <Row className="mb-2">
-          <Form.Check // prettier-ignore
-            type="switch"
-            value={countFirstInput ? "on" : "false"}
-            reverse
-            id="custom-switch"
-            label="Count first input as a monthly input"
-            onChange={() => toggleCountFirstInput()}
-          />
-        </Row>
-
-        <Row>
-          <Col>
-            <Button variant="outline-primary" onClick={automateMonthlyInputs}>
-              Automate Monthly Inputs
-            </Button>
-          </Col>
-          <Col>
-            <Button variant="outline-primary" onClick={automateMonthlyApy}>
-              Automate APY
-            </Button>
-          </Col>
-        </Row>
-      </Container>
+      <Table hover className="align-middle ">
+        <thead className="table-light">
+          <tr>
+            <th style={{ textAlign: "center" }}>Total Intersts</th>
+            <th style={{ textAlign: "center" }}>Total Growth</th>
+            <th style={{ textAlign: "center" }}>APY</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style={{ textAlign: "right" }}>{perf.totalInterests} $</td>
+            <td style={{ textAlign: "right" }}>{perf.totalGrowth} $</td>
+            <td style={{ textAlign: "right" }}>{perf.apy} $</td>
+          </tr>
+        </tbody>
+      </Table>
     </>
   );
 }

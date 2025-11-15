@@ -1,15 +1,30 @@
 import { Button, Card, Form } from "react-bootstrap";
-import { useAssetContext } from "../../../../contexts/AssetContext/AssetContextHook";
 import { useState } from "react";
+import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
+import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
+import toast from "react-hot-toast";
 
 export function NoAssetComponent() {
-  const { addNewAsset } = useAssetContext();
+  const { addAsset } = useBatch();
+  const { wallet } = useWallet();
 
   const [newName, setNewName] = useState("");
 
   const handleCreate = () => {
     if (!newName.trim()) return;
-    addNewAsset({ name: newName.trim() });
+    const rootDirId = wallet?.dirs[0].id;
+    if (!rootDirId) {
+      toast.error("No root directory found...");
+      return;
+    }
+    addAsset({
+      name: newName,
+      dir_id: rootDirId,
+      color: "#ff0000",
+      estimated_apy: 0,
+      // TODO: Remove that
+      count_first_input: false,
+    });
     setNewName("");
   };
 

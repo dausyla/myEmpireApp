@@ -28,12 +28,16 @@ export type Directory = {
 
 export type Asset = {
   id: number;
-  dir_id: number;
+  dir_id: number | null;
   name: string;
   color: string; // hex
   estimated_apy: number | null;
   count_first_input: boolean;
   created_at: string;
+  // Added when building the response
+  values: AssetValue[];
+  transactions: Transaction[];
+  recurring_transactions: RecurringTransaction[];
 };
 
 export type AssetValue = {
@@ -64,10 +68,7 @@ export type WalletResponse = {
   wallet: Wallet;
   dates: WalletDate[];
   dirs: Directory[];
-  assets: (Asset & {
-    values: AssetValue[];
-    transactions: Transaction[];
-  })[];
+  assets: Asset[];
 };
 
 export type WalletList = {

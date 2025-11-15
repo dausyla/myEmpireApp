@@ -53,6 +53,9 @@ export const buildWallet = async (
       ),
       transactions!asset_id (
         id, asset_id, date_id, amount, type, created_at
+      ),
+      recurring_transactions!asset_id (
+        id, asset_id, amount, period, created_at
       )
     `,
     )
@@ -81,6 +84,7 @@ export const buildWallet = async (
       ...a,
       values: a.asset_values || [],
       transactions: a.transactions || [],
+      recurring_transactions: a.recurring_transactions || [],
     })),
   };
 };

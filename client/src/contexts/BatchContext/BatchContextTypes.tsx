@@ -18,7 +18,9 @@ export type BatchContextType = {
   deleteTransaction: (id: number) => void;
 
   // Asset Values
+  addAssetValue: (value: Omit<AssetValue, "id" | "created_at">) => void;
   updateAssetValue: (id: number, updates: Partial<AssetValue>) => void;
+  deleteAssetValue: (id: number) => void;
 
   // Dates
   addDate: (date: Omit<WalletDate, "id" | "created_at">) => void;
@@ -26,7 +28,12 @@ export type BatchContextType = {
   deleteDate: (id: number) => void;
 
   // Assets
-  addAsset: (asset: Omit<Asset, "id" | "created_at">) => void;
+  addAsset: (
+    asset: Omit<
+      Asset,
+      "id" | "created_at" | "recurring_transactions" | "transactions" | "values"
+    >,
+  ) => void;
   updateAsset: (id: number, updates: Partial<Asset>) => void;
   deleteAsset: (id: number) => void;
 

@@ -24,11 +24,18 @@ export type BatchOp =
   | { op: "delete"; table: "transactions"; id: number; tempId?: number }
   // === Asset Values ===
   | {
+      op: "insert";
+      table: "asset_values";
+      data: Omit<AssetValue, "id" | "created_at">;
+      tempId?: number;
+    }
+  | {
       op: "update";
       table: "asset_values";
       id: number;
       data: Partial<AssetValue>;
     }
+  | { op: "delete"; table: "asset_values"; id: number; tempId?: number }
   // === Dates ===
   | {
       op: "insert";
@@ -47,7 +54,14 @@ export type BatchOp =
   | {
       op: "insert";
       table: "assets";
-      data: Omit<Asset, "id" | "created_at">;
+      data: Omit<
+        Asset,
+        | "id"
+        | "created_at"
+        | "recurring_transactions"
+        | "transactions"
+        | "values"
+      >;
       tempId?: number;
     }
   | {
@@ -90,3 +104,14 @@ export type BatchOp =
       id: number;
       tempId?: number;
     };
+
+// A batch response is all the inserted new rows
+// Like this, we can fetch their ids and fix the tempId of the optimistic UI
+export type BatchResponse = (
+  | RecurringTransaction
+  | Asset
+  | Directory
+  | AssetValue
+  | WalletDate
+  | Transaction
+)[];

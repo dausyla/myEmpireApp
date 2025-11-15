@@ -1,9 +1,9 @@
 import { Button, Card, Form } from "react-bootstrap";
 import { useState } from "react";
-import { usePortfolio } from "../../../contexts/WalletContext/WalletContextHook";
+import { useWallet } from "../../../contexts/WalletContext/WalletContextHook";
 
-export function NoPortfolio() {
-  const { createPortfolio } = usePortfolio();
+export function NoWallet() {
+  const { createWallet } = useWallet();
 
   // TODO
   // const [useExample, setUseExample] = useState(false);
@@ -14,7 +14,7 @@ export function NoPortfolio() {
   const handleCreate = () => {
     const name = !newName.trim() ? "New Portfolio" : newName;
     const desc = !newDesc.trim() ? "Portfolio Description" : newDesc;
-    createPortfolio(name, desc);
+    createWallet(name, desc);
   };
 
   return (
