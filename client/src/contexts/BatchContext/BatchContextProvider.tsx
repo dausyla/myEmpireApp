@@ -17,7 +17,7 @@ import {
   applyInsert,
   applyUpdate,
 } from "./BatchOptimisticFunctions";
-import type { BatchOp, BatchResponse } from "../../types/BatchOpType";
+import type { BatchOp, BatchResponse } from "@shared/BatchOpType";
 
 export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
   const { wallet, setWallet } = useWallet();

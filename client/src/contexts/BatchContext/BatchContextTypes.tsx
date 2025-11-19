@@ -1,4 +1,4 @@
-import type { BatchOp } from "../../types/BatchOpType";
+import type { BatchOp } from "@shared/BatchOpType";
 import type {
   Asset,
   AssetValue,

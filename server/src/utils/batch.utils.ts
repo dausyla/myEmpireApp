@@ -1,5 +1,5 @@
 import { supabase } from "../db/supabase";
-import { BatchOp } from "../types/BatchOpType";
+import { BatchOp } from "@shared/BatchOpType";
 
 export const insertOperation = async (
   op: BatchOp & { op: "insert" },
