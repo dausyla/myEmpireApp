@@ -1,49 +1,17 @@
-import { Button, NavDropdown } from "react-bootstrap";
+import { NavDropdown } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { usePortfolio } from "../../../contexts/WalletContext/WalletContextHook";
-import { EditableText } from "../../../utilies/components/EditableText";
-import { BsTrash } from "react-icons/bs";
+import { useWallet } from "../../../contexts/WalletContext/WalletContextHook";
 
 export function NavBar({
   setCurrentNav,
 }: {
   setCurrentNav: (nav: string) => void;
 }) {
-  const { portfolio, modifyPortfolio, portfolioList } = usePortfolio();
+  const { wallet, walletList } = useWallet();
 
-  const handleExport = () => {
-    const blob = new Blob([JSON.stringify(portfolio, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "portfolio.empire";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const parsed = JSON.parse(event.target?.result as string);
-        modifyPortfolio(parsed);
-      } catch (err) {
-        console.error("Invalid file format:", err);
-      }
-    };
-    reader.readAsText(file);
-    // reset input so same file can be re-imported
-    e.target.value = "";
-  };
-
-  const portfolioNames = portfolioList?.map((p) => p.title);
+  if (!walletList || !wallet) return null;
 
   return (
     <Navbar sticky="top" expand="lg" className="bg-body-tertiary shadow-sm">
@@ -53,17 +21,16 @@ export function NavBar({
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="main-nav" />
         <Navbar.Collapse id="main-nav">
-          <NavDropdown title="Portfolios" id="basic-nav-dropdown">
-            {portfolioNames?.map((name, index) => (
+          <NavDropdown title="Wallets" id="basic-nav-dropdown">
+            {walletList.map((w, i) => (
               <NavDropdown.Item
-                key={index}
+                key={i}
                 // TODO
                 // onClick={() => setCurrentPortfolioId(portfolios[index].id)}
               >
-                {name}
+                {w.title}
               </NavDropdown.Item>
             ))}
-            <NavDropdown.Divider />
           </NavDropdown>
           <Nav className="me-auto align-items-center">
             <Nav.Link onClick={() => setCurrentNav("dashboard")}>
@@ -76,46 +43,7 @@ export function NavBar({
           </Nav>
         </Navbar.Collapse>
         <Navbar.Collapse className="justify-content-end" style={{ gap: 8 }}>
-          {portfolio ? (
-            <>
-              <EditableText
-                value={portfolio.name}
-                modifyValue={(newName) => {
-                  portfolio.name = newName;
-                  modifyPortfolio(portfolio);
-                }}
-              />
-              <Button
-                // TODO
-                // onClick={() => deletePortfolio(portfolio.id)}
-                variant="outline-danger"
-                className="ms-2"
-              >
-                <BsTrash />
-              </Button>{" "}
-            </>
-          ) : (
-            <></>
-          )}
-          <Button
-            variant="outline-primary"
-            onClick={handleExport}
-            className="ms-2"
-          >
-            Export
-          </Button>
-          <label htmlFor="import-file">
-            <input
-              id="import-file"
-              type="file"
-              accept=".json,.empire,application/json"
-              onChange={handleImport}
-              style={{ display: "none" }}
-            />
-            <Button as="span" variant="outline-success">
-              Import
-            </Button>
-          </label>
+          {wallet.wallet.title}
         </Navbar.Collapse>
       </Container>
     </Navbar>
