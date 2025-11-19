@@ -1,4 +1,4 @@
-import type { Asset, Directory } from "../../types/WalletTypes";
+import type { Asset, Directory } from "@shared/WalletTypes";
 
 export type AppContextType = {
   currentItem: CurrentItem;

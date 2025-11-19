@@ -7,7 +7,7 @@ import {
   type RecurringTransaction,
   type Transaction,
   type WalletDate,
-} from "../../types/WalletTypes";
+} from "@shared/WalletTypes";
 import { BatchContext } from "./BatchContextHook";
 import toast from "react-hot-toast";
 import { api } from "../../utilies/api/api";

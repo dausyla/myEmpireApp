@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { DataContext } from "./DataContextHook";
 import { useWallet } from "../WalletContext/WalletContextHook";
 import type { AssetPerformance } from "../../types/DataTypes";
-import type { Asset, Transaction } from "../../types/WalletTypes";
+import type { Asset, Transaction } from "@shared/WalletTypes";
 
 export const DataContextProvider = ({ children }: { children: ReactNode }) => {
   const { wallet } = useWallet();

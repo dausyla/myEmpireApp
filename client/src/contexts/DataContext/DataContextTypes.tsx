@@ -1,5 +1,5 @@
 import type { AssetPerformance } from "../../types/DataTypes";
-import type { Asset, AssetValue, WalletDate } from "../../types/WalletTypes";
+import type { Asset, AssetValue, WalletDate } from "@shared/WalletTypes";
 
 export type DataContextType = {
   getAssetPerformance: (assetId: number) => AssetPerformance | null;

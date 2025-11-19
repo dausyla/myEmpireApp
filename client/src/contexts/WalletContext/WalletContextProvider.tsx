@@ -4,7 +4,7 @@ import { useAuthContext } from "../AuthContext/AuthContextHook";
 import { api } from "../../utilies/api/api";
 import { ENDPOINTS } from "../../utilies/api/endpoints";
 import toast from "react-hot-toast";
-import type { WalletList, WalletResponse } from "../../types/WalletTypes";
+import type { WalletList, WalletResponse } from "@shared/WalletTypes";
 
 export const WalletContextProvider = ({
   children,

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { supabase } from "../db/supabase";
 import { buildWallet } from "../utils/wallet.utils";
-import { WalletList } from "../types/WalletTypes";
+import { WalletList } from "@shared/WalletTypes";
 import { BatchOp } from "../types/BatchOpType";
 import {
   deleteOperation,

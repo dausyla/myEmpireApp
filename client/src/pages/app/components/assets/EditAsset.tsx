@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Card, Form, Button, InputGroup } from "react-bootstrap";
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
-import type { RecurringTransaction } from "../../../../types/WalletTypes";
+import type { RecurringTransaction } from "@shared/WalletTypes";
 
 export function EditAsset() {
   const { currentItem } = useApp();
@@ -19,9 +19,6 @@ export function EditAsset() {
 
   useEffect(() => {
     if (!currentItem || "wallet_id" in currentItem) return;
-
-    console.log("recurrings: ");
-    console.log(currentItem.recurring_transactions);
 
     setName(currentItem.name);
     setColor(currentItem.color);

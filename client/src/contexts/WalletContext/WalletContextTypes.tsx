@@ -1,4 +1,4 @@
-import type { WalletList, WalletResponse } from "../../types/WalletTypes";
+import type { WalletList, WalletResponse } from "@shared/WalletTypes";
 
 export type WalletContextType = {
   wallet: WalletResponse | null;

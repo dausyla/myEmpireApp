@@ -6,7 +6,7 @@ import type {
   RecurringTransaction,
   Transaction,
   WalletDate,
-} from "../../types/WalletTypes";
+} from "@shared/WalletTypes";
 
 export type BatchContextType = {
   queue: BatchOp[];
