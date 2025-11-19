@@ -7,21 +7,19 @@ import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook"
 import { NoAssetComponent } from "./NoAssetComponent";
 
 export function Assets() {
-  const { currentItem, setCurrentItem } = useApp();
+  const { currentItem } = useApp();
   const { wallet } = useWallet();
   if (!wallet) return null;
   if (wallet.assets.length === 0) return <NoAssetComponent />;
 
-  if (!currentItem) return null; // should never be null
-
-  const isAsset = "dir_id" in currentItem;
+  if (!currentItem) return null;
 
   return (
     <Container fluid className="h-100 p-2">
       <Row className="m-0">
         <Col md={6}>
           <Card className="rounded shadow-sm p-2">
-            {isAsset ? <AssetValuesTable /> : null}
+            {currentItem.type === "asset" ? <AssetValuesTable /> : null}
           </Card>
         </Col>
         <Col>
@@ -29,12 +27,12 @@ export function Assets() {
             <Row>
               <Col>
                 <Card className="rounded shadow-sm p-2 mb-3">
-                  {isAsset ? <AssetPerformence /> : null}
+                  {currentItem.type === "asset" ? <AssetPerformence /> : null}
                 </Card>
               </Col>
             </Row>
             <Row>
-              <Col>{isAsset ? <EditAsset /> : null}</Col>
+              <Col>{currentItem.type === "asset" ? <EditAsset /> : null}</Col>
             </Row>
           </Container>
         </Col>
