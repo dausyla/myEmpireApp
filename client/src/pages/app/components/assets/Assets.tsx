@@ -5,7 +5,6 @@ import { AssetPerformence } from "./AssetPerformence";
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 import { NoAssetComponent } from "./NoAssetComponent";
-import { useEffect } from "react";
 
 export function Assets() {
   const { currentItem, setCurrentItem } = useApp();

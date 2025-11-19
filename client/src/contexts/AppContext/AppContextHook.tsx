@@ -3,7 +3,8 @@ import type { AppContextType } from "./AppContextTypes";
 
 export const AppContext = createContext<AppContextType>({
   currentItem: null,
-  setCurrentItem: () => {},
+  currentItemId: null,
+  setCurrentItemId: () => {},
 });
 
 export function useApp() {

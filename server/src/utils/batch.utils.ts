@@ -12,6 +12,9 @@ export const insertOperation = async (
     data = { ...data, wallet_id: walletId };
   }
 
+  // Remove the tempId field before inserting in the battery
+  delete data.tempId;
+
   const { data: row, error } = await supabase
     .from(op.table)
     .insert(data)

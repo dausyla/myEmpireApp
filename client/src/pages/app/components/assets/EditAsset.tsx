@@ -20,6 +20,9 @@ export function EditAsset() {
   useEffect(() => {
     if (!currentItem || "wallet_id" in currentItem) return;
 
+    console.log("recurrings: ");
+    console.log(currentItem.recurring_transactions);
+
     setName(currentItem.name);
     setColor(currentItem.color);
     setApy(currentItem.estimated_apy?.toString() ?? "");
@@ -37,17 +40,11 @@ export function EditAsset() {
   };
 
   const addNewRecurring = () => {
-    const tempId = `temp-${Date.now()}`;
-    const newRt: RecurringTransaction & { tempId: string } = {
-      id: 0,
+    addRecurring({
       asset_id: currentItem.id,
       amount: 0,
       period: "monthly",
-      created_at: "",
-      tempId,
-    };
-    setRecurrings([...recurrings, newRt]);
-    addRecurring(newRt);
+    });
   };
 
   const updateRt = (
@@ -55,26 +52,12 @@ export function EditAsset() {
     field: keyof RecurringTransaction,
     value: any,
   ) => {
-    const updated = [...recurrings];
-    updated[index] = { ...updated[index], [field]: value };
-    setRecurrings(updated);
-
-    const rt = updated[index];
-    if (rt.tempId) {
-      addRecurring({
-        asset_id: rt.asset_id,
-        amount: rt.amount,
-        period: rt.period,
-      });
-    } else {
-      updateRecurring(rt.id, { [field]: value });
-    }
+    const rt = recurrings[index];
+    updateRecurring(rt.id, { [field]: value });
   };
 
   const removeRt = (index: number) => {
-    const rt = recurrings[index];
-    if (!rt.tempId && rt.id > 0) deleteRecurring(rt.id);
-    setRecurrings(recurrings.filter((_, i) => i !== index));
+    deleteRecurring(recurrings[index].id);
   };
 
   return (

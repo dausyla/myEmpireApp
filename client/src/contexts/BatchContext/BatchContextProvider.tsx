@@ -243,6 +243,13 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
             const real = results[idx++];
             if (!real) return;
 
+            if (op.table === "recurring_transactions") {
+              const asset = draft.assets.find((a) => a.id === op.data.asset_id);
+              const temp = asset?.recurring_transactions.find(
+                (t) => t.id === op.tempId,
+              );
+              if (temp) Object.assign(temp, real);
+            }
             if (op.table === "transactions") {
               const asset = draft.assets.find((a) => a.id === op.data.asset_id);
               const temp = asset?.transactions.find((t) => t.id === op.tempId);
