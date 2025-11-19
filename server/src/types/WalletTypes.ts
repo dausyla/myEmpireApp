@@ -12,8 +12,7 @@ export type Wallet = {
 export type WalletDate = {
   id: number;
   wallet_id: number;
-  date: string; // ISO date
-  index: number;
+  date: string; // YYYY/MM/DD ex: 2025/11/19
   created_at: string;
 };
 

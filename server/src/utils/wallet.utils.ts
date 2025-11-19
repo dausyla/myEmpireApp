@@ -20,9 +20,9 @@ export const buildWallet = async (
   // 2. Dates (sorted)
   const { data: dates, error: datesErr } = await supabase
     .from("wallet_dates")
-    .select("id, wallet_id, date, index, created_at")
+    .select("id, wallet_id, date, created_at")
     .eq("wallet_id", walletID)
-    .order("index", { ascending: true });
+    .order("date", { ascending: true });
 
   if (datesErr) throw datesErr;
 

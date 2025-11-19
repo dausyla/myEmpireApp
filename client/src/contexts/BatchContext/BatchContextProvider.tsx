@@ -255,6 +255,11 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
               const temp = asset?.transactions.find((t) => t.id === op.tempId);
               if (temp) Object.assign(temp, real);
             }
+            if (op.table === "asset_values") {
+              const asset = draft.assets.find((a) => a.id === op.data.asset_id);
+              const temp = asset?.values.find((v) => v.id === op.tempId);
+              if (temp) Object.assign(temp, real);
+            }
             if (op.table === "wallet_dates") {
               const temp = draft.dates.find((d) => d.id === op.tempId);
               if (temp) Object.assign(temp, real);

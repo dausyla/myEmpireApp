@@ -2,10 +2,27 @@ import type { ReactNode } from "react";
 import { DataContext } from "./DataContextHook";
 import { useWallet } from "../WalletContext/WalletContextHook";
 import type { AssetPerformance } from "../../types/DataTypes";
-import type { Transaction } from "../../types/WalletTypes";
+import type { Asset, Transaction } from "../../types/WalletTypes";
 
 export const DataContextProvider = ({ children }: { children: ReactNode }) => {
   const { wallet } = useWallet();
+
+  const getSortedDates = () => {
+    if (!wallet) return [];
+    return [...wallet.dates].sort((a, b) => a.date.localeCompare(b.date));
+  };
+
+  const getSortedValues = (asset: Asset) => {
+    const dateIdToIndex = Object.fromEntries(
+      getSortedDates().map((d, i) => [d.id, i]),
+    );
+
+    return [...asset.values].sort((a, b) => {
+      const indexA = dateIdToIndex[a.date_id] ?? -1;
+      const indexB = dateIdToIndex[b.date_id] ?? -1;
+      return indexA - indexB;
+    });
+  };
 
   // Helpers
   const sumTx = (txs: Transaction[], type: Transaction["type"]) =>
@@ -19,11 +36,11 @@ export const DataContextProvider = ({ children }: { children: ReactNode }) => {
     if (!asset) return null;
 
     // Sort the data by dates
+    const dates = getSortedDates();
     const values = asset.values.sort((a, b) => a.date_id - b.date_id);
     const transactions = asset.transactions.sort(
       (a, b) => a.date_id - b.date_id,
     );
-    const dates = wallet.dates.sort((a, b) => a.index - b.index);
 
     if (values.length === 0) return null;
 
@@ -69,8 +86,11 @@ export const DataContextProvider = ({ children }: { children: ReactNode }) => {
       apy: isFinite(apy) ? round(apy) : 0,
     };
   };
+
   return (
-    <DataContext.Provider value={{ getAssetPerformance }}>
+    <DataContext.Provider
+      value={{ getAssetPerformance, getSortedDates, getSortedValues }}
+    >
       {children}
     </DataContext.Provider>
   );

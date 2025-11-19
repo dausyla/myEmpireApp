@@ -1,19 +1,23 @@
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { useState } from "react";
 import { BsPlus } from "react-icons/bs";
-import { useDateContext } from "../../contexts/BatchContext/BatchContextHook";
+import { useBatch } from "../../contexts/BatchContext/BatchContextHook";
+import { useWallet } from "../../contexts/WalletContext/WalletContextHook";
 
 export function AddDateButton() {
-  const { addDate } = useDateContext();
-
+  const { addDate } = useBatch();
+  const { wallet } = useWallet();
   const [newDate, setNewDate] = useState("");
 
+  if (!wallet) return null;
+
+  const isValid =
+    newDate.trim() !== "" && !wallet.dates.some((d) => d.date === newDate);
+
   const addDateButton = () => {
-    if (!newDate) return;
+    if (!isValid) return;
 
-    const newDateTimestamp = new Date(newDate).getTime();
-
-    addDate(newDateTimestamp);
+    addDate({ date: newDate, wallet_id: wallet.wallet.id });
 
     setNewDate("");
   };
@@ -29,7 +33,7 @@ export function AddDateButton() {
       <Button
         variant="outline-primary"
         onClick={addDateButton}
-        disabled={!newDate}
+        disabled={!isValid}
         className="py-0 px-1"
       >
         <BsPlus />

@@ -4,51 +4,53 @@ import { EditableValue } from "../../../../utilies/components/EditableValue";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
+import { useData } from "../../../../contexts/DataContext/DataContextHook";
+import { AddDateButton } from "../../../../utilies/components/AddDateButton";
 
 export function AssetValuesTable() {
   const { wallet } = useWallet();
   const { currentItem } = useApp();
   const { updateAssetValue, addAssetValue } = useBatch();
+  const { getSortedDates } = useData();
 
-  if (!wallet || !currentItem || "wallet_id" in currentItem) return null;
+  if (!wallet || !currentItem || currentItem.type === "directory") return null;
 
   const asset = wallet.assets.find((a) => a.id === currentItem.id);
   if (!asset) return null;
 
-  const dates = wallet.dates.sort((a, b) => a.index - b.index);
+  const dates = getSortedDates();
   const valuesMap = new Map(asset.values.map((v) => [v.date_id, v]));
   // const txMap = new Map(asset.transactions.map((t) => [t.date_id, t]));
 
   let lastValue = 0;
 
-  const rows = dates.map((date, index) => {
+  const rows = dates.map((date) => {
     const valueEntry = valuesMap.get(date.id);
     const currentValue = valueEntry?.value ?? lastValue;
+
+    const gain = valueEntry ? valueEntry.value - lastValue : null;
+    const percentage = gain !== null ? (gain / lastValue) * 100 : null;
+
     if (valueEntry) lastValue = currentValue;
 
-    const inputs =
-      asset.transactions
-        .filter(
-          (t) =>
-            t.date_id === date.id && ["deposit", "reward"].includes(t.type),
-        )
-        .reduce((sum, t) => sum + t.amount, 0) -
-      asset.transactions
-        .filter(
-          (t) =>
-            t.date_id === date.id && ["withdrawal", "fee"].includes(t.type),
-        )
-        .reduce((sum, t) => sum + t.amount, 0);
+    const transactions = asset.transactions
+      .filter(
+        (t) =>
+          t.date_id === date.id && ["deposit", "withdrawal"].includes(t.type),
+      )
+      .reduce(
+        (sum, t) => (t.type === "deposit" ? sum + t.amount : sum - t.amount),
+        0,
+      );
 
-    const prevValue =
-      index === 0
-        ? null
-        : (valuesMap.get(dates[index - 1].id)?.value ?? lastValue);
-    const gain = prevValue !== null ? currentValue - prevValue - inputs : null;
-    const percentage =
-      prevValue !== null && prevValue > 0 && gain !== null
-        ? (gain / prevValue) * 100
-        : null;
+    const generated = asset.transactions
+      .filter(
+        (t) => t.date_id === date.id && ["fee", "reward"].includes(t.type),
+      )
+      .reduce(
+        (sum, t) => (t.type === "reward" ? sum + t.amount : sum - t.amount),
+        0,
+      );
 
     return (
       <tr key={date.id}>
@@ -84,9 +86,14 @@ export function AssetValuesTable() {
           )}
         </td>
 
-        {/* Inputs */}
+        {/* Transactions */}
         <td className="text-end align-middle">
-          {inputs !== 0 ? inputs.toFixed(2) : "—"}
+          {transactions !== 0 ? transactions.toFixed(2) : "—"}
+        </td>
+
+        {/* Generated */}
+        <td className="text-end align-middle">
+          {generated !== 0 ? generated.toFixed(2) : "—"}
         </td>
 
         {/* Gains */}
@@ -118,19 +125,22 @@ export function AssetValuesTable() {
     <Table size="sm" hover responsive className="align-middle text-nowrap">
       <thead className="table-light">
         <tr>
-          <th className="text-center" style={{ width: "20%" }}>
+          <th className="text-center" style={{ width: "17%" }}>
             Date
           </th>
-          <th className="text-center" style={{ width: "20%" }}>
+          <th className="text-center" style={{ width: "17%" }}>
             Value
           </th>
-          <th className="text-center" style={{ width: "20%" }}>
-            Net Input
+          <th className="text-center" style={{ width: "17%" }}>
+            Transactions
           </th>
-          <th className="text-end" style={{ width: "20%" }}>
+          <th className="text-center" style={{ width: "17%" }}>
+            Generated
+          </th>
+          <th className="text-end" style={{ width: "16%" }}>
             Gain
           </th>
-          <th className="text-end" style={{ width: "20%" }}>
+          <th className="text-end" style={{ width: "16%" }}>
             %
           </th>
         </tr>
@@ -138,7 +148,9 @@ export function AssetValuesTable() {
       <tbody>
         {rows}
         <tr>
-          <td colSpan={5}>AddDateButton</td>
+          <td colSpan={5}>
+            <AddDateButton />
+          </td>
         </tr>
       </tbody>
     </Table>
