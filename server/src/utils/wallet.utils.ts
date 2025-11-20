@@ -35,7 +35,7 @@ export const buildWallet = async (
 
   if (dirsErr) throw dirsErr;
 
-  // 4. Assets + values + transactions (nested)
+  // 4. Assets + values (nested)
   const { data: assets, error: assetsErr } = await supabase
     .from("assets")
     .select(
@@ -49,17 +49,10 @@ export const buildWallet = async (
       created_at,
       asset_values!asset_id (
         id, asset_id, date_id, value
-      ),
-      transactions!asset_id (
-        id, asset_id, date_id, amount, type, created_at
-      ),
-      recurring_transactions!asset_id (
-        id, asset_id, amount, period, created_at
       )
     `,
     )
-    .in("asset_values.date_id", dateIds)
-    .in("transactions.date_id", dateIds);
+    .in("asset_values.date_id", dateIds);
 
   if (assetsErr) throw assetsErr;
 
@@ -74,7 +67,23 @@ export const buildWallet = async (
 
   const filteredAssets = assets.filter((a: any) => validAssetIds.has(a.id));
 
-  // 5. Return raw  structure
+  // 5. Transactions
+  const { data: trx, error: trxErr } = await supabase
+    .from("transactions")
+    .select("*")
+    .eq("wallet_id", walletID);
+
+  if (trxErr) throw trxErr;
+
+  // 6. Recurring Transactions
+  const { data: recTrx, error: recTrxErr } = await supabase
+    .from("recurring_transactions")
+    .select("*")
+    .eq("wallet_id", walletID);
+
+  if (recTrxErr) throw recTrxErr;
+
+  // 7. Return raw  structure
   return {
     wallet,
     dates: dates || [],
@@ -85,5 +94,7 @@ export const buildWallet = async (
       transactions: a.transactions || [],
       recurring_transactions: a.recurring_transactions || [],
     })),
+    transactions: trx,
+    recurring_transactions: recTrx,
   };
 };

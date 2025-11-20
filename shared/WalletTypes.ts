@@ -35,8 +35,6 @@ export type Asset = {
   created_at: string;
   // Added when building the response
   values: AssetValue[];
-  transactions: Transaction[];
-  recurring_transactions: RecurringTransaction[];
 };
 
 export type AssetValue = {
@@ -48,17 +46,24 @@ export type AssetValue = {
 
 export type Transaction = {
   id: number;
-  asset_id: number;
+  wallet_id: number;
+  to_asset_id?: number;
+  from_asset_id?: number;
+  description: string;
   date_id: number;
   amount: number;
-  type: "deposit" | "withdrawal" | "fee" | "reward";
+  type: TransactionTypes;
   created_at: string;
 };
 
 export type RecurringTransaction = {
   id: number;
-  asset_id: number;
+  wallet_id: number;
+  to_asset_id?: number;
+  from_asset_id?: number;
+  description: string;
   amount: number;
+  type: TransactionTypes;
   period: "daily" | "weekly" | "monthly" | "yearly";
   created_at: string;
 };
@@ -68,6 +73,8 @@ export type WalletResponse = {
   dates: WalletDate[];
   dirs: Directory[];
   assets: Asset[];
+  transactions: Transaction[];
+  recurring_transactions: RecurringTransaction[];
 };
 
 export type WalletList = {
@@ -86,3 +93,5 @@ export type BatchResponse = (
   | WalletDate
   | Transaction
 )[];
+
+export type TransactionTypes = "deposit" | "withdrawal" | "fee" | "reward";

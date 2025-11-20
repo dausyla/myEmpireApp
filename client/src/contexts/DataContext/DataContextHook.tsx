@@ -5,6 +5,7 @@ export const DataContext = createContext<DataContextType>({
   getAssetPerformance: () => null,
   getSortedDates: () => [],
   getSortedValues: () => [],
+  getSortedTransactions: () => [],
 });
 
 export function useData() {
