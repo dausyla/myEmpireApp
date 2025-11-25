@@ -1,8 +1,9 @@
 import { Button, ButtonGroup, ListGroup } from "react-bootstrap";
 import { FaFileAlt, FaTrash } from "react-icons/fa";
-import type { Asset } from "../../types/WalletTypes";
-import { useAssetContext } from "../../contexts/AssetContext/AssetContextHook";
 import { useState } from "react";
+import type { Asset } from "@shared/WalletTypes";
+import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
+import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 
 export function AssetItem({
   asset,
@@ -11,12 +12,13 @@ export function AssetItem({
   asset: Asset;
   depth: number;
 }) {
-  const { setCurrentAsset, deleteAsset } = useAssetContext();
+  const { deleteAsset } = useBatch();
+  const { setCurrentItemId } = useApp();
   const [hovered, setHovered] = useState(false);
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    deleteAsset(asset);
+    deleteAsset(asset.id);
   };
   return (
     <ListGroup.Item
@@ -29,7 +31,7 @@ export function AssetItem({
         borderRadius: 0,
       }}
       action
-      onClick={() => setCurrentAsset(asset)}
+      onClick={() => setCurrentItemId({ type: "asset", id: asset.id })}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className={`d-flex align-items-center justify-content-between bg-body${

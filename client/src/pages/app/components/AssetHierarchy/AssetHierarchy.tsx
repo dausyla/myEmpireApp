@@ -1,13 +1,21 @@
 import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
-import { usePortfolio } from "../../contexts/WalletContext/WalletContextHook";
 import { DirectoryItem } from "./DirectoryItem";
 import { FaFileAlt, FaFolder } from "react-icons/fa";
-import { useAssetContext } from "../../contexts/AssetContext/AssetContextHook";
+import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
+import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
 
 export function AssetHierarchy() {
-  const { portfolio } = usePortfolio();
-  const { addNewAsset, addNewDir } = useAssetContext();
-  if (!portfolio) return null;
+  const { wallet } = useWallet();
+  const {} = useBatch();
+
+  if (!wallet) return null;
+
+  const root = wallet.dirs.find((d) => !d.parent_dir_id);
+
+  if (!root) {
+    console.log("No root dir...");
+    return null;
+  }
 
   return (
     <Container fluid className="h-100 p-1 bg-body-tertiary">
@@ -16,7 +24,7 @@ export function AssetHierarchy() {
           <Button
             size="sm"
             variant="outline-primary"
-            onClick={() => addNewAsset({})}
+            // onClick={() => addNewAsset({})}
           >
             New Asset&nbsp;
             <FaFileAlt />
@@ -26,7 +34,7 @@ export function AssetHierarchy() {
           <Button
             size="sm"
             variant="outline-success"
-            onClick={() => addNewDir({})}
+            // onClick={() => addNewDir({})}
           >
             New Dir&nbsp;
             <FaFolder />
@@ -34,7 +42,7 @@ export function AssetHierarchy() {
         </Col>
       </Row>
       <ListGroup variant="flush" className="">
-        <DirectoryItem dir={portfolio.root} />
+        <DirectoryItem dir={root} />
       </ListGroup>
     </Container>
   );

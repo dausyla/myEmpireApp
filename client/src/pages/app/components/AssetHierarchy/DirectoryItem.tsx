@@ -1,11 +1,11 @@
 import { ListGroup, ButtonGroup, Button } from "react-bootstrap";
-import type { Directory } from "../../types/WalletTypes";
 import { FaFolder, FaFolderOpen, FaTrash, FaFileAlt } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import { AssetItem } from "./AssetItem";
-import { useAssetContext } from "../../contexts/AssetContext/AssetContextHook";
 import { useState } from "react";
-import { usePortfolio } from "../../contexts/WalletContext/WalletContextHook";
+import type { Directory } from "@shared/WalletTypes";
+import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
+import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
 
 interface DirectoryItemProps {
   dir: Directory;
@@ -13,39 +13,48 @@ interface DirectoryItemProps {
 }
 
 export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
-  const { portfolio, modifyPortfolio } = usePortfolio();
-  const { addNewAsset, addNewDir, deleteDir } = useAssetContext();
+  const { wallet } = useWallet();
+  const [isOpened, setIsOpened] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const { addDir, addAsset, deleteDir } = useBatch();
 
-  if (!portfolio) return null;
-
-  const toggleDirectory = () => {
-    dir.isOpened = !dir.isOpened;
-    modifyPortfolio(portfolio);
-  };
+  if (!wallet) return null;
 
   const handleAddDir = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent toggleDirectory()
-    addNewDir({ fromDir: dir });
+    addDir({
+      name: "New directory",
+      wallet_id: wallet.wallet.id,
+      description: "My directory description",
+      parent_dir_id: dir.id,
+    });
   };
 
   const handleAddAsset = (e: React.MouseEvent) => {
     e.stopPropagation();
-    addNewAsset({ fromDir: dir });
+    addAsset({
+      name: "New Asset",
+      dir_id: dir.id,
+      color: "#ff0000",
+      estimated_apy: 0,
+      count_first_input: false,
+    });
   };
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    deleteDir(dir);
+    deleteDir(dir.id);
   };
 
-  const subDirs = dir.subDirs.map((sub) => (
-    <DirectoryItem key={sub.id} dir={sub} depth={depth + 1} />
-  ));
+  const subDirs = wallet.dirs
+    .filter((d) => d.parent_dir_id === dir.id)
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((sub) => <DirectoryItem key={sub.id} dir={sub} depth={depth + 1} />);
 
-  const subAssets = dir.subAssets.map((a) => (
-    <AssetItem key={a.id} asset={a} depth={depth} />
-  ));
+  const subAssets = wallet.assets
+    .filter((a) => a.dir_id === dir.id)
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((a) => <AssetItem key={a.id} asset={a} depth={depth} />);
 
   return (
     <>
@@ -53,7 +62,7 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
       {dir.id !== 0 && (
         <ListGroup.Item
           action
-          onClick={() => toggleDirectory()}
+          onClick={() => setIsOpened(!isOpened)}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           className={`d-flex align-items-center justify-content-between bg-body${
@@ -68,7 +77,7 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
           }}
         >
           <div className="d-flex align-items-center">
-            {dir.isOpened ? (
+            {isOpened ? (
               <FaFolderOpen className="text-warning me-2" />
             ) : (
               <FaFolder className="text-warning me-2" />
@@ -110,7 +119,7 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
 
       {/* Subdirectories and assets */}
       <AnimatePresence initial={false}>
-        {(dir.isOpened || dir.id === 0) && (
+        {(isOpened || dir.id === 0) && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
