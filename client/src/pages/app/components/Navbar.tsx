@@ -6,6 +6,7 @@ import type { JSX } from "react";
 import { AssetPerformence } from "./assets/AssetPerformence";
 import { AssetValuesTable } from "./assets/AssetValuesTable";
 import { EditAsset } from "./assets/EditAsset";
+import { EditTransactions } from "./transactions/EditTransactions";
 
 export function NavBar({
   openWindow,
@@ -37,7 +38,7 @@ export function NavBar({
               </NavDropdown.Item>
             ))}
           </NavDropdown>
-          <NavDropdown title="Windows" id="basic-nav-dropdown" className="ms-3">
+          <NavDropdown title="Assets" id="basic-nav-dropdown" className="ms-3">
             <NavDropdown.Item
               onClick={() =>
                 openWindow(<AssetPerformence />, "Asset Performance")
@@ -54,6 +55,19 @@ export function NavBar({
               onClick={() => openWindow(<EditAsset />, "Edit Asset")}
             >
               Edit Asset
+            </NavDropdown.Item>
+          </NavDropdown>
+          <NavDropdown
+            title="Transactions"
+            id="basic-nav-dropdown"
+            className="ms-3"
+          >
+            <NavDropdown.Item
+              onClick={() =>
+                openWindow(<EditTransactions />, "Edit Transactions")
+              }
+            >
+              Edit Transactions
             </NavDropdown.Item>
           </NavDropdown>
         </Navbar.Collapse>

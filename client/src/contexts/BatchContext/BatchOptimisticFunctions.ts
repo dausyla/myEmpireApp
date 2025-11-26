@@ -10,14 +10,11 @@ export const applyInsert = (
   const now = new Date().toISOString();
 
   if (op.table === "transactions") {
-    const asset = draft.assets.find((a) => a.id === op.data.asset_id);
-    if (asset) {
-      asset.transactions.push({
-        ...op.data,
-        id: tempId,
-        created_at: now,
-      } as any);
-    }
+    draft.transactions.push({
+      ...op.data,
+      id: tempId,
+      created_at: now,
+    } as any);
   }
 
   if (op.table === "asset_values") {
@@ -57,15 +54,11 @@ export const applyInsert = (
   }
 
   if (op.table === "recurring_transactions") {
-    const asset = draft.assets.find((a) => a.id === op.data.asset_id);
-    if (asset) {
-      (asset as any).recurring_transactions ??= [];
-      (asset as any).recurring_transactions.push({
-        ...op.data,
-        id: tempId,
-        created_at: now,
-      });
-    }
+    draft.recurring_transactions.push({
+      ...op.data,
+      id: tempId,
+      created_at: now,
+    });
   }
 };
 
@@ -74,10 +67,8 @@ export const applyUpdate = (
   op: BatchOp & { op: "update" },
 ) => {
   if (op.table === "transactions") {
-    draft.assets.forEach((a) => {
-      const tx = a.transactions.find((t) => t.id === op.id);
-      if (tx) Object.assign(tx, op.data);
-    });
+    const tx = draft.transactions.find((t) => t.id === op.id);
+    if (tx) Object.assign(tx, op.data);
   }
 
   if (op.table === "asset_values") {
@@ -103,10 +94,8 @@ export const applyUpdate = (
   }
 
   if (op.table === "recurring_transactions") {
-    draft.assets.forEach((a: any) => {
-      const rt = a.recurring_transactions?.find((r: any) => r.id === op.id);
-      if (rt) Object.assign(rt, op.data);
-    });
+    const rt = draft.recurring_transactions?.find((r: any) => r.id === op.id);
+    if (rt) Object.assign(rt, op.data);
   }
 };
 
@@ -118,11 +107,9 @@ export const applyDelete = (
   const tempId = op.tempId;
 
   if (op.table === "transactions") {
-    draft.assets.forEach((a) => {
-      a.transactions = a.transactions.filter(
-        (t) => t.id !== id && t.id !== tempId,
-      );
-    });
+    draft.transactions = draft.transactions.filter(
+      (t) => t.id !== id && t.id !== tempId,
+    );
   }
 
   if (op.table === "wallet_dates") {
@@ -138,12 +125,8 @@ export const applyDelete = (
   }
 
   if (op.table === "recurring_transactions") {
-    draft.assets.forEach((a: any) => {
-      if (a.recurring_transactions) {
-        a.recurring_transactions = a.recurring_transactions.filter(
-          (r: any) => r.id !== id && r.id !== tempId,
-        );
-      }
-    });
+    draft.recurring_transactions = draft.recurring_transactions.filter(
+      (r: any) => r.id !== id && r.id !== tempId,
+    );
   }
 };
