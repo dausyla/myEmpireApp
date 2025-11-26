@@ -10,6 +10,10 @@ export interface WindowProps {
   initialHeight?: number;
   minWidth?: number;
   minHeight?: number;
+  minX?: number;
+  minY?: number;
+  maxX?: number;
+  maxY?: number;
   onClose: () => void;
   children: React.ReactNode;
   zIndex?: number;
@@ -23,6 +27,10 @@ export const Window: React.FC<WindowProps> = ({
   initialHeight = 300,
   minWidth = 200,
   minHeight = 150,
+  minX = 0,
+  minY = 0,
+  maxX,
+  maxY,
   onClose,
   children,
   zIndex = 1000,
@@ -42,28 +50,41 @@ export const Window: React.FC<WindowProps> = ({
   const handleMouseDown = useCallback(
     (e: React.MouseEvent, type: "drag" | "resize", resizeDir?: string) => {
       e.preventDefault();
-      const rect = windowRef.current?.getBoundingClientRect();
 
-      if (type === "drag" && rect) {
+      if (type === "drag") {
         setIsDragging(true);
+        // Calculate offset from the current mouse position to the window's current position
         setDragOffset({
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top,
+          x: e.clientX - position.x,
+          y: e.clientY - position.y,
         });
       } else if (type === "resize" && resizeDir) {
         setIsResizing(true);
         setResizeType(resizeDir);
       }
     },
-    [],
+    [position],
   );
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       if (isDragging) {
+        let newX = e.clientX - dragOffset.x;
+        let newY = e.clientY - dragOffset.y;
+
+        // Apply boundary constraints
+        newX = Math.max(
+          minX,
+          Math.min(newX, (maxX || window.innerWidth) - size.width),
+        );
+        newY = Math.max(
+          minY,
+          Math.min(newY, (maxY || window.innerHeight) - size.height),
+        );
+
         setPosition({
-          x: e.clientX - dragOffset.x,
-          y: e.clientY - dragOffset.y,
+          x: newX,
+          y: newY,
         });
       } else if (isResizing) {
         const rect = windowRef.current?.getBoundingClientRect();
@@ -75,19 +96,35 @@ export const Window: React.FC<WindowProps> = ({
         let newY = position.y;
 
         if (resizeType.includes("right")) {
-          newWidth = Math.max(minWidth, e.clientX - rect.left);
+          newWidth = Math.max(
+            minWidth,
+            Math.min(
+              e.clientX - rect.left,
+              (maxX || window.innerWidth) - position.x,
+            ),
+          );
         }
         if (resizeType.includes("bottom")) {
-          newHeight = Math.max(minHeight, e.clientY - rect.top);
+          newHeight = Math.max(
+            minHeight,
+            Math.min(
+              e.clientY - rect.top,
+              (maxY || window.innerHeight) - position.y,
+            ),
+          );
         }
         if (resizeType.includes("left")) {
           const deltaX = rect.left - e.clientX;
-          newWidth = Math.max(minWidth, size.width + deltaX);
+          const maxDeltaX = position.x - minX;
+          const constrainedDeltaX = Math.min(deltaX, maxDeltaX);
+          newWidth = Math.max(minWidth, size.width + constrainedDeltaX);
           newX = position.x - (newWidth - size.width);
         }
         if (resizeType.includes("top")) {
           const deltaY = rect.top - e.clientY;
-          newHeight = Math.max(minHeight, size.height + deltaY);
+          const maxDeltaY = position.y - minY;
+          const constrainedDeltaY = Math.min(deltaY, maxDeltaY);
+          newHeight = Math.max(minHeight, size.height + constrainedDeltaY);
           newY = position.y - (newHeight - size.height);
         }
 
@@ -104,6 +141,10 @@ export const Window: React.FC<WindowProps> = ({
       resizeType,
       minWidth,
       minHeight,
+      minX,
+      minY,
+      maxX,
+      maxY,
     ],
   );
 
