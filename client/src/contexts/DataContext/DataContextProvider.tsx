@@ -73,13 +73,14 @@ export const DataContextProvider = ({ children }: { children: ReactNode }) => {
     // --- Transactions ---
     // Deposit = Deposit to + Withdrawal to
     const totalDeposit = transactions.reduce((sum, t) => {
+      console.log(t);
       if (t.type === "deposit" && t.to_asset_id === asset.id)
         return sum + t.amount;
       else if (t.type === "withdrawal" && t.to_asset_id === asset.id)
         return sum + t.amount;
       return sum;
     }, 0);
-    // Deposit = Deposit from + Withdrawal from
+    // Withdrawal = Deposit from + Withdrawal from
     const totalWithdrawal = transactions.reduce((sum, t) => {
       if (t.type === "deposit" && t.from_asset_id === asset.id)
         return sum + t.amount;

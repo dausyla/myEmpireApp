@@ -1,0 +1,58 @@
+.asset-values-table-container {
+  padding: 10px;
+}
+
+.asset-values-table {
+  border-radius: 12px !important;
+  border: none !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.asset-values-table thead th {
+  border-bottom: none !important;
+  font-size: 0.8rem;
+}
+
+.asset-values-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.asset-values-table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.asset-values-table tbody tr.table-info {
+  background-color: rgba(13, 110, 253, 0.08) !important;
+}
+
+.asset-values-table tbody tr.table-info:hover {
+  background-color: rgba(13, 110, 253, 0.12) !important;
+}
+
+.add-date-section {
+  min-width: 300px;
+  border: 2px dashed #dee2e6 !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.user-select-none {
+  user-select: none;
+}
+
+.asset-value-placeholder {
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px dashed #dee2e6;
+  transition: all 0.2s ease;
+}
+
+.asset-value-placeholder:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+  border-color: #007bff;
+}
