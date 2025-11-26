@@ -7,6 +7,7 @@ import { AssetPerformence } from "./assets/AssetPerformence";
 import { AssetValuesTable } from "./assets/AssetValuesTable";
 import { EditAsset } from "./assets/EditAsset";
 import { EditTransactions } from "./transactions/EditTransactions";
+import { EditRecurringTransactions } from "./transactions/EditRecurringTransactions";
 
 export function NavBar({
   openWindow,
@@ -68,6 +69,16 @@ export function NavBar({
               }
             >
               Edit Transactions
+            </NavDropdown.Item>
+            <NavDropdown.Item
+              onClick={() =>
+                openWindow(
+                  <EditRecurringTransactions />,
+                  "Edit Recurring Transactions",
+                )
+              }
+            >
+              Edit Recurring Transactions
             </NavDropdown.Item>
           </NavDropdown>
         </Navbar.Collapse>
