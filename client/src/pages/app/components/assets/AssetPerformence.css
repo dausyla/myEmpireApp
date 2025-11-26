@@ -1,0 +1,54 @@
+.asset-performance-container {
+  padding: 10px;
+}
+
+.asset-performance-table {
+  border-radius: 6px !important;
+  border: none !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.asset-performance-table thead th {
+  border-bottom: none !important;
+  font-size: 0.8rem;
+}
+
+.asset-performance-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.asset-performance-table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.performance-summary-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+}
+
+.performance-metric {
+  padding: 8px;
+  border-radius: 6px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.performance-metric:hover {
+  transform: translateY(-2px);
+}
+
+.metric-icon {
+  font-size: 1.2em;
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 1.1em;
+  margin-bottom: 2px;
+}
+
+.metric-label {
+  font-size: 0.75em;
+}

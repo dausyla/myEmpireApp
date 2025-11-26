@@ -1,6 +1,8 @@
 import Table from "react-bootstrap/Table";
+import Card from "react-bootstrap/Card";
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 import { useData } from "../../../../contexts/DataContext/DataContextHook";
+import "./AssetPerformence.css";
 
 export function AssetPerformence() {
   const { currentItemId } = useApp();
@@ -12,66 +14,164 @@ export function AssetPerformence() {
 
   const totalValue = perf ? perf.totalValue : 0;
   const timeSpent = perf ? perf.timeSpent : 0;
-
   const totalDeposit = perf ? perf.totalDeposit : 0;
   const totalWithdrawal = perf ? perf.totalWithdrawal : 0;
   const totalFees = perf ? perf.totalFees : 0;
   const totalRewards = perf ? perf.totalRewards : 0;
-
   const totalGrowth = perf ? perf.totalGrowth : 0;
   const totalInterests = perf ? perf.totalInterests : 0;
   const apy = perf ? perf.apy : 0;
 
   return (
-    <>
-      <Table hover className="align-middle ">
-        <thead className="table-light">
-          <tr>
-            <th style={{ textAlign: "center" }}>Total Value</th>
-            <th style={{ textAlign: "center" }}>Time Spent</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style={{ textAlign: "right" }}>{totalValue} $</td>
-            <td style={{ textAlign: "right" }}>{timeSpent} days</td>
-          </tr>
-        </tbody>
-      </Table>
-      <Table hover className="align-middle ">
-        <thead className="table-light">
-          <tr>
-            <th style={{ textAlign: "center" }}>Total Deposit</th>
-            <th style={{ textAlign: "center" }}>Total Withdrawal</th>
-            <th style={{ textAlign: "center" }}>Total Fees</th>
-            <th style={{ textAlign: "center" }}>Total Rewards</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style={{ textAlign: "right" }}>{totalDeposit} $</td>
-            <td style={{ textAlign: "right" }}>{totalWithdrawal} $</td>
-            <td style={{ textAlign: "right" }}>{totalFees} $</td>
-            <td style={{ textAlign: "right" }}>{totalRewards} $</td>
-          </tr>
-        </tbody>
-      </Table>
-      <Table hover className="align-middle ">
-        <thead className="table-light">
-          <tr>
-            <th style={{ textAlign: "center" }}>Total Interests</th>
-            <th style={{ textAlign: "center" }}>Total Growth</th>
-            <th style={{ textAlign: "center" }}>APY</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style={{ textAlign: "right" }}>{totalInterests} $</td>
-            <td style={{ textAlign: "right" }}>{totalGrowth} %</td>
-            <td style={{ textAlign: "right" }}>{apy} %</td>
-          </tr>
-        </tbody>
-      </Table>
-    </>
+    <div className="asset-performance-container">
+      <div className="table-responsive">
+        <Table
+          hover
+          size="sm"
+          className="asset-performance-table align-middle text-nowrap shadow-sm"
+          style={{
+            borderRadius: "6px",
+            overflow: "hidden",
+            backgroundColor: "white",
+          }}
+        >
+          <thead
+            className="table-dark"
+            style={{
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            }}
+          >
+            <tr>
+              <th
+                className="text-center py-2"
+                style={{ width: "25%", border: "none" }}
+              >
+                <span className="fw-bold text-white">💰 Value & Time</span>
+              </th>
+              <th
+                className="text-center py-2"
+                style={{ width: "25%", border: "none" }}
+              >
+                <span className="fw-bold text-white">📥 Deposits</span>
+              </th>
+              <th
+                className="text-center py-2"
+                style={{ width: "25%", border: "none" }}
+              >
+                <span className="fw-bold text-white">📤 Withdrawals</span>
+              </th>
+              <th
+                className="text-center py-2"
+                style={{ width: "25%", border: "none" }}
+              >
+                <span className="fw-bold text-white">⚡ Net Flow</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {/* Value & Time */}
+              <td className="text-center align-middle py-2">
+                <div className="d-flex flex-column align-items-center">
+                  <div className="d-flex align-items-center mb-1">
+                    <span className="text-muted me-2" style={{ fontSize: "0.9em" }}>$</span>
+                    <span className="fw-bold" style={{ fontSize: "1.1em", color: "#28a745" }}>
+                      {totalValue.toLocaleString()}
+                    </span>
+                  </div>
+                  <small className="text-muted" style={{ fontSize: "0.8em" }}>
+                    ⏱️ {timeSpent} days
+                  </small>
+                </div>
+              </td>
+
+              {/* Deposits */}
+              <td className="text-center align-middle py-2">
+                <div className="d-flex flex-column align-items-center">
+                  <span className={`fw-medium ${totalDeposit > 0 ? "text-success" : "text-muted"}`} style={{ fontSize: "0.9em" }}>
+                    +${totalDeposit.toLocaleString()}
+                  </span>
+                  {totalRewards > 0 && (
+                    <small className="text-success" style={{ fontSize: "0.7em" }}>
+                      +${totalRewards.toLocaleString()} rewards
+                    </small>
+                  )}
+                </div>
+              </td>
+
+              {/* Withdrawals */}
+              <td className="text-center align-middle py-2">
+                <div className="d-flex flex-column align-items-center">
+                  <span className={`fw-medium ${totalWithdrawal > 0 ? "text-danger" : "text-muted"}`} style={{ fontSize: "0.9em" }}>
+                    -${totalWithdrawal.toLocaleString()}
+                  </span>
+                  {totalFees > 0 && (
+                    <small className="text-warning" style={{ fontSize: "0.7em" }}>
+                      -${totalFees.toLocaleString()} fees
+                    </small>
+                  )}
+                </div>
+              </td>
+
+              {/* Net Flow */}
+              <td className="text-center align-middle py-2">
+                <div className="d-flex flex-column align-items-center">
+                  <span
+                    className={`fw-bold ${
+                      totalDeposit - totalWithdrawal > 0 ? "text-success" :
+                      totalDeposit - totalWithdrawal < 0 ? "text-danger" : "text-muted"
+                    }`}
+                    style={{ fontSize: "1em" }}
+                  >
+                    {totalDeposit - totalWithdrawal >= 0 ? "+" : ""}
+                    ${(totalDeposit - totalWithdrawal).toLocaleString()}
+                  </span>
+                  <small className="text-muted" style={{ fontSize: "0.7em" }}>
+                    Net contribution
+                  </small>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+      </div>
+
+      {/* Performance Summary Card */}
+      <div className="mt-2">
+        <Card className="performance-summary-card shadow-sm" style={{ border: 'none', borderRadius: '8px' }}>
+          <Card.Body className="p-3">
+            <div className="row g-3">
+              <div className="col-6 col-md-4">
+                <div className="performance-metric text-center">
+                  <div className="metric-icon">📈</div>
+                  <div className="metric-value text-success fw-bold">
+                    {totalGrowth.toFixed(2)}%
+                  </div>
+                  <div className="metric-label small text-muted">Total Growth</div>
+                </div>
+              </div>
+              <div className="col-6 col-md-4">
+                <div className="performance-metric text-center">
+                  <div className="metric-icon">💎</div>
+                  <div className="metric-value text-primary fw-bold">
+                    ${totalInterests.toLocaleString()}
+                  </div>
+                  <div className="metric-label small text-muted">Total Interests</div>
+                </div>
+              </div>
+              <div className="col-12 col-md-4">
+                <div className="performance-metric text-center">
+                  <div className="metric-icon">🚀</div>
+                  <div className="metric-value text-info fw-bold">
+                    {apy.toFixed(2)}%
+                  </div>
+                  <div className="metric-label small text-muted">Annual Yield</div>
+                </div>
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
+      </div>
+    </div>
   );
 }
