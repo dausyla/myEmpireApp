@@ -15,7 +15,12 @@ import { EditRecurringTransactions } from "./transactions/EditRecurringTransacti
 export function NavBar({
   openWindow,
 }: {
-  openWindow: (element: JSX.Element, title: string) => void;
+  openWindow: (
+    element: JSX.Element,
+    title: string,
+    initialWidth: number,
+    initialHeight: number,
+  ) => void;
 }) {
   const { wallet, walletList, getWallet } = useWallet();
   const { theme, toggleTheme } = useTheme();
@@ -54,18 +59,20 @@ export function NavBar({
           <NavDropdown title="Assets" id="basic-nav-dropdown" className="ms-3">
             <NavDropdown.Item
               onClick={() =>
-                openWindow(<AssetPerformence />, "Asset Performance")
+                openWindow(<AssetPerformence />, "Asset Performance", 500, 250)
               }
             >
               Asset Performance
             </NavDropdown.Item>
             <NavDropdown.Item
-              onClick={() => openWindow(<AssetValuesTable />, "Asset Values")}
+              onClick={() =>
+                openWindow(<AssetValuesTable />, "Asset Values", 1000, 500)
+              }
             >
               Asset Values
             </NavDropdown.Item>
             <NavDropdown.Item
-              onClick={() => openWindow(<EditAsset />, "Edit Asset")}
+              onClick={() => openWindow(<EditAsset />, "Edit Asset", 450, 275)}
             >
               Edit Asset
             </NavDropdown.Item>
@@ -77,7 +84,7 @@ export function NavBar({
           >
             <NavDropdown.Item
               onClick={() =>
-                openWindow(<EditTransactions />, "Edit Transactions")
+                openWindow(<EditTransactions />, "Edit Transactions", 1000, 500)
               }
             >
               Edit Transactions
@@ -87,6 +94,8 @@ export function NavBar({
                 openWindow(
                   <EditRecurringTransactions />,
                   "Edit Recurring Transactions",
+                  1000,
+                  500,
                 )
               }
             >

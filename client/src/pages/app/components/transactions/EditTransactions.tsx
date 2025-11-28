@@ -9,6 +9,7 @@ import { EditableValue } from "../../../../utilies/components/EditableValue";
 import type { Transaction, TransactionTypes } from "@shared/WalletTypes";
 
 import "./EditTransactions.css";
+import { EditableDate } from "../../../../utilies/components/EditableDate";
 
 export function EditTransactions() {
   const { wallet } = useWallet();
@@ -117,9 +118,9 @@ export function EditTransactions() {
     }
   };
 
-  const formatDate = (dateId: number) => {
-    const date = wallet.dates.find((d) => d.id === dateId);
-    return date ? date.date.replace(/-/g, "/") : "Unknown";
+  const getDate = (dateId: number) => {
+    const date = wallet?.dates.find((d) => d.id === dateId);
+    return date ? date.date : "Unknown";
   };
 
   const getTransactionAssetNames = (tx: (typeof allTransactions)[0]) => ({
@@ -308,7 +309,12 @@ export function EditTransactions() {
                 const assetNames = getTransactionAssetNames(transaction);
                 return (
                   <tr key={transaction.id}>
-                    <td>{formatDate(transaction.date_id)}</td>
+                    <td>
+                      <EditableDate
+                        dateId={transaction.date_id}
+                        currentDate={getDate(transaction.date_id)}
+                      />
+                    </td>
                     <td>
                       <EditableText
                         value={transaction.description}
@@ -384,7 +390,7 @@ export function EditTransactions() {
               <br />
               Amount: {transactionToDelete.amount}
               <br />
-              Date: {formatDate(transactionToDelete.date_id)}
+              Date: {getDate(transactionToDelete.date_id)}
             </div>
           )}
           <div className="alert alert-warning mt-3">

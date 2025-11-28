@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Button, InputGroup, Form } from "react-bootstrap";
-import { BsCheckSquare, BsPencil, BsXCircle } from "react-icons/bs";
+import { BsCheck, BsX } from "react-icons/bs";
+import "./Utilities.css";
 
 export function EditableText({
   value,
@@ -43,36 +43,30 @@ export function EditableText({
   };
 
   return (
-    <InputGroup style={{ width: "12rem" }} onKeyDown={handleKeyDown}>
-      {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}
-      <Form.Control
-        value={newValue}
-        readOnly={!isEditing}
-        onChange={(e) => setNewValue(e.target.value)}
-        onDoubleClick={() => setIsEditing(true)}
-      />
+    <div className="editable-wrapper">
       {isEditing ? (
-        <>
-          <Button
-            variant="success"
-            onClick={saveValue}
-            style={{ padding: "0" }}
-          >
-            <BsCheckSquare style={{ margin: "0.4rem" }} />
-          </Button>
-          <Button variant="danger" onClick={cancel} style={{ padding: "0" }}>
-            <BsXCircle style={{ margin: "0.4rem" }} />
-          </Button>
-        </>
+        <div className="editable-edit-container">
+          {prefix && <span className="text-muted me-1">{prefix}</span>}
+          <input
+            className="editable-input"
+            value={newValue}
+            onChange={(e) => setNewValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            autoFocus
+          />
+          <button className="utility-btn success" onClick={saveValue}>
+            <BsCheck />
+          </button>
+          <button className="utility-btn danger" onClick={cancel}>
+            <BsX />
+          </button>
+        </div>
       ) : (
-        <Button
-          onClick={() => setIsEditing(true)}
-          variant="outline-primary"
-          style={{ padding: "0" }}
-        >
-          <BsPencil style={{ margin: "0.4rem" }} />
-        </Button>
+        <div className="editable-view" onClick={() => setIsEditing(true)}>
+          {prefix && <span className="text-muted me-1">{prefix}</span>}
+          <span>{value}</span>
+        </div>
       )}
-    </InputGroup>
+    </div>
   );
 }

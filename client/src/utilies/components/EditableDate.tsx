@@ -1,95 +1,77 @@
-import { Button, Form, InputGroup } from "react-bootstrap";
-import { useEffect, useState } from "react";
-import { usePortfolio } from "../../contexts/WalletContext/WalletContextHook";
-import { BsCheckSquare, BsPencil, BsXCircle, BsTrash } from "react-icons/bs";
-import { useDateContext } from "../../contexts/BatchContext/BatchContextHook";
+import { useState } from "react";
+import { BsCheck, BsX, BsTrash } from "react-icons/bs";
+import { useBatch } from "../../contexts/BatchContext/BatchContextHook";
+import "./Utilities.css";
 
-export function EditableDate({ index }: { index: number }) {
-  const { portfolio } = usePortfolio();
-  const { editDate, deleteDate } = useDateContext();
-
-  const initialDate = portfolio
-    ? new Date(portfolio.dates[index]).toISOString().split("T")[0]
-    : new Date().toISOString().split("T")[0]; // Today
-
-  const [newDate, setNewDate] = useState(initialDate);
-  const [formerDate, setFormerDate] = useState(initialDate);
+export function EditableDate({
+  dateId,
+  currentDate,
+}: {
+  dateId: number;
+  currentDate: string;
+}) {
+  const { updateDate, deleteDate } = useBatch();
+  const [newDate, setNewDate] = useState(currentDate);
   const [isEditing, setIsEditing] = useState(false);
 
   const saveValue = () => {
-    if (!newDate) return;
-    const newDateTimestamp = new Date(newDate).getTime();
-    const formerDateTimestamp = new Date(formerDate).getTime();
-
-    if (newDateTimestamp !== formerDateTimestamp) {
-      editDate(formerDateTimestamp, newDateTimestamp);
-      setFormerDate(newDate);
+    if (!newDate || newDate === currentDate) {
+      setIsEditing(false);
+      return;
     }
+    updateDate(dateId, { date: newDate });
     setIsEditing(false);
-    (document.activeElement as HTMLElement)?.blur();
   };
 
   const cancel = () => {
     setIsEditing(false);
-    setNewDate(formerDate);
-    (document.activeElement as HTMLElement)?.blur();
+    setNewDate(currentDate);
   };
 
-  const remove = () => {
-    const timestamp = new Date(formerDate).getTime();
-    deleteDate(timestamp);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!isEditing) {
-      if (e.key === "Enter") setIsEditing(true);
-    } else {
-      if (e.key === "Enter") saveValue();
-      else if (e.key === "Escape") cancel();
+  const remove = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (confirm("Are you sure you want to delete this date?")) {
+      deleteDate(dateId);
     }
   };
 
-  useEffect(() => {
-    setNewDate(initialDate);
-    setFormerDate(initialDate);
-  }, [initialDate]);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") saveValue();
+    else if (e.key === "Escape") cancel();
+  };
 
   return (
-    <InputGroup style={{ minWidth: "10.5rem" }} onKeyDown={handleKeyDown}>
-      <Form.Control
-        type="date"
-        value={newDate}
-        onChange={(e) => setNewDate(e.target.value)}
-        readOnly={!isEditing}
-        className="py-0 px-1"
-      />
+    <div className="editable-wrapper">
       {isEditing ? (
-        <>
-          <Button variant="success" onClick={saveValue} className="py-0 px-1">
-            <BsCheckSquare />
-          </Button>
-          <Button variant="danger" onClick={cancel} className="py-0 px-1">
-            <BsXCircle />
-          </Button>
-        </>
+        <div className="editable-edit-container">
+          <input
+            type="date"
+            className="editable-input"
+            value={newDate}
+            onChange={(e) => setNewDate(e.target.value)}
+            onKeyDown={handleKeyDown}
+            autoFocus
+          />
+          <button className="utility-btn success" onClick={saveValue}>
+            <BsCheck />
+          </button>
+          <button className="utility-btn danger" onClick={cancel}>
+            <BsX />
+          </button>
+        </div>
       ) : (
-        <>
-          <Button
-            onClick={() => setIsEditing(true)}
-            variant="outline-primary"
-            className="py-0 px-1"
-          >
-            <BsPencil />
-          </Button>
-          <Button
+        <div className="editable-view" onClick={() => setIsEditing(true)}>
+          <span className="fw-medium">{currentDate.replace(/-/g, "/")}</span>
+          <button
+            className="utility-btn danger ms-2"
             onClick={remove}
-            variant="outline-danger"
-            className="py-0 px-1"
+            title="Delete Date"
+            style={{ opacity: 0.5 }}
           >
-            <BsTrash />
-          </Button>
-        </>
+            <BsTrash style={{ fontSize: "0.8em" }} />
+          </button>
+        </div>
       )}
-    </InputGroup>
+    </div>
   );
 }

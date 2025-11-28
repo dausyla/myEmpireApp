@@ -1,0 +1,109 @@
+.editable-wrapper {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  min-height: 24px;
+}
+
+.editable-view {
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-base);
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.editable-view:hover {
+  background-color: var(--bg-surface-secondary);
+  border-color: var(--border-color);
+}
+
+.editable-edit-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.editable-input {
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--brand-gradient) !important; /* Gradient border or brand color */
+  border-image: var(--brand-gradient) 1 !important;
+  color: var(--text-primary) !important;
+  border-radius: var(--radius-sm) !important;
+  font-size: 0.9rem !important;
+  padding: 2px 6px !important;
+  min-width: 80px;
+  height: 28px;
+}
+
+.editable-input:focus {
+  box-shadow: 0 0 0 2px rgba(233, 64, 87, 0.1) !important;
+  outline: none;
+}
+
+.utility-btn {
+  padding: 2px;
+  border-radius: 4px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: var(--transition-base);
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+
+.utility-btn:hover {
+  background-color: var(--bg-surface-secondary);
+  color: var(--text-primary);
+}
+
+.utility-btn.success {
+  color: #28a745;
+}
+
+.utility-btn.success:hover {
+  background-color: rgba(40, 167, 69, 0.1);
+}
+
+.utility-btn.danger {
+  color: #dc3545;
+}
+
+.utility-btn.danger:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.add-date-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-date-btn {
+  background: var(--bg-surface-secondary);
+  border: 1px dashed var(--border-color);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  transition: var(--transition-base);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.add-date-btn:hover {
+  background: var(--bg-surface);
+  color: #e94057;
+  border-color: #e94057;
+}

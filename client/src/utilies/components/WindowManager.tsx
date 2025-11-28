@@ -1,10 +1,12 @@
-import { useState, useEffect, useRef, type JSX } from 'react';
-import { Window } from './Window';
+import { useState, useEffect, useRef, type JSX } from "react";
+import { Window, type WindowProps } from "./Window";
 
 export interface ManagedWindow {
   id: string;
   element: JSX.Element;
   title: string;
+  initialWidth: number;
+  initialHeight: number;
 }
 
 export interface WindowManagerProps {
@@ -13,12 +15,19 @@ export interface WindowManagerProps {
 
 export interface WindowManagerReturn {
   windows: JSX.Element;
-  openWindow: (element: JSX.Element, title: string) => void;
+  openWindow: (
+    element: JSX.Element,
+    title: string,
+    initialWidth: number,
+    initialHeight: number,
+  ) => void;
   closeWindow: (id: string) => void;
   windowCount: number;
 }
 
-export const useWindowManager = ({ containerRef }: WindowManagerProps): WindowManagerReturn => {
+export const useWindowManager = ({
+  containerRef,
+}: WindowManagerProps): WindowManagerReturn => {
   const [windows, setWindows] = useState<ManagedWindow[]>([]);
   const [containerBounds, setContainerBounds] = useState({
     width: 0,
@@ -42,15 +51,20 @@ export const useWindowManager = ({ containerRef }: WindowManagerProps): WindowMa
     };
 
     updateBounds();
-    window.addEventListener('resize', updateBounds);
-    return () => window.removeEventListener('resize', updateBounds);
+    window.addEventListener("resize", updateBounds);
+    return () => window.removeEventListener("resize", updateBounds);
   }, [containerRef]);
 
-  const openWindow = (element: JSX.Element, title: string) => {
+  const openWindow = (
+    element: JSX.Element,
+    title: string,
+    initialWidth: number,
+    initialHeight: number,
+  ) => {
     const id = `window-${Date.now()}`;
     setWindows((prev) => [
       ...prev,
-      { id, element, title },
+      { id, element, title, initialWidth, initialHeight },
     ]);
   };
 
@@ -70,8 +84,10 @@ export const useWindowManager = ({ containerRef }: WindowManagerProps): WindowMa
         <Window
           key={win.id}
           title={win.title}
-          initialX={minX + 50 + (index * 30)} // Stagger windows
-          initialY={20 + (index * 30)}
+          initialX={minX + 50 + index * 30} // Stagger windows
+          initialY={20 + index * 30}
+          initialWidth={win.initialWidth}
+          initialHeight={win.initialHeight}
           minX={minX}
           minY={10}
           maxX={maxX}

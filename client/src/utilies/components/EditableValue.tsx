@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Button, InputGroup, Form } from "react-bootstrap";
-import { BsCheckSquare, BsPencil, BsXCircle } from "react-icons/bs";
+import { BsCheck, BsX } from "react-icons/bs";
+import "./Utilities.css";
 
 export function EditableValue({
   value,
@@ -51,39 +51,31 @@ export function EditableValue({
   };
 
   return (
-    <InputGroup
-      style={{
-        minWidth: "7rem",
-      }}
-      onKeyDown={handleKeyDown}
-    >
-      <Form.Control
-        onChange={onChange}
-        value={newValue}
-        onClick={() => setIsEditing(true)}
-        className="text-end py-0 px-1"
-      />
+    <div className="editable-wrapper">
       {isEditing ? (
-        <>
-          <Button variant="success" onClick={saveValue} className="py-0 px-1">
-            <BsCheckSquare />
-          </Button>
-          <Button variant="danger" onClick={cancel} className="py-0 px-1">
-            <BsXCircle />
-          </Button>
-        </>
+        <div className="editable-edit-container">
+          <input
+            className="editable-input"
+            value={newValue}
+            onChange={onChange}
+            onKeyDown={handleKeyDown}
+            autoFocus
+          />
+          <button className="utility-btn success" onClick={saveValue}>
+            <BsCheck />
+          </button>
+          <button className="utility-btn danger" onClick={cancel}>
+            <BsX />
+          </button>
+        </div>
       ) : (
-        <>
-          <InputGroup.Text className="py-0 px-1">{suffix}</InputGroup.Text>
-          <Button
-            onClick={() => setIsEditing(true)}
-            variant="outline-primary"
-            className="py-0 px-1"
-          >
-            <BsPencil />
-          </Button>
-        </>
+        <div className="editable-view" onClick={() => setIsEditing(true)}>
+          <span>
+            {suffix}
+            {value.toFixed(2)}
+          </span>
+        </div>
       )}
-    </InputGroup>
+    </div>
   );
 }

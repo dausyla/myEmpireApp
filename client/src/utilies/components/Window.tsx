@@ -23,8 +23,8 @@ export const Window: React.FC<WindowProps> = ({
   title,
   initialX = 100,
   initialY = 100,
-  initialWidth = 400,
-  initialHeight = 300,
+  initialWidth = 1000,
+  initialHeight = 500,
   minWidth = 200,
   minHeight = 150,
   minX = 0,
@@ -165,6 +165,10 @@ export const Window: React.FC<WindowProps> = ({
     }
   }, [isDragging, isResizing, handleMouseMove, handleMouseUp]);
 
+  // Debug
+  React.useEffect(() => {
+    console.log(size);
+  }, [size]);
   return (
     <div
       ref={windowRef}

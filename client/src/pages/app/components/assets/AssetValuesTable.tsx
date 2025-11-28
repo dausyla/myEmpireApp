@@ -7,6 +7,7 @@ import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 import { useData } from "../../../../contexts/DataContext/DataContextHook";
 import { AddDateButton } from "../../../../utilies/components/AddDateButton";
+import { EditableDate } from "../../../../utilies/components/EditableDate";
 import "./AssetValuesTable.css";
 
 export function AssetValuesTable() {
@@ -71,9 +72,7 @@ export function AssetValuesTable() {
         {/* Date */}
         <td className="text-center align-middle py-2">
           <div className="d-flex flex-column align-items-center">
-            <span className="fw-medium" style={{ fontSize: "0.9em" }}>
-              {date.date.replace(/-/g, "/")}
-            </span>
+            <EditableDate dateId={date.id} currentDate={date.date} />
             {hasTransactions && (
               <Badge
                 bg="primary"
@@ -89,9 +88,7 @@ export function AssetValuesTable() {
         {/* Value */}
         <td className="text-end align-middle py-2">
           <div className="d-flex align-items-center justify-content-end">
-            <span className="me-1 text-muted" style={{ fontSize: "0.9em" }}>
-              $
-            </span>
+            <span className="me-1 text-muted">$</span>
             {valueEntry ? (
               <EditableValue
                 value={currentValue}
@@ -110,7 +107,6 @@ export function AssetValuesTable() {
                   })
                 }
                 title="Click to add value"
-                style={{ fontSize: "0.9em" }}
               >
                 {currentValue.toFixed(2)}
               </span>
@@ -122,7 +118,6 @@ export function AssetValuesTable() {
         <td className="text-end align-middle py-2">
           <span
             className={`fw-bold ${gain != null ? (gain > 0 ? "text-success" : gain < 0 ? "text-danger" : "text-muted") : "text-muted"}`}
-            style={{ fontSize: "0.9em" }}
           >
             {gain != null ? (
               <>
@@ -139,7 +134,6 @@ export function AssetValuesTable() {
         <td className="text-end align-middle py-2">
           <span
             className={`fw-bold ${percentage != null ? (percentage > 0 ? "text-success" : percentage < 0 ? "text-danger" : "text-muted") : "text-muted"}`}
-            style={{ fontSize: "0.9em" }}
           >
             {percentage != null ? (
               <>
@@ -157,7 +151,6 @@ export function AssetValuesTable() {
           <div className="d-flex align-items-center justify-content-end">
             <span
               className={`fw-medium ${transactionAmount >= 0 ? "text-success" : "text-danger"}`}
-              style={{ fontSize: "0.9em" }}
             >
               {transactionAmount !== 0 ? (
                 <>
@@ -188,7 +181,6 @@ export function AssetValuesTable() {
           <div className="d-flex align-items-center justify-content-end">
             <span
               className={`fw-medium ${generatedAmount >= 0 ? "text-success" : "text-warning"}`}
-              style={{ fontSize: "0.9em" }}
             >
               {generatedAmount !== 0 ? (
                 <>
