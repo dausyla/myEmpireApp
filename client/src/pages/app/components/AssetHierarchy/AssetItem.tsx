@@ -1,4 +1,3 @@
-import { Button, ButtonGroup, ListGroup } from "react-bootstrap";
 import { FaFileAlt, FaTrash } from "react-icons/fa";
 import { useState } from "react";
 import type { Asset } from "@shared/WalletTypes";
@@ -13,50 +12,36 @@ export function AssetItem({
   depth: number;
 }) {
   const { deleteAsset } = useBatch();
-  const { setCurrentItemId } = useApp();
-  const [hovered, setHovered] = useState(false);
+  const { currentItemId, setCurrentItemId } = useApp();
+  const [, setHovered] = useState(false);
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     deleteAsset(asset.id);
   };
   return (
-    <ListGroup.Item
+    <div
       key={asset.id}
-      style={{
-        paddingTop: "2px",
-        paddingBottom: "2px",
-        paddingLeft: `${(depth + 1) * 16}px`,
-        border: "none",
-        borderRadius: 0,
-        backgroundColor: hovered
-          ? "var(--bg-surface-secondary)"
-          : "transparent",
-        color: "var(--text-primary)",
-      }}
-      action
+      className={`hierarchy-item ${currentItemId?.id === asset.id ? "active" : ""}`}
+      style={{ paddingLeft: `${(depth + 1) * 16 + 12}px` }}
       onClick={() => setCurrentItemId({ type: "asset", id: asset.id })}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="d-flex align-items-center justify-content-between"
     >
-      <div className="d-flex align-items-center">
-        <FaFileAlt className="text-secondary me-2" />
-        {asset.name}
+      <div className="hierarchy-item-content">
+        <FaFileAlt className="text-secondary" style={{ fontSize: "0.9em" }} />
+        <span className="hierarchy-item-text">{asset.name}</span>
       </div>
       {/* Action buttons (visible on hover) */}
-      {hovered && (
-        <ButtonGroup size="sm">
-          <Button
-            title="Supprimer le dossier"
-            variant="light"
-            className="p-0"
-            onClick={handleDelete}
-          >
-            <FaTrash className="text-danger m-1" />
-          </Button>
-        </ButtonGroup>
-      )}
-    </ListGroup.Item>
+      <div className="hierarchy-actions">
+        <button
+          title="Supprimer le fichier"
+          className="hierarchy-action-btn danger"
+          onClick={handleDelete}
+        >
+          <FaTrash />
+        </button>
+      </div>
+    </div>
   );
 }

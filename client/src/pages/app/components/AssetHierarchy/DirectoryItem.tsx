@@ -1,4 +1,3 @@
-import { ListGroup, ButtonGroup, Button } from "react-bootstrap";
 import { FaFolder, FaFolderOpen, FaTrash, FaFileAlt } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import { AssetItem } from "./AssetItem";
@@ -15,7 +14,7 @@ interface DirectoryItemProps {
 export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
   const { wallet } = useWallet();
   const [isOpened, setIsOpened] = useState(false);
-  const [hovered, setHovered] = useState(false);
+  const [, setHovered] = useState(false);
   const { addDir, addAsset, deleteDir } = useBatch();
 
   if (!wallet) return null;
@@ -60,63 +59,47 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
     <>
       {/* Directory line */}
       {dir.id !== 0 && (
-        <ListGroup.Item
-          action
+        <div
+          className={`hierarchy-item ${isOpened ? "expanded" : ""}`}
+          style={{ paddingLeft: `${depth * 16 + 12}px` }}
           onClick={() => setIsOpened(!isOpened)}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
-          className="d-flex align-items-center justify-content-between"
-          style={{
-            paddingTop: "2px",
-            paddingBottom: "2px",
-            paddingLeft: `${depth * 16}px`,
-            border: "none",
-            borderRadius: 0,
-            backgroundColor: hovered
-              ? "var(--bg-surface-secondary)"
-              : "transparent",
-            color: "var(--text-primary)",
-          }}
         >
-          <div className="d-flex align-items-center">
+          <div className="hierarchy-item-content">
             {isOpened ? (
-              <FaFolderOpen className="text-warning me-2" />
+              <FaFolderOpen className="text-warning" />
             ) : (
-              <FaFolder className="text-warning me-2" />
+              <FaFolder className="text-warning" />
             )}
-            <span>{dir.name}</span>
+            <span className="hierarchy-item-text">{dir.name}</span>
           </div>
 
           {/* Action buttons (visible on hover) */}
-          {hovered && (
-            <ButtonGroup size="sm">
-              <Button
-                variant="light"
-                title="Ajouter un dossier"
-                className="p-0"
-                onClick={handleAddDir}
-              >
-                <FaFolder className="text-success m-1" />
-              </Button>
-              <Button
-                variant="light"
-                title="Ajouter un fichier"
-                className="p-0"
-                onClick={handleAddAsset}
-              >
-                <FaFileAlt className="text-primary m-1" />
-              </Button>
-              <Button
-                variant="light"
-                title="Supprimer le dossier"
-                className="p-0"
-                onClick={handleDelete}
-              >
-                <FaTrash className="text-danger m-1" />
-              </Button>
-            </ButtonGroup>
-          )}
-        </ListGroup.Item>
+          <div className="hierarchy-actions">
+            <button
+              title="Ajouter un dossier"
+              className="hierarchy-action-btn success"
+              onClick={handleAddDir}
+            >
+              <FaFolder />
+            </button>
+            <button
+              title="Ajouter un fichier"
+              className="hierarchy-action-btn primary"
+              onClick={handleAddAsset}
+            >
+              <FaFileAlt />
+            </button>
+            <button
+              title="Supprimer le dossier"
+              className="hierarchy-action-btn danger"
+              onClick={handleDelete}
+            >
+              <FaTrash />
+            </button>
+          </div>
+        </div>
       )}
 
       {/* Subdirectories and assets */}

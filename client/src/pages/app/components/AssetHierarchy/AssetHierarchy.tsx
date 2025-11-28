@@ -1,8 +1,9 @@
-import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
+import { Button, Col, ListGroup, Row } from "react-bootstrap";
 import { DirectoryItem } from "./DirectoryItem";
 import { FaFileAlt, FaFolder } from "react-icons/fa";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
+import "./AssetHierarchy.css";
 
 export function AssetHierarchy() {
   const { wallet } = useWallet();
@@ -18,43 +19,34 @@ export function AssetHierarchy() {
   }
 
   return (
-    <Container
-      fluid
-      className="h-100 p-1"
-      style={{
-        backgroundColor: "var(--bg-surface-secondary)",
-        borderRight: "1px solid var(--border-color)",
-      }}
-    >
-      <Row className="p-1">
-        <Col className="p-0">
-          <Button
-            size="sm"
-            variant="link"
-            className="text-decoration-none fw-medium"
-            style={{ color: "var(--text-primary)" }}
-            // onClick={() => addNewAsset({})}
-          >
-            New Asset&nbsp;
-            <FaFileAlt />
-          </Button>
-        </Col>
-        <Col className="p-0">
-          <Button
-            size="sm"
-            variant="link"
-            className="text-decoration-none fw-medium"
-            style={{ color: "var(--text-primary)" }}
-            // onClick={() => addNewDir({})}
-          >
-            New Dir&nbsp;
-            <FaFolder />
-          </Button>
-        </Col>
-      </Row>
-      <ListGroup variant="flush" className="">
-        <DirectoryItem dir={root} />
-      </ListGroup>
-    </Container>
+    <div className="hierarchy-container">
+      <div className="hierarchy-header">
+        <Row className="g-2">
+          <Col xs={6}>
+            <Button
+              variant="link"
+              className="hierarchy-btn w-100 justify-content-center"
+              // onClick={() => addNewAsset({})}
+            >
+              <FaFileAlt /> New Asset
+            </Button>
+          </Col>
+          <Col xs={6}>
+            <Button
+              variant="link"
+              className="hierarchy-btn w-100 justify-content-center"
+              // onClick={() => addNewDir({})}
+            >
+              <FaFolder /> New Dir
+            </Button>
+          </Col>
+        </Row>
+      </div>
+      <div className="hierarchy-scroll-area">
+        <ListGroup variant="flush" className="p-0">
+          <DirectoryItem dir={root} />
+        </ListGroup>
+      </div>
+    </div>
   );
 }
