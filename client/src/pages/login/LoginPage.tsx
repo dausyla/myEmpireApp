@@ -25,13 +25,26 @@ export const LoginPage = () => {
   };
 
   return (
-    <Container className="min-vh-100 d-flex align-items-center justify-content-center py-5">
+    <Container
+      fluid
+      className="min-vh-100 d-flex align-items-center justify-content-center py-5"
+      style={{ background: "var(--brand-gradient)" }}
+    >
       <Row className="w-100">
         <Col md={6} lg={5} xl={4} className="mx-auto">
-          <Card className="shadow-lg border-0 rounded-4 overflow-hidden">
+          <Card
+            className="shadow-lg border-0 rounded-4 overflow-hidden"
+            style={{
+              backdropFilter: "blur(10px)",
+              backgroundColor: "var(--bg-surface)",
+            }}
+          >
             <Card.Body className="p-5">
               <div className="text-center mb-4">
-                <h2 className="fw-bold text-primary">
+                <h2
+                  className="fw-bold"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   {isSigningUp ? "Créer un compte" : "Connexion"}
                 </h2>
                 <p className="text-muted">
@@ -116,7 +129,8 @@ export const LoginPage = () => {
                   <Button
                     variant="link"
                     onClick={() => setIsSignup(!isSigningUp)}
-                    className="text-decoration-none text-primary fw-medium"
+                    className="text-decoration-none fw-medium"
+                    style={{ color: "var(--text-secondary)" }}
                   >
                     {isSigningUp
                       ? "Déjà un compte ? Se connecter"

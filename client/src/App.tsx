@@ -11,6 +11,7 @@ import { ProtectedRoute } from "./utilies/ProtectedPage";
 import { BatchContextProvider } from "./contexts/BatchContext/BatchContextProvider";
 import { DataContextProvider } from "./contexts/DataContext/DataContextProvider";
 import { AppContextProvider } from "./contexts/AppContext/AppContextProvider";
+import { ThemeContextProvider } from "./contexts/ThemeContext/ThemeContextProvider";
 
 // Register Chart.js to enable chart rendering
 ChartJS.register(...registerables);
@@ -18,29 +19,31 @@ ChartJS.register(...registerables);
 function App() {
   return (
     <Router basename="/myEmpireApp">
-      <AuthContextProvider>
-        <Routes>
-          <Route
-            path="/app"
-            element={
-              <ProtectedRoute>
-                <WalletContextProvider>
-                  <BatchContextProvider>
-                    <DataContextProvider>
-                      <AppContextProvider>
-                        <MyEmpireApp />
-                      </AppContextProvider>
-                    </DataContextProvider>
-                  </BatchContextProvider>
-                </WalletContextProvider>
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="*" element={<NoRouteMatch />} />
-        </Routes>
-      </AuthContextProvider>
+      <ThemeContextProvider>
+        <AuthContextProvider>
+          <Routes>
+            <Route
+              path="/app"
+              element={
+                <ProtectedRoute>
+                  <WalletContextProvider>
+                    <BatchContextProvider>
+                      <DataContextProvider>
+                        <AppContextProvider>
+                          <MyEmpireApp />
+                        </AppContextProvider>
+                      </DataContextProvider>
+                    </BatchContextProvider>
+                  </WalletContextProvider>
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="*" element={<NoRouteMatch />} />
+          </Routes>
+        </AuthContextProvider>
+      </ThemeContextProvider>
     </Router>
   );
 }

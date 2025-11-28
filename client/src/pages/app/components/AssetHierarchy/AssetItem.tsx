@@ -29,14 +29,16 @@ export function AssetItem({
         paddingLeft: `${(depth + 1) * 16}px`,
         border: "none",
         borderRadius: 0,
+        backgroundColor: hovered
+          ? "var(--bg-surface-secondary)"
+          : "transparent",
+        color: "var(--text-primary)",
       }}
       action
       onClick={() => setCurrentItemId({ type: "asset", id: asset.id })}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={`d-flex align-items-center justify-content-between bg-body${
-        hovered ? "" : "-tertiary"
-      }`}
+      className="d-flex align-items-center justify-content-between"
     >
       <div className="d-flex align-items-center">
         <FaFileAlt className="text-secondary me-2" />

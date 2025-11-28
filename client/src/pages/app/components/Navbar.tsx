@@ -2,6 +2,9 @@ import { NavDropdown } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { useWallet } from "../../../contexts/WalletContext/WalletContextHook";
+import { useTheme } from "../../../contexts/ThemeContext/ThemeContextHook";
+import { FaSun, FaMoon } from "react-icons/fa";
+import { Button } from "react-bootstrap";
 import type { JSX } from "react";
 import { AssetPerformence } from "./assets/AssetPerformence";
 import { AssetValuesTable } from "./assets/AssetValuesTable";
@@ -15,6 +18,7 @@ export function NavBar({
   openWindow: (element: JSX.Element, title: string) => void;
 }) {
   const { wallet, walletList, getWallet } = useWallet();
+  const { theme, toggleTheme } = useTheme();
 
   if (!walletList || !wallet) return null;
 
@@ -24,7 +28,15 @@ export function NavBar({
   };
 
   return (
-    <Navbar sticky="top" expand="lg" className="bg-body-tertiary shadow-sm">
+    <Navbar
+      sticky="top"
+      expand="lg"
+      className="shadow-sm"
+      style={{
+        backgroundColor: "var(--bg-surface)",
+        borderBottom: "1px solid var(--border-color)",
+      }}
+    >
       <Container>
         <Navbar.Brand>MyEmpireApp</Navbar.Brand>
         <Navbar.Toggle aria-controls="main-nav" />
@@ -82,8 +94,16 @@ export function NavBar({
             </NavDropdown.Item>
           </NavDropdown>
         </Navbar.Collapse>
-        <Navbar.Collapse className="justify-content-end" style={{ gap: 8 }}>
-          {wallet.wallet.title}
+        <Navbar.Collapse className="justify-content-end" style={{ gap: 16 }}>
+          <span className="fw-medium">{wallet.wallet.title}</span>
+          <Button
+            variant="link"
+            onClick={toggleTheme}
+            className="p-0 text-decoration-none"
+            style={{ color: "var(--text-primary)" }}
+          >
+            {theme === "light" ? <FaMoon size={20} /> : <FaSun size={20} />}
+          </Button>
         </Navbar.Collapse>
       </Container>
     </Navbar>

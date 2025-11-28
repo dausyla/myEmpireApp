@@ -65,15 +65,17 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
           onClick={() => setIsOpened(!isOpened)}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
-          className={`d-flex align-items-center justify-content-between bg-body${
-            hovered ? "" : "-tertiary"
-          }`}
+          className="d-flex align-items-center justify-content-between"
           style={{
             paddingTop: "2px",
             paddingBottom: "2px",
             paddingLeft: `${depth * 16}px`,
             border: "none",
             borderRadius: 0,
+            backgroundColor: hovered
+              ? "var(--bg-surface-secondary)"
+              : "transparent",
+            color: "var(--text-primary)",
           }}
         >
           <div className="d-flex align-items-center">

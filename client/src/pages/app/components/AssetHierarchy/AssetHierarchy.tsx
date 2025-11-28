@@ -18,12 +18,21 @@ export function AssetHierarchy() {
   }
 
   return (
-    <Container fluid className="h-100 p-1 bg-body-tertiary">
+    <Container
+      fluid
+      className="h-100 p-1"
+      style={{
+        backgroundColor: "var(--bg-surface-secondary)",
+        borderRight: "1px solid var(--border-color)",
+      }}
+    >
       <Row className="p-1">
         <Col className="p-0">
           <Button
             size="sm"
-            variant="outline-primary"
+            variant="link"
+            className="text-decoration-none fw-medium"
+            style={{ color: "var(--text-primary)" }}
             // onClick={() => addNewAsset({})}
           >
             New Asset&nbsp;
@@ -33,7 +42,9 @@ export function AssetHierarchy() {
         <Col className="p-0">
           <Button
             size="sm"
-            variant="outline-success"
+            variant="link"
+            className="text-decoration-none fw-medium"
+            style={{ color: "var(--text-primary)" }}
             // onClick={() => addNewDir({})}
           >
             New Dir&nbsp;
