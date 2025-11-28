@@ -30,7 +30,7 @@ export function AssetValuesTable() {
     const valueEntry = valuesMap.get(date.id);
     const currentValue = valueEntry?.value ?? lastValue;
 
-    const gain = valueEntry ? valueEntry.value - lastValue : null;
+    const gain = valueEntry ? valueEntry.value - lastValue : 0;
     const percentage = gain !== null ? (gain / lastValue) * 100 : null;
 
     if (valueEntry) lastValue = currentValue;
@@ -118,6 +118,40 @@ export function AssetValuesTable() {
           </div>
         </td>
 
+        {/* Gains */}
+        <td className="text-end align-middle py-2">
+          <span
+            className={`fw-bold ${gain != null ? (gain > 0 ? "text-success" : gain < 0 ? "text-danger" : "text-muted") : "text-muted"}`}
+            style={{ fontSize: "0.9em" }}
+          >
+            {gain != null ? (
+              <>
+                <span className="me-1">{gain >= 0 ? "+" : ""}</span>$
+                {Math.abs(gain).toFixed(2)}
+              </>
+            ) : (
+              <span>N/A</span>
+            )}
+          </span>
+        </td>
+
+        {/* Percentage */}
+        <td className="text-end align-middle py-2">
+          <span
+            className={`fw-bold ${percentage != null ? (percentage > 0 ? "text-success" : percentage < 0 ? "text-danger" : "text-muted") : "text-muted"}`}
+            style={{ fontSize: "0.9em" }}
+          >
+            {percentage != null ? (
+              <>
+                <span className="me-1">{percentage >= 0 ? "+" : ""}</span>
+                {Math.abs(percentage).toFixed(2)}%
+              </>
+            ) : (
+              <span>N/A</span>
+            )}
+          </span>
+        </td>
+
         {/* Transactions */}
         <td className="text-end align-middle py-2">
           <div className="d-flex align-items-center justify-content-end">
@@ -179,99 +213,55 @@ export function AssetValuesTable() {
             )}
           </div>
         </td>
-
-        {/* Gains */}
-        <td className="text-end align-middle py-2">
-          <span
-            className={`fw-bold ${gain != null ? (gain >= 0 ? "text-success" : "text-danger") : "text-muted"}`}
-            style={{ fontSize: "0.9em" }}
-          >
-            {gain != null ? (
-              <>
-                <span className="me-1">{gain >= 0 ? "+" : ""}</span>$
-                {Math.abs(gain).toFixed(2)}
-              </>
-            ) : (
-              <span>N/A</span>
-            )}
-          </span>
-        </td>
-
-        {/* Percentage */}
-        <td className="text-end align-middle py-2">
-          <span
-            className={`fw-bold ${percentage != null ? (percentage >= 0 ? "text-success" : "text-danger") : "text-muted"}`}
-            style={{ fontSize: "0.9em" }}
-          >
-            {percentage != null ? (
-              <>
-                <span className="me-1">{percentage >= 0 ? "+" : ""}</span>
-                {Math.abs(percentage).toFixed(2)}%
-              </>
-            ) : (
-              <span>N/A</span>
-            )}
-          </span>
-        </td>
       </tr>
     );
   });
 
   return (
     <div className="asset-values-table-container">
-      <div className="table-responsive">
+      <div className="table-responsive flex-grow-1">
         <Table
           hover
           size="sm"
-          className="asset-values-table align-middle text-nowrap shadow-sm"
-          style={{
-            borderRadius: "6px",
-            overflow: "hidden",
-            backgroundColor: "white",
-          }}
+          className="asset-values-table align-middle text-nowrap"
         >
-          <thead
-            className="table-dark"
-            style={{
-              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            }}
-          >
+          <thead>
             <tr>
               <th
                 className="text-center py-2"
                 style={{ width: "16%", border: "none" }}
               >
-                <span className="fw-bold text-white">📅 Date</span>
+                <span className="fw-bold ">📅 Date</span>
               </th>
               <th
                 className="text-center py-2"
                 style={{ width: "17%", border: "none" }}
               >
-                <span className="fw-bold text-white">💰 Value</span>
-              </th>
-              <th
-                className="text-center py-2"
-                style={{ width: "17%", border: "none" }}
-              >
-                <span className="fw-bold text-white">💸 Trans</span>
-              </th>
-              <th
-                className="text-center py-2"
-                style={{ width: "17%", border: "none" }}
-              >
-                <span className="fw-bold text-white">⚡ Gen</span>
+                <span className="fw-bold ">💰 Value</span>
               </th>
               <th
                 className="text-center py-2"
                 style={{ width: "16%", border: "none" }}
               >
-                <span className="fw-bold text-white">📈 Gain</span>
+                <span className="fw-bold ">📈 Gain</span>
               </th>
               <th
                 className="text-center py-2"
                 style={{ width: "17%", border: "none" }}
               >
-                <span className="fw-bold text-white">📊 %</span>
+                <span className="fw-bold ">📊 %</span>
+              </th>
+              <th
+                className="text-center py-2"
+                style={{ width: "17%", border: "none" }}
+              >
+                <span className="fw-bold ">💸 Transactions</span>
+              </th>
+              <th
+                className="text-center py-2"
+                style={{ width: "17%", border: "none" }}
+              >
+                <span className="fw-bold ">⚡ Generated</span>
               </th>
             </tr>
           </thead>
@@ -280,10 +270,7 @@ export function AssetValuesTable() {
       </div>
 
       <div className="mt-2 d-flex justify-content-center">
-        <div
-          className="add-date-section p-2 bg-light rounded shadow-sm"
-          style={{ minWidth: "200px" }}
-        >
+        <div className="add-date-section">
           <small className="d-block text-center text-muted mb-2">
             📅 Add New Date
           </small>

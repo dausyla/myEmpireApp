@@ -34,16 +34,7 @@ export function EditAsset() {
 
   return (
     <div className="edit-asset-container">
-      {/* Header */}
-      <div className="edit-asset-header">
-        <div className="d-flex align-items-center gap-2">
-          <div
-            className="asset-color-preview"
-            style={{ backgroundColor: color }}
-          />
-          <h5 className="mb-0 fw-bold text-white">⚙️ Edit Asset</h5>
-        </div>
-      </div>
+      {/* Header removed as it is now part of the Window component */}
 
       {/* Asset Configuration */}
       <div className="asset-config-section">
