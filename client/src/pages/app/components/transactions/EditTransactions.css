@@ -1,11 +1,11 @@
-.asset-performance-container {
+.edit-transactions-container {
   padding: 10px;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.asset-performance-table {
+.transactions-table {
   border-radius: var(--radius-md) !important;
   border: 1px solid var(--border-color) !important;
   box-shadow: var(--shadow-sm) !important;
@@ -13,7 +13,7 @@
   font-size: 0.75rem !important; /* Tiny font */
 }
 
-.asset-performance-table thead th {
+.transactions-table thead th {
   background: var(--bg-surface-primary) !important;
   color: var(--text-primary) !important;
   border: 1px solid var(--border-color) !important;
@@ -23,7 +23,7 @@
   white-space: nowrap;
 }
 
-.asset-performance-table tbody td {
+.transactions-table tbody td {
   padding: 2px 8px !important; /* Ultra compact padding */
   border-color: var(--border-color) !important;
   background-color: var(--bg-surface) !important;
@@ -31,23 +31,24 @@
   vertical-align: middle !important;
 }
 
-.performance-summary-card {
+.add-transaction-section {
+  background-color: var(--bg-surface-secondary);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.form-control-sm-modern {
   background-color: var(--bg-surface) !important;
   border: 1px solid var(--border-color) !important;
-  border-radius: var(--radius-md) !important;
+  color: var(--text-primary) !important;
+  border-radius: var(--radius-sm) !important;
+  font-size: 0.8rem !important;
+  padding: 4px 8px !important;
 }
 
-.performance-metric .metric-icon {
-  font-size: 1.5rem;
-  margin-bottom: 4px;
-}
-
-.performance-metric .metric-value {
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.performance-metric .metric-label {
-  color: var(--text-secondary) !important;
-  font-size: 0.7rem;
+.form-control-sm-modern:focus {
+  border-color: #e94057 !important;
+  box-shadow: 0 0 0 2px rgba(233, 64, 87, 0.1) !important;
 }

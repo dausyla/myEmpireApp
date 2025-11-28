@@ -1,11 +1,11 @@
-.asset-performance-container {
+.edit-recurring-container {
   padding: 10px;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.asset-performance-table {
+.recurring-table {
   border-radius: var(--radius-md) !important;
   border: 1px solid var(--border-color) !important;
   box-shadow: var(--shadow-sm) !important;
@@ -13,7 +13,7 @@
   font-size: 0.75rem !important; /* Tiny font */
 }
 
-.asset-performance-table thead th {
+.recurring-table thead th {
   background: var(--bg-surface-primary) !important;
   color: var(--text-primary) !important;
   border: 1px solid var(--border-color) !important;
@@ -23,7 +23,7 @@
   white-space: nowrap;
 }
 
-.asset-performance-table tbody td {
+.recurring-table tbody td {
   padding: 2px 8px !important; /* Ultra compact padding */
   border-color: var(--border-color) !important;
   background-color: var(--bg-surface) !important;
@@ -31,23 +31,10 @@
   vertical-align: middle !important;
 }
 
-.performance-summary-card {
-  background-color: var(--bg-surface) !important;
-  border: 1px solid var(--border-color) !important;
-  border-radius: var(--radius-md) !important;
-}
-
-.performance-metric .metric-icon {
-  font-size: 1.5rem;
-  margin-bottom: 4px;
-}
-
-.performance-metric .metric-value {
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.performance-metric .metric-label {
-  color: var(--text-secondary) !important;
-  font-size: 0.7rem;
+.add-recurring-section {
+  background-color: var(--bg-surface-secondary);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 16px;
 }

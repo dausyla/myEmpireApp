@@ -6,19 +6,21 @@ import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
 import { useData } from "../../../../contexts/DataContext/DataContextHook";
 import { EditableText } from "../../../../utilies/components/EditableText";
 import { EditableValue } from "../../../../utilies/components/EditableValue";
-import type { RecurringTransaction, TransactionTypes } from "@shared/WalletTypes";
+import type {
+  RecurringTransaction,
+  TransactionTypes,
+} from "@shared/WalletTypes";
+
+import "./EditRecurringTransactions.css";
 
 export function EditRecurringTransactions() {
   const { wallet } = useWallet();
   const { getSortedDates } = useData();
-  const {
-    addRecurring,
-    updateRecurring,
-    deleteRecurring,
-  } = useBatch();
+  const { addRecurring, updateRecurring, deleteRecurring } = useBatch();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [recurringToDelete, setRecurringToDelete] = useState<RecurringTransaction | null>(null);
+  const [recurringToDelete, setRecurringToDelete] =
+    useState<RecurringTransaction | null>(null);
   const [isAddingRecurring, setIsAddingRecurring] = useState(false);
 
   // Form state for new recurring transaction
@@ -44,8 +46,12 @@ export function EditRecurringTransactions() {
 
     const recurringData = {
       wallet_id: wallet.wallet.id,
-      to_asset_id: newRecurring.to_asset_id ? parseInt(newRecurring.to_asset_id) : undefined,
-      from_asset_id: newRecurring.from_asset_id ? parseInt(newRecurring.from_asset_id) : undefined,
+      to_asset_id: newRecurring.to_asset_id
+        ? parseInt(newRecurring.to_asset_id)
+        : undefined,
+      from_asset_id: newRecurring.from_asset_id
+        ? parseInt(newRecurring.from_asset_id)
+        : undefined,
       description: newRecurring.description.trim(),
       amount: parseFloat(newRecurring.amount),
       type: newRecurring.type,
@@ -66,7 +72,11 @@ export function EditRecurringTransactions() {
     setIsAddingRecurring(false);
   };
 
-  const handleUpdateRecurring = (id: number, field: keyof RecurringTransaction, value: any) => {
+  const handleUpdateRecurring = (
+    id: number,
+    field: keyof RecurringTransaction,
+    value: any,
+  ) => {
     updateRecurring(id, { [field]: value });
   };
 
@@ -84,38 +94,39 @@ export function EditRecurringTransactions() {
   };
 
   const getAssetName = (assetId?: number) => {
-    if (!assetId) return '-';
-    const asset = wallet.assets.find(a => a.id === assetId);
-    return asset ? asset.name : 'Unknown';
+    if (!assetId) return "-";
+    const asset = wallet.assets.find((a) => a.id === assetId);
+    return asset ? asset.name : "Unknown";
   };
 
   const getPeriodLabel = (period: string) => {
     const labels: Record<string, string> = {
-      daily: 'Daily',
-      weekly: 'Weekly',
-      monthly: 'Monthly',
-      yearly: 'Yearly',
+      daily: "Daily",
+      weekly: "Weekly",
+      monthly: "Monthly",
+      yearly: "Yearly",
     };
     return labels[period] || period;
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h3>Edit Recurring Transactions</h3>
+    <div className="edit-recurring-container">
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h5 className="mb-0 fw-bold">Edit Recurring Transactions</h5>
         <Button
           variant="primary"
+          size="sm"
           onClick={() => setIsAddingRecurring(!isAddingRecurring)}
         >
-          <BsPlus className="me-2" />
-          Add Recurring
+          <BsPlus className="me-1" />
+          Add
         </Button>
       </div>
 
       {/* Add Recurring Transaction Form */}
       {isAddingRecurring && (
-        <div className="mb-4 p-3 border rounded">
-          <h5>Add New Recurring Transaction</h5>
+        <div className="add-recurring-section">
+          <h6 className="mb-3">Add New Recurring Transaction</h6>
           <Row className="g-3">
             <Col md={6}>
               <Form.Group>
@@ -123,7 +134,12 @@ export function EditRecurringTransactions() {
                 <Form.Control
                   type="text"
                   value={newRecurring.description}
-                  onChange={(e) => setNewRecurring(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setNewRecurring((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
                   placeholder="Transaction description"
                 />
               </Form.Group>
@@ -135,7 +151,12 @@ export function EditRecurringTransactions() {
                   type="number"
                   step="0.01"
                   value={newRecurring.amount}
-                  onChange={(e) => setNewRecurring(prev => ({ ...prev, amount: e.target.value }))}
+                  onChange={(e) =>
+                    setNewRecurring((prev) => ({
+                      ...prev,
+                      amount: e.target.value,
+                    }))
+                  }
                   placeholder="0.00"
                 />
               </Form.Group>
@@ -145,7 +166,12 @@ export function EditRecurringTransactions() {
                 <Form.Label>Type</Form.Label>
                 <Form.Select
                   value={newRecurring.type}
-                  onChange={(e) => setNewRecurring(prev => ({ ...prev, type: e.target.value as TransactionTypes }))}
+                  onChange={(e) =>
+                    setNewRecurring((prev) => ({
+                      ...prev,
+                      type: e.target.value as TransactionTypes,
+                    }))
+                  }
                 >
                   <option value="deposit">Deposit</option>
                   <option value="withdrawal">Withdrawal</option>
@@ -159,7 +185,16 @@ export function EditRecurringTransactions() {
                 <Form.Label>Period</Form.Label>
                 <Form.Select
                   value={newRecurring.period}
-                  onChange={(e) => setNewRecurring(prev => ({ ...prev, period: e.target.value as "daily" | "weekly" | "monthly" | "yearly" }))}
+                  onChange={(e) =>
+                    setNewRecurring((prev) => ({
+                      ...prev,
+                      period: e.target.value as
+                        | "daily"
+                        | "weekly"
+                        | "monthly"
+                        | "yearly",
+                    }))
+                  }
                 >
                   <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
@@ -173,10 +208,15 @@ export function EditRecurringTransactions() {
                 <Form.Label>From Asset (optional)</Form.Label>
                 <Form.Select
                   value={newRecurring.from_asset_id}
-                  onChange={(e) => setNewRecurring(prev => ({ ...prev, from_asset_id: e.target.value }))}
+                  onChange={(e) =>
+                    setNewRecurring((prev) => ({
+                      ...prev,
+                      from_asset_id: e.target.value,
+                    }))
+                  }
                 >
                   <option value="">None</option>
-                  {availableAssets.map(asset => (
+                  {availableAssets.map((asset) => (
                     <option key={asset.id} value={asset.id}>
                       {asset.name}
                     </option>
@@ -189,10 +229,15 @@ export function EditRecurringTransactions() {
                 <Form.Label>To Asset (optional)</Form.Label>
                 <Form.Select
                   value={newRecurring.to_asset_id}
-                  onChange={(e) => setNewRecurring(prev => ({ ...prev, to_asset_id: e.target.value }))}
+                  onChange={(e) =>
+                    setNewRecurring((prev) => ({
+                      ...prev,
+                      to_asset_id: e.target.value,
+                    }))
+                  }
                 >
                   <option value="">None</option>
-                  {availableAssets.map(asset => (
+                  {availableAssets.map((asset) => (
                     <option key={asset.id} value={asset.id}>
                       {asset.name}
                     </option>
@@ -205,7 +250,10 @@ export function EditRecurringTransactions() {
                 <Button variant="success" onClick={handleAddRecurring}>
                   Add Recurring Transaction
                 </Button>
-                <Button variant="secondary" onClick={() => setIsAddingRecurring(false)}>
+                <Button
+                  variant="secondary"
+                  onClick={() => setIsAddingRecurring(false)}
+                >
                   Cancel
                 </Button>
               </div>
@@ -215,9 +263,13 @@ export function EditRecurringTransactions() {
       )}
 
       {/* Recurring Transactions Table */}
-      <div style={{ maxHeight: "600px", overflowY: "auto" }}>
-        <Table striped bordered hover>
-          <thead style={{ position: "sticky", top: 0, background: "white", zIndex: 1 }}>
+      <div className="table-responsive flex-grow-1">
+        <Table
+          hover
+          size="sm"
+          className="recurring-table align-middle text-nowrap"
+        >
+          <thead>
             <tr>
               <th>Description</th>
               <th>Amount</th>
@@ -241,20 +293,34 @@ export function EditRecurringTransactions() {
                   <td>
                     <EditableText
                       value={recurring.description}
-                      modifyValue={(value) => handleUpdateRecurring(recurring.id, 'description', value)}
+                      modifyValue={(value) =>
+                        handleUpdateRecurring(
+                          recurring.id,
+                          "description",
+                          value,
+                        )
+                      }
                     />
                   </td>
                   <td>
                     <EditableValue
                       value={recurring.amount}
-                      modifyValue={(value) => handleUpdateRecurring(recurring.id, 'amount', value)}
+                      modifyValue={(value) =>
+                        handleUpdateRecurring(recurring.id, "amount", value)
+                      }
                     />
                   </td>
                   <td>
                     <Form.Select
                       size="sm"
                       value={recurring.type}
-                      onChange={(e) => handleUpdateRecurring(recurring.id, 'type', e.target.value as TransactionTypes)}
+                      onChange={(e) =>
+                        handleUpdateRecurring(
+                          recurring.id,
+                          "type",
+                          e.target.value as TransactionTypes,
+                        )
+                      }
                       style={{ width: "120px" }}
                     >
                       <option value="deposit">Deposit</option>
@@ -267,7 +333,17 @@ export function EditRecurringTransactions() {
                     <Form.Select
                       size="sm"
                       value={recurring.period}
-                      onChange={(e) => handleUpdateRecurring(recurring.id, 'period', e.target.value as "daily" | "weekly" | "monthly" | "yearly")}
+                      onChange={(e) =>
+                        handleUpdateRecurring(
+                          recurring.id,
+                          "period",
+                          e.target.value as
+                            | "daily"
+                            | "weekly"
+                            | "monthly"
+                            | "yearly",
+                        )
+                      }
                       style={{ width: "100px" }}
                     >
                       <option value="daily">Daily</option>
@@ -303,8 +379,10 @@ export function EditRecurringTransactions() {
           Are you sure you want to delete this recurring transaction?
           {recurringToDelete && (
             <div className="mt-3 p-3 bg-light rounded">
-              <strong>{recurringToDelete.description}</strong><br />
-              Amount: {recurringToDelete.amount}<br />
+              <strong>{recurringToDelete.description}</strong>
+              <br />
+              Amount: {recurringToDelete.amount}
+              <br />
               Period: {getPeriodLabel(recurringToDelete.period)}
             </div>
           )}

@@ -8,6 +8,8 @@ import { EditableText } from "../../../../utilies/components/EditableText";
 import { EditableValue } from "../../../../utilies/components/EditableValue";
 import type { Transaction, TransactionTypes } from "@shared/WalletTypes";
 
+import "./EditTransactions.css";
+
 export function EditTransactions() {
   const { wallet } = useWallet();
   const { getSortedDates } = useData();
@@ -126,22 +128,23 @@ export function EditTransactions() {
   });
 
   return (
-    <div style={{ padding: "20px" }}>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h3>Edit Transactions</h3>
+    <div className="edit-transactions-container">
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h5 className="mb-0 fw-bold">Edit Transactions</h5>
         <Button
           variant="primary"
+          size="sm"
           onClick={() => setIsAddingTransaction(!isAddingTransaction)}
         >
-          <BsPlus className="me-2" />
-          Add Transaction
+          <BsPlus className="me-1" />
+          Add
         </Button>
       </div>
 
       {/* Add Transaction Form */}
       {isAddingTransaction && (
-        <div className="mb-4 p-3 border rounded">
-          <h5>Add New Transaction</h5>
+        <div className="add-transaction-section">
+          <h6 className="mb-3">Add New Transaction</h6>
           <Row className="g-3">
             <Col md={6}>
               <Form.Group>
@@ -276,16 +279,13 @@ export function EditTransactions() {
       )}
 
       {/* Transactions Table */}
-      <div style={{ maxHeight: "600px", overflowY: "auto" }}>
-        <Table striped bordered hover>
-          <thead
-            style={{
-              position: "sticky",
-              top: 0,
-              background: "white",
-              zIndex: 1,
-            }}
-          >
+      <div className="table-responsive flex-grow-1">
+        <Table
+          hover
+          size="sm"
+          className="transactions-table align-middle text-nowrap"
+        >
+          <thead>
             <tr>
               <th>Date</th>
               <th>Description</th>
