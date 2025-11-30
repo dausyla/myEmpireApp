@@ -12,3 +12,12 @@ export type AssetPerformance = {
   totalGrowth: number; // %
   apy: number; // %
 };
+
+export type AssetPerformancePerDate = {
+  value: number;
+  deposits: number;
+  withdrawals: number;
+  fees: number;
+  rewards: number;
+  timeSpent: number; // days since last date
+};

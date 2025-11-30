@@ -1,4 +1,7 @@
-import type { AssetPerformance } from "../../types/DataTypes";
+import type {
+  AssetPerformance,
+  AssetPerformancePerDate,
+} from "../../types/DataTypes";
 import type {
   Asset,
   AssetValue,
@@ -8,6 +11,9 @@ import type {
 
 export type DataContextType = {
   getAssetPerformance: (assetId: number) => AssetPerformance | null;
+  getAssetPerformancePerDates: (
+    assetId: number,
+  ) => Record<number, AssetPerformancePerDate>;
   getSortedDates: () => WalletDate[];
   getSortedValues: (asset: Asset) => AssetValue[];
   getSortedTransactions: (asset: Asset) => Transaction[];

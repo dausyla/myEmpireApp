@@ -3,6 +3,7 @@ import { type DataContextType } from "./DataContextTypes";
 
 export const DataContext = createContext<DataContextType>({
   getAssetPerformance: () => null,
+  getAssetPerformancePerDates: () => ({}),
   getSortedDates: () => [],
   getSortedValues: () => [],
   getSortedTransactions: () => [],
