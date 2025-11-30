@@ -1,4 +1,3 @@
-import Card from "react-bootstrap/Card";
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 import { useData } from "../../../../contexts/DataContext/DataContextHook";
 import "./AssetPerformence.css";
@@ -52,7 +51,7 @@ export function AssetPerformence() {
             <div className="d-flex flex-column align-items-center">
               <span
                 className="fw-bold metric-value"
-                style={{ color: "#28a745" }}
+                style={{ color: " #61ac73ff" }}
               >
                 {timeSpent.toLocaleString()} days
               </span>

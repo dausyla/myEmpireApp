@@ -72,7 +72,7 @@ export function NavBar({
               Asset Values
             </NavDropdown.Item>
             <NavDropdown.Item
-              onClick={() => openWindow(<EditAsset />, "Edit Asset", 450, 275)}
+              onClick={() => openWindow(<EditAsset />, "Edit Asset", 320, 200)}
             >
               Edit Asset
             </NavDropdown.Item>

@@ -37,71 +37,68 @@ export function EditAsset() {
       {/* Header removed as it is now part of the Window component */}
 
       {/* Asset Configuration */}
-      <div className="asset-config-section">
-        <div className="row g-3">
-          {/* Asset Name */}
-          <div className="col-12">
-            <div className="form-group-modern">
-              <label className="form-label-modern">
-                <span className="label-icon">📝</span>
-                Asset Name
-              </label>
+      <div className="row g-3 m-0">
+        {/* Asset Name */}
+        <div className="col-12">
+          <div className="form-group-modern">
+            <label className="form-label-modern">
+              <span className="label-icon">📝</span>
+              Asset Name
+            </label>
+            <Form.Control
+              className="form-control-modern"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onBlur={handleSaveAsset}
+              placeholder="Enter asset name"
+            />
+          </div>
+        </div>
+
+        {/* Color Picker */}
+        <div className="col-md-6">
+          <div className="form-group-modern m-1">
+            <label className="form-label-modern">
+              <BsPalette className="label-icon" />
+              Color Theme
+            </label>
+            <div className="d-flex gap-2 align-items-center">
               <Form.Control
-                className="form-control-modern"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                type="color"
+                className="color-picker"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
                 onBlur={handleSaveAsset}
-                placeholder="Enter asset name"
+              />
+              <Form.Control
+                className="color-input form-control-modern"
+                value={color.toUpperCase()}
+                onChange={(e) => setColor(e.target.value)}
+                onBlur={handleSaveAsset}
+                placeholder="#000000"
               />
             </div>
           </div>
+        </div>
 
-          {/* Color Picker */}
-          <div className="col-md-6">
-            <div className="form-group-modern">
-              <label className="form-label-modern">
-                <BsPalette className="label-icon" />
-                Color Theme
-              </label>
-              <div className="d-flex gap-2 align-items-center">
-                <Form.Control
-                  type="color"
-                  className="color-picker"
-                  value={color}
-                  onChange={(e) => setColor(e.target.value)}
-                  onBlur={handleSaveAsset}
-                />
-                <Form.Control
-                  className="color-input form-control-modern"
-                  value={color.toUpperCase()}
-                  onChange={(e) => setColor(e.target.value)}
-                  onBlur={handleSaveAsset}
-                  placeholder="#000000"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* APY */}
-          <div className="col-md-6">
-            <div className="form-group-modern">
-              <label className="form-label-modern">
-                <BsPercent className="label-icon" />
-                Est. APY
-              </label>
-              <InputGroup>
-                <Form.Control
-                  className="form-control-modern"
-                  type="number"
-                  step="0.01"
-                  value={apy}
-                  onChange={(e) => setApy(e.target.value)}
-                  onBlur={handleSaveAsset}
-                  placeholder="0.00"
-                />
-                <InputGroup.Text>%</InputGroup.Text>
-              </InputGroup>
-            </div>
+        {/* APY */}
+        <div className="col-md-6">
+          <div className="form-group-modern m-1">
+            <label className="form-label-modern">
+              <BsPercent className="label-icon" />
+              Est. APY
+            </label>
+            <InputGroup>
+              <Form.Control
+                className="form-control-modern"
+                type="number"
+                step="0.01"
+                value={apy}
+                onChange={(e) => setApy(e.target.value)}
+                onBlur={handleSaveAsset}
+                placeholder="0.00"
+              />
+            </InputGroup>
           </div>
         </div>
       </div>

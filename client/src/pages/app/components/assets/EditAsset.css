@@ -1,34 +1,26 @@
 .edit-asset-container {
-  padding: 10px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.asset-config-section {
-  background-color: var(--bg-surface);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-sm);
-}
-
 .form-group-modern {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .form-label-modern {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.8rem;
+  gap: 6px;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-secondary);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .label-icon {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--text-primary);
 }
 
@@ -37,8 +29,9 @@
   border: 1px solid var(--border-color) !important;
   color: var(--text-primary) !important;
   border-radius: var(--radius-sm) !important;
-  font-size: 0.9rem !important;
-  padding: 8px 12px !important;
+  font-size: 0.8rem !important;
+  padding: 4px 8px !important;
+  min-height: 28px !important;
   transition: var(--transition-base) !important;
 }
 
@@ -48,9 +41,17 @@
   background-color: var(--bg-surface) !important;
 }
 
+.input-group-text-modern {
+  background-color: var(--bg-surface-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-secondary) !important;
+  font-size: 0.75rem !important;
+  padding: 4px 8px !important;
+}
+
 .color-picker {
-  width: 40px !important;
-  height: 38px !important;
+  width: 32px !important;
+  height: 28px !important;
   padding: 2px !important;
   border: 1px solid var(--border-color) !important;
   border-radius: var(--radius-sm) !important;
