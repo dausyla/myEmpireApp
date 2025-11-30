@@ -1,53 +1,27 @@
 .asset-performance-container {
-  padding: 10px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.asset-performance-table {
-  border-radius: var(--radius-md) !important;
-  border: 1px solid var(--border-color) !important;
-  box-shadow: var(--shadow-sm) !important;
-  margin-bottom: 0 !important;
-  font-size: 0.75rem !important; /* Tiny font */
-}
-
-.asset-performance-table thead th {
-  background: var(--bg-surface-primary) !important;
-  color: var(--text-primary) !important;
-  border: 1px solid var(--border-color) !important;
-  font-weight: 600;
-  padding: 4px 8px !important; /* Compact padding */
-  font-size: 0.75rem;
-  white-space: nowrap;
-}
-
-.asset-performance-table tbody td {
-  padding: 2px 8px !important; /* Ultra compact padding */
-  border-color: var(--border-color) !important;
-  background-color: var(--bg-surface) !important;
-  color: var(--text-primary) !important;
-  vertical-align: middle !important;
-}
-
-.performance-summary-card {
+.performance-card {
   background-color: var(--bg-surface) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: var(--radius-md) !important;
 }
 
 .performance-metric .metric-icon {
-  font-size: 1.5rem;
-  margin-bottom: 4px;
+  font-size: 1.2rem;
+  margin-bottom: 2px;
 }
 
 .performance-metric .metric-value {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
 }
 
 .performance-metric .metric-label {
   color: var(--text-secondary) !important;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
 }

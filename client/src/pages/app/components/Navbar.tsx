@@ -59,14 +59,14 @@ export function NavBar({
           <NavDropdown title="Assets" id="basic-nav-dropdown" className="ms-3">
             <NavDropdown.Item
               onClick={() =>
-                openWindow(<AssetPerformence />, "Asset Performance", 500, 250)
+                openWindow(<AssetPerformence />, "Asset Performance", 350, 230)
               }
             >
               Asset Performance
             </NavDropdown.Item>
             <NavDropdown.Item
               onClick={() =>
-                openWindow(<AssetValuesTable />, "Asset Values", 1000, 500)
+                openWindow(<AssetValuesTable />, "Asset Values", 800, 530)
               }
             >
               Asset Values

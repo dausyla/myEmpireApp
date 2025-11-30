@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, type JSX } from "react";
-import { Window, type WindowProps } from "./Window";
+import { useState, useEffect, type JSX } from "react";
+import { Window } from "./Window";
 
 export interface ManagedWindow {
   id: string;

@@ -1,4 +1,3 @@
-import Table from "react-bootstrap/Table";
 import Card from "react-bootstrap/Card";
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 import { useData } from "../../../../contexts/DataContext/DataContextHook";
@@ -24,172 +23,148 @@ export function AssetPerformence() {
 
   return (
     <div className="asset-performance-container">
-      <div className="table-responsive">
-        <Table
-          hover
-          size="sm"
-          className="asset-performance-table align-middle text-nowrap"
-        >
-          <thead>
-            <tr>
-              <th
-                className="text-center py-2"
-                style={{ width: "25%", border: "none" }}
+      {/* Row 1: Detailed Metrics */}
+      <div className="row g-3 p-2 m-0">
+        {/* Value */}
+        <div className="col-6 col-md-3">
+          <div className="performance-metric text-center">
+            <div className="metric-icon">💰</div>
+            <div className="d-flex flex-column align-items-center">
+              <div className="d-flex align-items-center mb-0">
+                <span className="text-muted me-1" style={{ fontSize: "0.8em" }}>
+                  $
+                </span>
+                <span
+                  className="fw-bold metric-value"
+                  style={{ color: "#28a745" }}
+                >
+                  {totalValue.toLocaleString()}
+                </span>
+              </div>
+              <div className="metric-label small text-muted">Value</div>
+            </div>
+          </div>
+        </div>
+        {/* Time */}
+        <div className="col-6 col-md-3">
+          <div className="performance-metric text-center">
+            <div className="metric-icon">⏱️</div>
+            <div className="d-flex flex-column align-items-center">
+              <span
+                className="fw-bold metric-value"
+                style={{ color: "#28a745" }}
               >
-                <span className="fw-bold">💰 Value & Time</span>
-              </th>
-              <th
-                className="text-center py-2"
-                style={{ width: "25%", border: "none" }}
-              >
-                <span className="fw-bold">📥 Deposits</span>
-              </th>
-              <th
-                className="text-center py-2"
-                style={{ width: "25%", border: "none" }}
-              >
-                <span className="fw-bold">📤 Withdrawals</span>
-              </th>
-              <th
-                className="text-center py-2"
-                style={{ width: "25%", border: "none" }}
-              >
-                <span className="fw-bold">⚡ Net Flow</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              {/* Value & Time */}
-              <td className="text-center align-middle py-2">
-                <div className="d-flex flex-column align-items-center">
-                  <div className="d-flex align-items-center mb-1">
-                    <span
-                      className="text-muted me-2"
-                      style={{ fontSize: "0.9em" }}
-                    >
-                      $
-                    </span>
-                    <span
-                      className="fw-bold"
-                      style={{ fontSize: "1.1em", color: "#28a745" }}
-                    >
-                      {totalValue.toLocaleString()}
-                    </span>
-                  </div>
-                  <small className="text-muted" style={{ fontSize: "0.8em" }}>
-                    ⏱️ {timeSpent} days
-                  </small>
-                </div>
-              </td>
+                {timeSpent.toLocaleString()} days
+              </span>
+              <div className="metric-label small text-muted">Time</div>
+            </div>
+          </div>
+        </div>
 
-              {/* Deposits */}
-              <td className="text-center align-middle py-2">
-                <div className="d-flex flex-column align-items-center">
-                  <span
-                    className={`fw-medium ${totalDeposit > 0 ? "text-success" : "text-muted"}`}
-                    style={{ fontSize: "0.9em" }}
-                  >
-                    +${totalDeposit.toLocaleString()}
-                  </span>
-                  {totalRewards > 0 && (
-                    <small
-                      className="text-success"
-                      style={{ fontSize: "0.7em" }}
-                    >
-                      +${totalRewards.toLocaleString()} rewards
-                    </small>
-                  )}
-                </div>
-              </td>
+        {/* Deposits */}
+        <div className="col-6 col-md-3">
+          <div className="performance-metric text-center">
+            <div className="metric-icon">📥</div>
+            <div className="d-flex flex-column align-items-center">
+              <span
+                className={`fw-medium metric-value ${totalDeposit > 0 ? "text-success" : "text-muted"}`}
+              >
+                +${totalDeposit.toLocaleString()}
+              </span>
+              <div className="metric-label small text-muted">Deposits</div>
+              {totalRewards > 0 && (
+                <small
+                  className="text-success mt-1"
+                  style={{ fontSize: "0.65em" }}
+                >
+                  +${totalRewards.toLocaleString()} rewards
+                </small>
+              )}
+            </div>
+          </div>
+        </div>
 
-              {/* Withdrawals */}
-              <td className="text-center align-middle py-2">
-                <div className="d-flex flex-column align-items-center">
-                  <span
-                    className={`fw-medium ${totalWithdrawal > 0 ? "text-danger" : "text-muted"}`}
-                    style={{ fontSize: "0.9em" }}
-                  >
-                    -${totalWithdrawal.toLocaleString()}
-                  </span>
-                  {totalFees > 0 && (
-                    <small
-                      className="text-warning"
-                      style={{ fontSize: "0.7em" }}
-                    >
-                      -${totalFees.toLocaleString()} fees
-                    </small>
-                  )}
-                </div>
-              </td>
-
-              {/* Net Flow */}
-              <td className="text-center align-middle py-2">
-                <div className="d-flex flex-column align-items-center">
-                  <span
-                    className={`fw-bold ${
-                      totalDeposit - totalWithdrawal > 0
-                        ? "text-success"
-                        : totalDeposit - totalWithdrawal < 0
-                          ? "text-danger"
-                          : "text-muted"
-                    }`}
-                    style={{ fontSize: "1em" }}
-                  >
-                    {totalDeposit - totalWithdrawal >= 0 ? "+" : ""}$
-                    {(totalDeposit - totalWithdrawal).toLocaleString()}
-                  </span>
-                  <small className="text-muted" style={{ fontSize: "0.7em" }}>
-                    Net contribution
-                  </small>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </Table>
+        {/* Withdrawals */}
+        <div className="col-6 col-md-3">
+          <div className="performance-metric text-center">
+            <div className="metric-icon">📤</div>
+            <div className="d-flex flex-column align-items-center">
+              <span
+                className={`fw-medium metric-value ${totalWithdrawal > 0 ? "text-danger" : "text-muted"}`}
+              >
+                -${totalWithdrawal.toLocaleString()}
+              </span>
+              <div className="metric-label small text-muted">Withdrawals</div>
+              {totalFees > 0 && (
+                <small
+                  className="text-warning mt-1"
+                  style={{ fontSize: "0.65em" }}
+                >
+                  -${totalFees.toLocaleString()} fees
+                </small>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Performance Summary Card */}
-      <div className="mt-2">
-        <Card className="performance-summary-card shadow-sm">
-          <Card.Body className="p-3">
-            <div className="row g-3">
-              <div className="col-6 col-md-4">
-                <div className="performance-metric text-center">
-                  <div className="metric-icon">📈</div>
-                  <div className="metric-value text-success fw-bold">
-                    {totalGrowth.toFixed(2)}%
-                  </div>
-                  <div className="metric-label small text-muted">
-                    Total Growth
-                  </div>
-                </div>
-              </div>
-              <div className="col-6 col-md-4">
-                <div className="performance-metric text-center">
-                  <div className="metric-icon">💎</div>
-                  <div className="metric-value text-primary fw-bold">
-                    ${totalInterests.toLocaleString()}
-                  </div>
-                  <div className="metric-label small text-muted">
-                    Total Interests
-                  </div>
-                </div>
-              </div>
-              <div className="col-12 col-md-4">
-                <div className="performance-metric text-center">
-                  <div className="metric-icon">🚀</div>
-                  <div className="metric-value text-info fw-bold">
-                    {apy.toFixed(2)}%
-                  </div>
-                  <div className="metric-label small text-muted">
-                    Annual Yield
-                  </div>
-                </div>
-              </div>
+      {/* Divider */}
+      <hr className="my-1 mx-4 opacity-10" />
+
+      {/* Row 2: Performance Summary */}
+
+      {/* Total Growth */}
+      <div className="row g-3 m-0 p-2">
+        <div className="col-6 col-md-3">
+          <div className="performance-metric text-center">
+            <div className="metric-icon">📈</div>
+            <div className="metric-value text-success fw-bold">
+              {totalGrowth.toFixed(2)}%
             </div>
-          </Card.Body>
-        </Card>
+            <div className="metric-label small text-muted">Total Growth</div>
+          </div>
+        </div>
+        {/* Interests */}
+        <div className="col-6 col-md-3">
+          <div className="performance-metric text-center">
+            <div className="metric-icon">💎</div>
+            <div className="metric-value text-primary fw-bold">
+              ${totalInterests.toLocaleString()}
+            </div>
+            <div className="metric-label small text-muted">Total Interests</div>
+          </div>
+        </div>
+        {/* APY */}
+        <div className="col-12 col-md-3">
+          <div className="performance-metric text-center">
+            <div className="metric-icon">🚀</div>
+            <div className="metric-value text-info fw-bold">
+              {apy.toFixed(2)}%
+            </div>
+            <div className="metric-label small text-muted">Annual Yield</div>
+          </div>
+        </div>
+        {/* Net Flow */}
+        <div className="col-6 col-md-3">
+          <div className="performance-metric text-center">
+            <div className="metric-icon">⚡</div>
+            <div className="d-flex flex-column align-items-center">
+              <span
+                className={`fw-bold metric-value ${
+                  totalDeposit - totalWithdrawal > 0
+                    ? "text-success"
+                    : totalDeposit - totalWithdrawal < 0
+                      ? "text-danger"
+                      : "text-muted"
+                }`}
+              >
+                {totalDeposit - totalWithdrawal >= 0 ? "+" : ""}$
+                {(totalDeposit - totalWithdrawal).toLocaleString()}
+              </span>
+              <div className="metric-label small text-muted">Net Flow</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -165,10 +165,6 @@ export const Window: React.FC<WindowProps> = ({
     }
   }, [isDragging, isResizing, handleMouseMove, handleMouseUp]);
 
-  // Debug
-  React.useEffect(() => {
-    console.log(size);
-  }, [size]);
   return (
     <div
       ref={windowRef}
