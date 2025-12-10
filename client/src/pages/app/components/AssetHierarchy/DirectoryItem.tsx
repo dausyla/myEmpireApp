@@ -60,40 +60,46 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
       {/* Directory line */}
       {dir.id !== 0 && (
         <div
-          className={`hierarchy-item ${isOpened ? "expanded" : ""}`}
+          className={`group flex items-center justify-between px-3 py-1.5 cursor-pointer transition-colors border-l-[3px] border-transparent hover:bg-white/5 text-[0.9rem] ${
+            isOpened
+              ? "text-[var(--text-primary)]"
+              : "text-[var(--text-primary)]"
+          }`}
           style={{ paddingLeft: `${depth * 16 + 12}px` }}
           onClick={() => setIsOpened(!isOpened)}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >
-          <div className="hierarchy-item-content">
+          <div className="flex items-center gap-2 flex-1 overflow-hidden">
             {isOpened ? (
-              <FaFolderOpen className="text-warning" />
+              <FaFolderOpen className="text-yellow-500" />
             ) : (
-              <FaFolder className="text-warning" />
+              <FaFolder className="text-yellow-500" />
             )}
-            <span className="hierarchy-item-text">{dir.name}</span>
+            <span className="whitespace-nowrap overflow-hidden text-ellipsis">
+              {dir.name}
+            </span>
           </div>
 
           {/* Action buttons (visible on hover) */}
-          <div className="hierarchy-actions">
+          <div className="flex gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
             <button
               title="Ajouter un dossier"
-              className="hierarchy-action-btn success"
+              className="p-1 rounded bg-transparent border-0 text-[var(--text-secondary)] flex items-center justify-center text-xs transition-colors hover:bg-[var(--bg-surface)] hover:text-[#28a745]"
               onClick={handleAddDir}
             >
               <FaFolder />
             </button>
             <button
               title="Ajouter un fichier"
-              className="hierarchy-action-btn primary"
+              className="p-1 rounded bg-transparent border-0 text-[var(--text-secondary)] flex items-center justify-center text-xs transition-colors hover:bg-[var(--bg-surface)] hover:text-[#0d6efd]"
               onClick={handleAddAsset}
             >
               <FaFileAlt />
             </button>
             <button
               title="Supprimer le dossier"
-              className="hierarchy-action-btn danger"
+              className="p-1 rounded bg-transparent border-0 text-[var(--text-secondary)] flex items-center justify-center text-xs transition-colors hover:bg-[var(--bg-surface)] hover:text-[#dc3545]"
               onClick={handleDelete}
             >
               <FaTrash />

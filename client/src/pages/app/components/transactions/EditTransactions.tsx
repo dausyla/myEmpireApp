@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Button, Table, Form, Row, Col, Alert, Modal } from "react-bootstrap";
 import { BsTrash, BsPlus } from "react-icons/bs";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
@@ -8,7 +7,6 @@ import { EditableText } from "../../../../utilies/components/EditableText";
 import { EditableValue } from "../../../../utilies/components/EditableValue";
 import type { Transaction, TransactionTypes } from "@shared/WalletTypes";
 
-import "./EditTransactions.css";
 import { EditableDate } from "../../../../utilies/components/EditableDate";
 
 export function EditTransactions() {
@@ -32,7 +30,11 @@ export function EditTransactions() {
   });
 
   if (!wallet) {
-    return <Alert variant="warning">No wallet selected</Alert>;
+    return (
+      <div className="p-4 mb-4 text-yellow-800 bg-yellow-50 rounded-lg">
+        No wallet selected
+      </div>
+    );
   }
 
   // Get all transactions from the wallet
@@ -129,178 +131,237 @@ export function EditTransactions() {
   });
 
   return (
-    <div className="edit-transactions-container">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h5 className="mb-0 fw-bold">Edit Transactions</h5>
-        <Button
-          variant="primary"
-          size="sm"
+    <div className="h-full flex flex-col p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h5 className="mb-0 font-bold text-lg text-[var(--text-primary)]">
+          Edit Transactions
+        </h5>
+        <button
+          className="px-3 py-1.5 bg-[var(--brand-primary)] text-white rounded text-sm font-medium flex items-center hover:opacity-90 transition-opacity"
+          style={{ background: "var(--brand-gradient)" }}
           onClick={() => setIsAddingTransaction(!isAddingTransaction)}
         >
-          <BsPlus className="me-1" />
+          <BsPlus className="mr-1 text-lg" />
           Add
-        </Button>
+        </button>
       </div>
 
       {/* Add Transaction Form */}
       {isAddingTransaction && (
-        <div className="add-transaction-section">
-          <h6 className="mb-3">Add New Transaction</h6>
-          <Row className="g-3">
-            <Col md={6}>
-              <Form.Group>
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={newTransaction.description}
-                  onChange={(e) =>
-                    setNewTransaction((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                  placeholder="Transaction description"
-                />
-              </Form.Group>
-            </Col>
-            <Col md={3}>
-              <Form.Group>
-                <Form.Label>Amount</Form.Label>
-                <Form.Control
-                  type="number"
-                  step="0.01"
-                  value={newTransaction.amount}
-                  onChange={(e) =>
-                    setNewTransaction((prev) => ({
-                      ...prev,
-                      amount: e.target.value,
-                    }))
-                  }
-                  placeholder="0.00"
-                />
-              </Form.Group>
-            </Col>
-            <Col md={3}>
-              <Form.Group>
-                <Form.Label>Type</Form.Label>
-                <Form.Select
-                  value={newTransaction.type}
-                  onChange={(e) =>
-                    setNewTransaction((prev) => ({
-                      ...prev,
-                      type: e.target.value as TransactionTypes,
-                    }))
-                  }
+        <div
+          className="mb-4 p-4 rounded-lg border border-[var(--border-color)]"
+          style={{ backgroundColor: "var(--bg-surface-secondary)" }}
+        >
+          <h6 className="mb-3 font-medium text-[var(--text-primary)]">
+            Add New Transaction
+          </h6>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <div className="md:col-span-6">
+              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+                Description
+              </label>
+              <input
+                type="text"
+                value={newTransaction.description}
+                onChange={(e) =>
+                  setNewTransaction((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                placeholder="Transaction description"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
+                style={{
+                  backgroundColor: "var(--bg-surface)",
+                  color: "var(--text-primary)",
+                  borderColor: "var(--border-color)",
+                }}
+              />
+            </div>
+            <div className="md:col-span-3">
+              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+                Amount
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                value={newTransaction.amount}
+                onChange={(e) =>
+                  setNewTransaction((prev) => ({
+                    ...prev,
+                    amount: e.target.value,
+                  }))
+                }
+                placeholder="0.00"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
+                style={{
+                  backgroundColor: "var(--bg-surface)",
+                  color: "var(--text-primary)",
+                  borderColor: "var(--border-color)",
+                }}
+              />
+            </div>
+            <div className="md:col-span-3">
+              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+                Type
+              </label>
+              <select
+                value={newTransaction.type}
+                onChange={(e) =>
+                  setNewTransaction((prev) => ({
+                    ...prev,
+                    type: e.target.value as TransactionTypes,
+                  }))
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
+                style={{
+                  backgroundColor: "var(--bg-surface)",
+                  color: "var(--text-primary)",
+                  borderColor: "var(--border-color)",
+                }}
+              >
+                <option value="deposit">Deposit</option>
+                <option value="withdrawal">Withdrawal</option>
+                <option value="fee">Fee</option>
+                <option value="reward">Reward</option>
+              </select>
+            </div>
+            <div className="md:col-span-4">
+              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+                Date
+              </label>
+              <select
+                value={newTransaction.date_id}
+                onChange={(e) =>
+                  setNewTransaction((prev) => ({
+                    ...prev,
+                    date_id: e.target.value,
+                  }))
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
+                style={{
+                  backgroundColor: "var(--bg-surface)",
+                  color: "var(--text-primary)",
+                  borderColor: "var(--border-color)",
+                }}
+              >
+                <option value="">Select date</option>
+                {availableDates.map((date) => (
+                  <option key={date.id} value={date.id}>
+                    {date.date.replace(/-/g, "/")}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="md:col-span-4">
+              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+                From Asset (optional)
+              </label>
+              <select
+                value={newTransaction.from_asset_id}
+                onChange={(e) =>
+                  setNewTransaction((prev) => ({
+                    ...prev,
+                    from_asset_id: e.target.value,
+                  }))
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
+                style={{
+                  backgroundColor: "var(--bg-surface)",
+                  color: "var(--text-primary)",
+                  borderColor: "var(--border-color)",
+                }}
+              >
+                <option value="">None</option>
+                {availableAssets.map((asset) => (
+                  <option key={asset.id} value={asset.id}>
+                    {asset.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="md:col-span-4">
+              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+                To Asset (optional)
+              </label>
+              <select
+                value={newTransaction.to_asset_id}
+                onChange={(e) =>
+                  setNewTransaction((prev) => ({
+                    ...prev,
+                    to_asset_id: e.target.value,
+                  }))
+                }
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
+                style={{
+                  backgroundColor: "var(--bg-surface)",
+                  color: "var(--text-primary)",
+                  borderColor: "var(--border-color)",
+                }}
+              >
+                <option value="">None</option>
+                {availableAssets.map((asset) => (
+                  <option key={asset.id} value={asset.id}>
+                    {asset.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="col-span-12">
+              <div className="flex gap-2">
+                <button
+                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-medium"
+                  onClick={handleAddTransaction}
                 >
-                  <option value="deposit">Deposit</option>
-                  <option value="withdrawal">Withdrawal</option>
-                  <option value="fee">Fee</option>
-                  <option value="reward">Reward</option>
-                </Form.Select>
-              </Form.Group>
-            </Col>
-            <Col md={4}>
-              <Form.Group>
-                <Form.Label>Date</Form.Label>
-                <Form.Select
-                  value={newTransaction.date_id}
-                  onChange={(e) =>
-                    setNewTransaction((prev) => ({
-                      ...prev,
-                      date_id: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="">Select date</option>
-                  {availableDates.map((date) => (
-                    <option key={date.id} value={date.id}>
-                      {date.date.replace(/-/g, "/")}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-            <Col md={4}>
-              <Form.Group>
-                <Form.Label>From Asset (optional)</Form.Label>
-                <Form.Select
-                  value={newTransaction.from_asset_id}
-                  onChange={(e) =>
-                    setNewTransaction((prev) => ({
-                      ...prev,
-                      from_asset_id: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="">None</option>
-                  {availableAssets.map((asset) => (
-                    <option key={asset.id} value={asset.id}>
-                      {asset.name}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-            <Col md={4}>
-              <Form.Group>
-                <Form.Label>To Asset (optional)</Form.Label>
-                <Form.Select
-                  value={newTransaction.to_asset_id}
-                  onChange={(e) =>
-                    setNewTransaction((prev) => ({
-                      ...prev,
-                      to_asset_id: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="">None</option>
-                  {availableAssets.map((asset) => (
-                    <option key={asset.id} value={asset.id}>
-                      {asset.name}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-            <Col xs={12}>
-              <div className="d-flex gap-2">
-                <Button variant="success" onClick={handleAddTransaction}>
                   Add Transaction
-                </Button>
-                <Button
-                  variant="secondary"
+                </button>
+                <button
+                  className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors font-medium"
                   onClick={() => setIsAddingTransaction(false)}
                 >
                   Cancel
-                </Button>
+                </button>
               </div>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Transactions Table */}
-      <div className="table-responsive flex-grow-1">
-        <Table
-          hover
-          size="sm"
-          className="transactions-table align-middle text-nowrap"
-        >
-          <thead>
+      <div className="flex-grow overflow-auto border border-[var(--border-color)] rounded-lg">
+        <table className="w-full text-left border-collapse whitespace-nowrap">
+          <thead
+            className="sticky top-0 z-10"
+            style={{ backgroundColor: "var(--bg-surface-secondary)" }}
+          >
             <tr>
-              <th>Date</th>
-              <th>Description</th>
-              <th>Amount</th>
-              <th>Type</th>
-              <th>From Asset</th>
-              <th>To Asset</th>
-              <th>Actions</th>
+              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+                Date
+              </th>
+              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+                Description
+              </th>
+              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+                Amount
+              </th>
+              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+                Type
+              </th>
+              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+                From Asset
+              </th>
+              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+                To Asset
+              </th>
+              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+                Actions
+              </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-[var(--border-color)]">
             {sortedTransactions.length === 0 ? (
               <tr>
-                <td colSpan={7} className="text-center text-muted">
+                <td colSpan={7} className="p-4 text-center text-gray-500">
                   No transactions found
                 </td>
               </tr>
@@ -308,14 +369,17 @@ export function EditTransactions() {
               sortedTransactions.map((transaction) => {
                 const assetNames = getTransactionAssetNames(transaction);
                 return (
-                  <tr key={transaction.id}>
-                    <td>
+                  <tr
+                    key={transaction.id}
+                    className="hover:bg-[var(--bg-surface-secondary)] transition-colors"
+                  >
+                    <td className="p-3 text-sm text-[var(--text-primary)]">
                       <EditableDate
                         dateId={transaction.date_id}
                         currentDate={getDate(transaction.date_id)}
                       />
                     </td>
-                    <td>
+                    <td className="p-3 text-sm text-[var(--text-primary)]">
                       <EditableText
                         value={transaction.description}
                         modifyValue={(value) =>
@@ -327,7 +391,7 @@ export function EditTransactions() {
                         }
                       />
                     </td>
-                    <td>
+                    <td className="p-3 text-sm text-[var(--text-primary)]">
                       <EditableValue
                         value={transaction.amount}
                         modifyValue={(value) =>
@@ -339,9 +403,8 @@ export function EditTransactions() {
                         }
                       />
                     </td>
-                    <td>
-                      <Form.Select
-                        size="sm"
+                    <td className="p-3 text-sm">
+                      <select
                         value={transaction.type}
                         onChange={(e) =>
                           handleUpdateTransaction(
@@ -350,62 +413,93 @@ export function EditTransactions() {
                             e.target.value as TransactionTypes,
                           )
                         }
-                        style={{ width: "120px" }}
+                        className="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-[var(--brand-primary)] w-[120px]"
+                        style={{
+                          backgroundColor: "var(--bg-surface)",
+                          color: "var(--text-primary)",
+                          borderColor: "var(--border-color)",
+                        }}
                       >
                         <option value="deposit">Deposit</option>
                         <option value="withdrawal">Withdrawal</option>
                         <option value="fee">Fee</option>
                         <option value="reward">Reward</option>
-                      </Form.Select>
+                      </select>
                     </td>
-                    <td>{assetNames.from}</td>
-                    <td>{assetNames.to}</td>
-                    <td>
-                      <Button
-                        variant="outline-danger"
-                        size="sm"
+                    <td className="p-3 text-sm text-[var(--text-primary)]">
+                      {assetNames.from}
+                    </td>
+                    <td className="p-3 text-sm text-[var(--text-primary)]">
+                      {assetNames.to}
+                    </td>
+                    <td className="p-3 text-sm">
+                      <button
+                        className="p-1.5 text-red-500 border border-red-500 rounded hover:bg-red-500 hover:text-white transition-colors"
                         onClick={() => handleDeleteTransaction(transaction)}
                       >
                         <BsTrash />
-                      </Button>
+                      </button>
                     </td>
                   </tr>
                 );
               })
             )}
           </tbody>
-        </Table>
+        </table>
       </div>
 
       {/* Delete Confirmation Modal */}
-      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Delete</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to delete this transaction?
-          {transactionToDelete && (
-            <div className="mt-3 p-3 bg-light rounded">
-              <strong>{transactionToDelete.description}</strong>
-              <br />
-              Amount: {transactionToDelete.amount}
-              <br />
-              Date: {getDate(transactionToDelete.date_id)}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div
+            className="w-full max-w-md rounded-lg shadow-xl overflow-hidden"
+            style={{ backgroundColor: "var(--bg-surface)" }}
+          >
+            <div className="px-6 py-4 border-b border-[var(--border-color)] flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+                Confirm Delete
+              </h3>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="text-gray-400 hover:text-gray-500"
+              >
+                ✕
+              </button>
             </div>
-          )}
-          <div className="alert alert-warning mt-3">
-            <small>This action cannot be undone.</small>
+            <div className="p-6">
+              <p className="text-[var(--text-primary)] mb-4">
+                Are you sure you want to delete this transaction?
+              </p>
+              {transactionToDelete && (
+                <div className="p-3 bg-gray-100 rounded mb-4 text-sm text-gray-800">
+                  <strong>{transactionToDelete.description}</strong>
+                  <br />
+                  Amount: {transactionToDelete.amount}
+                  <br />
+                  Date: {getDate(transactionToDelete.date_id)}
+                </div>
+              )}
+              <div className="p-3 bg-yellow-50 text-yellow-800 rounded text-sm">
+                This action cannot be undone.
+              </div>
+            </div>
+            <div className="px-6 py-4 bg-[var(--bg-surface-secondary)] flex justify-end gap-3">
+              <button
+                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                onClick={confirmDelete}
+              >
+                Delete Transaction
+              </button>
+            </div>
           </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={confirmDelete}>
-            Delete Transaction
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        </div>
+      )}
     </div>
   );
 }

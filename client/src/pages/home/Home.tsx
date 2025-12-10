@@ -1,37 +1,33 @@
-import { Container, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export function Home() {
   const navigate = useNavigate();
 
   return (
-    <Container
-      fluid
-      className="d-flex justify-content-center align-items-center vh-100"
+    <div
+      className="flex justify-center items-center min-h-screen w-full"
       style={{ background: "var(--brand-gradient)" }}
     >
-      <Card
-        className="p-5 shadow-lg text-center rounded-4 border-0"
+      <div
+        className="p-12 shadow-2xl text-center rounded-3xl border-0 max-w-[600px] w-full mx-4"
         style={{
-          maxWidth: "600px",
           backgroundColor: "var(--bg-surface)",
           color: "var(--text-primary)",
         }}
       >
-        <h1 className="fw-bold mb-3">Welcome to MyEmpire</h1>
-        <p className="text-muted mb-4">
+        <h1 className="font-bold mb-4 text-4xl">Welcome to MyEmpire</h1>
+        <p className="text-gray-500 mb-8 text-lg">
           Track, analyze, and predict your portfolio performance with ease.
         </p>
 
-        <Button
-          size="lg"
-          variant="primary"
-          className="px-5 py-3 rounded-pill fw-semibold shadow"
+        <button
+          className="px-8 py-4 rounded-full font-semibold shadow-md text-white transition-transform hover:scale-105 active:scale-95"
+          style={{ background: "var(--brand-gradient)" }}
           onClick={() => navigate("/app")}
         >
           🚀 Enter Your Empire
-        </Button>
-      </Card>
-    </Container>
+        </button>
+      </div>
+    </div>
   );
 }

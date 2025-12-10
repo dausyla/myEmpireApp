@@ -1,6 +1,5 @@
 import { Line } from "react-chartjs-2";
 import { usePortfolio } from "../../../../contexts/WalletContext/WalletContextHook";
-import { Card, Form, InputGroup } from "react-bootstrap";
 import { useState } from "react";
 import {
   getDates,
@@ -86,32 +85,81 @@ export function Graphs() {
   };
 
   return (
-    <Card className="rounded shadow-sm p-2 h-100">
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <InputGroup style={{ width: "17rem", marginBottom: "1rem" }}>
-          <InputGroup.Text>Prediction over</InputGroup.Text>
-          <Form.Control
+    <div
+      className="rounded shadow-sm p-4 h-full flex flex-col"
+      style={{ backgroundColor: "var(--bg-surface)" }}
+    >
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center">
+          <span
+            className="px-3 py-2 border border-r-0 rounded-l-md text-sm"
+            style={{
+              backgroundColor: "var(--bg-surface-secondary)",
+              borderColor: "var(--border-color)",
+              color: "var(--text-primary)",
+            }}
+          >
+            Prediction over
+          </span>
+          <input
             type="number"
             onChange={onYearsChange}
             value={overYears}
+            className="w-20 px-3 py-2 border text-center focus:outline-none focus:ring-1 focus:ring-[var(--brand-primary)]"
+            style={{
+              backgroundColor: "var(--bg-surface)",
+              borderColor: "var(--border-color)",
+              color: "var(--text-primary)",
+            }}
           />
-          <InputGroup.Text>years</InputGroup.Text>
-        </InputGroup>
-        <Form.Check
-          type="switch"
-          label="Detail Prediction"
-          value={detailPrediction ? "on" : "off"}
-          onChange={() => setDetailPrediction(!detailPrediction)}
-        />
+          <span
+            className="px-3 py-2 border border-l-0 rounded-r-md text-sm"
+            style={{
+              backgroundColor: "var(--bg-surface-secondary)",
+              borderColor: "var(--border-color)",
+              color: "var(--text-primary)",
+            }}
+          >
+            years
+          </span>
+        </div>
+
+        <label className="flex items-center cursor-pointer gap-2">
+          <span
+            className="text-sm font-medium"
+            style={{ color: "var(--text-primary)" }}
+          >
+            Detail Prediction
+          </span>
+          <div className="relative inline-block w-10 h-6 align-middle select-none transition duration-200 ease-in">
+            <input
+              type="checkbox"
+              name="toggle"
+              id="toggle"
+              checked={detailPrediction}
+              onChange={() => setDetailPrediction(!detailPrediction)}
+              className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-transform duration-200 ease-in-out"
+              style={{
+                borderColor: detailPrediction ? "var(--brand-primary)" : "#ccc",
+                transform: detailPrediction
+                  ? "translateX(100%)"
+                  : "translateX(0)",
+              }}
+            />
+            <span
+              className="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+              style={{
+                backgroundColor: detailPrediction
+                  ? "var(--brand-primary)"
+                  : "#ccc",
+              }}
+            ></span>
+          </div>
+        </label>
       </div>
-      <div style={{ height: "90%" }}>
+      <div className="flex-1 min-h-0">
         <Line options={graphOptions} data={data} />
       </div>
-    </Card>
+    </div>
   );
 }

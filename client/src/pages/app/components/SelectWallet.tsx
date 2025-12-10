@@ -1,13 +1,4 @@
 // src/pages/PortfolioListPage.tsx
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Alert,
-  Button,
-  Spinner,
-} from "react-bootstrap";
 import { NoWallet } from "./NoWallet";
 import { useWallet } from "../../../contexts/WalletContext/WalletContextHook";
 
@@ -15,62 +6,64 @@ export const SelectWallet = () => {
   const { getWallet, walletList } = useWallet();
 
   return (
-    <Container className="py-5">
-      <h1 className="mb-4 text-center fw-bold">My Portfolios</h1>
+    <div className="container mx-auto py-12 px-4">
+      <h1 className="mb-8 text-center font-bold text-3xl text-[var(--text-primary)]">
+        My Portfolios
+      </h1>
 
       {walletList === null ? (
-        <div className="text-center py-5">
-          <Spinner animation="border" variant="primary" />
+        <div className="text-center py-12">
+          <div className="inline-block w-8 h-8 border-4 border-[var(--brand-primary)] border-r-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <>
-          <Row xs={1} md={2} lg={3} className="g-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {walletList.map((p) => (
-              <Col key={p.id}>
-                <Card
-                  className="h-100 shadow-sm hover-shadow transition"
+              <div key={p.id}>
+                <div
+                  className="h-full shadow-sm hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 rounded-lg border border-[var(--border-color)] flex flex-col"
                   style={{
+                    backgroundColor: "var(--bg-surface)",
                     cursor: "pointer",
-                    transition: "transform 0.2s, box-shadow 0.2s",
                   }}
                   onClick={() => getWallet(p.id)}
                 >
-                  <Card.Body className="d-flex flex-column">
-                    <Card.Title className="text-primary">{p.title}</Card.Title>
+                  <div className="p-5 flex flex-col flex-grow">
+                    <h5 className="text-xl font-medium mb-2 text-[var(--brand-primary)]">
+                      {p.title}
+                    </h5>
                     {p.description ? (
-                      <Card.Text className="text-muted flex-grow-1">
+                      <p className="text-gray-500 flex-grow mb-4">
                         {p.description}
-                      </Card.Text>
+                      </p>
                     ) : (
-                      <Card.Text className="text-muted fst-italic">
+                      <p className="text-gray-400 italic flex-grow mb-4">
                         No description
-                      </Card.Text>
+                      </p>
                     )}
-                    <Button
-                      variant="outline-primary"
-                      size="sm"
-                      className="mt-3 align-self-start"
+                    <button
+                      className="mt-auto self-start px-3 py-1.5 text-sm border border-[var(--brand-primary)] text-[var(--brand-primary)] rounded hover:bg-[var(--brand-primary)] hover:text-white transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
                         getWallet(p.id);
                       }}
                     >
                       Open
-                    </Button>
-                  </Card.Body>
-                </Card>
-              </Col>
+                    </button>
+                  </div>
+                </div>
+              </div>
             ))}
-          </Row>
+          </div>
 
           {walletList.length === 0 && (
-            <Alert variant="info" className="text-center mt-5">
-              <p className="mb-2">No portfolios yet.</p>
+            <div className="text-center mt-12 p-4 bg-blue-50 text-blue-800 rounded-lg border border-blue-100">
+              <p className="mb-4">No portfolios yet.</p>
               <NoWallet />
-            </Alert>
+            </div>
           )}
         </>
       )}
-    </Container>
+    </div>
   );
 };

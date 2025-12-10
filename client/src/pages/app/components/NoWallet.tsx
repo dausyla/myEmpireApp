@@ -1,4 +1,3 @@
-import { Button, Card, Form } from "react-bootstrap";
 import { useState } from "react";
 import { useWallet } from "../../../contexts/WalletContext/WalletContextHook";
 
@@ -19,11 +18,16 @@ export function NoWallet() {
 
   return (
     <>
-      <Card style={{ width: "22rem" }} className="shadow">
-        <Card.Body>
-          <Card.Title>Create a New Portfolio</Card.Title>
-          <Form.Group className="mb-3">
-            <Form.Control
+      <div
+        className="w-[22rem] shadow-lg rounded-lg border border-[var(--border-color)] overflow-hidden mx-auto"
+        style={{ backgroundColor: "var(--bg-surface)" }}
+      >
+        <div className="p-5">
+          <h5 className="text-xl font-medium mb-4 text-[var(--text-primary)]">
+            Create a New Portfolio
+          </h5>
+          <div className="mb-4 space-y-3">
+            <input
               type="text"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
@@ -34,9 +38,15 @@ export function NoWallet() {
                   handleCreate();
                 }
               }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent"
+              style={{
+                backgroundColor: "var(--bg-surface-secondary)",
+                color: "var(--text-primary)",
+                borderColor: "var(--border-color)",
+              }}
             />
 
-            <Form.Control
+            <input
               type="text"
               value={newDesc}
               onChange={(e) => setNewDesc(e.target.value)}
@@ -47,29 +57,38 @@ export function NoWallet() {
                   handleCreate();
                 }
               }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent"
+              style={{
+                backgroundColor: "var(--bg-surface-secondary)",
+                color: "var(--text-primary)",
+                borderColor: "var(--border-color)",
+              }}
             />
 
             {/* Option to choose between empty or example portfolio put on the right */}
-            {/* <Form.Check
-                type="checkbox"
-                reverse
-                label="Use Example Portfolio"
-                className="mt-2"
-                style={{ justifyItems: "right" }}
-                checked={useExample}
-                onChange={() => setUseExample(!useExample)}
-              /> */}
-          </Form.Group>
+            {/* <div className="flex justify-end mt-2">
+                <label className="flex items-center gap-2 text-sm text-[var(--text-primary)]">
+                  Use Example Portfolio
+                  <input
+                    type="checkbox"
+                    checked={useExample}
+                    onChange={() => setUseExample(!useExample)}
+                    className="rounded border-gray-300 text-[var(--brand-primary)] focus:ring-[var(--brand-primary)]"
+                  />
+                </label>
+              </div> */}
+          </div>
 
-          <Button
-            variant="primary"
+          <button
             onClick={handleCreate}
             disabled={!newName.trim()}
+            className="w-full px-4 py-2 bg-[var(--brand-primary)] text-white rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            style={{ background: "var(--brand-gradient)" }}
           >
             Create
-          </Button>
-        </Card.Body>
-      </Card>
+          </button>
+        </div>
+      </div>
     </>
   );
 }

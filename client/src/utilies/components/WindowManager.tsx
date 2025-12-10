@@ -73,8 +73,8 @@ export const useWindowManager = ({
   };
 
   // Calculate boundaries
-  const hierarchyWidth = containerBounds.width * (2 / 12); // Bootstrap md={2}
-  const minX = containerBounds.left + hierarchyWidth + 10; // Add margin
+  const hierarchyWidth = containerBounds.width * (2 / 12);
+  const minX = containerBounds.left + hierarchyWidth + 10;
   const maxX = containerBounds.left + containerBounds.width - 10;
   const maxY = containerBounds.height - 10;
 

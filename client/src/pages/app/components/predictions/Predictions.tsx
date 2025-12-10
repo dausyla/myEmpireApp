@@ -1,10 +1,9 @@
-import {  Container  } from "react-bootstrap";
 import { Graphs } from "./Graph";
 
 export function Predictions() {
   return (
-    <Container fluid className="h-100 p-2">
+    <div className="h-full p-2 w-full">
       <Graphs />
-    </Container>
+    </div>
   );
 }

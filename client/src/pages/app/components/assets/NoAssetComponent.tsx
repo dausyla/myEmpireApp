@@ -1,4 +1,3 @@
-import { Button, Card, Form } from "react-bootstrap";
 import { useState } from "react";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
@@ -29,13 +28,23 @@ export function NoAssetComponent() {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center mt-5">
-      <Card style={{ width: "22rem" }} className="shadow">
-        <Card.Header>No Assets Found</Card.Header>
-        <Card.Body>
-          <Card.Title>Create a New Asset</Card.Title>
-          <Form.Group className="mb-3">
-            <Form.Control
+    <div className="flex justify-center items-center mt-12">
+      <div
+        className="w-[22rem] shadow-lg rounded-lg border border-[var(--border-color)] overflow-hidden"
+        style={{ backgroundColor: "var(--bg-surface)" }}
+      >
+        <div
+          className="px-4 py-3 border-b border-[var(--border-color)] font-medium"
+          style={{ backgroundColor: "var(--bg-surface-secondary)" }}
+        >
+          No Assets Found
+        </div>
+        <div className="p-5">
+          <h5 className="text-xl font-medium mb-4 text-[var(--text-primary)]">
+            Create a New Asset
+          </h5>
+          <div className="mb-4">
+            <input
               type="text"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
@@ -46,18 +55,25 @@ export function NoAssetComponent() {
                   handleCreate();
                 }
               }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent"
+              style={{
+                backgroundColor: "var(--bg-surface-secondary)",
+                color: "var(--text-primary)",
+                borderColor: "var(--border-color)",
+              }}
             />
-          </Form.Group>
+          </div>
 
-          <Button
-            variant="primary"
+          <button
             onClick={handleCreate}
             disabled={!newName.trim()}
+            className="w-full px-4 py-2 bg-[var(--brand-primary)] text-white rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            style={{ background: "var(--brand-gradient)" }}
           >
             Create
-          </Button>
-        </Card.Body>
-      </Card>
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

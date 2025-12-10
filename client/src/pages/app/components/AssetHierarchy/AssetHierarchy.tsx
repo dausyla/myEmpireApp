@@ -1,9 +1,7 @@
-import { Button, Col, ListGroup, Row } from "react-bootstrap";
 import { DirectoryItem } from "./DirectoryItem";
 import { FaFileAlt, FaFolder } from "react-icons/fa";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
-import "./AssetHierarchy.css";
 
 export function AssetHierarchy() {
   const { wallet } = useWallet();
@@ -19,33 +17,45 @@ export function AssetHierarchy() {
   }
 
   return (
-    <div className="hierarchy-container">
-      <div className="hierarchy-header">
-        <Row className="g-2">
-          <Col xs={6}>
-            <Button
-              variant="link"
-              className="hierarchy-btn w-100 justify-content-center"
+    <div
+      className="h-full flex flex-col border-r"
+      style={{
+        backgroundColor: "var(--bg-surface-secondary)",
+        borderColor: "var(--border-color)",
+      }}
+    >
+      <div
+        className="p-2 border-b"
+        style={{
+          backgroundColor: "var(--bg-surface)",
+          borderColor: "var(--border-color)",
+        }}
+      >
+        <div className="grid grid-cols-2 gap-2">
+          <div>
+            <button
+              className="w-full flex items-center justify-center gap-1.5 px-2 py-1 rounded text-sm font-medium transition-colors hover:bg-[var(--bg-surface-secondary)] hover:text-[#e94057]"
+              style={{ color: "var(--text-primary)" }}
               // onClick={() => addNewAsset({})}
             >
               <FaFileAlt /> New Asset
-            </Button>
-          </Col>
-          <Col xs={6}>
-            <Button
-              variant="link"
-              className="hierarchy-btn w-100 justify-content-center"
+            </button>
+          </div>
+          <div>
+            <button
+              className="w-full flex items-center justify-center gap-1.5 px-2 py-1 rounded text-sm font-medium transition-colors hover:bg-[var(--bg-surface-secondary)] hover:text-[#e94057]"
+              style={{ color: "var(--text-primary)" }}
               // onClick={() => addNewDir({})}
             >
               <FaFolder /> New Dir
-            </Button>
-          </Col>
-        </Row>
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="hierarchy-scroll-area">
-        <ListGroup variant="flush" className="p-0">
+      <div className="flex-1 overflow-y-auto py-2">
+        <div className="p-0">
           <DirectoryItem dir={root} />
-        </ListGroup>
+        </div>
       </div>
     </div>
   );
