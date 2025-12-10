@@ -1,6 +1,0 @@
-- Detail Inputs (with descriptions)
-- Is APY cumulative checkbox
-- Inputs => Transactions
-- Performence over a time
-- currency ($/euro)
-- Groups? => Arborescence comme dans vs code
