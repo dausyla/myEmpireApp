@@ -1,5 +1,9 @@
 @import "./theme/variables.css";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: var(--font-family-base);
   line-height: 1.5;

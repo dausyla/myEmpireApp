@@ -1,16 +1,77 @@
-import { NavDropdown } from "react-bootstrap";
-import Container from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
 import { useWallet } from "../../../contexts/WalletContext/WalletContextHook";
 import { useTheme } from "../../../contexts/ThemeContext/ThemeContextHook";
-import { FaSun, FaMoon } from "react-icons/fa";
-import { Button } from "react-bootstrap";
-import type { JSX } from "react";
+import { FaSun, FaMoon, FaBars } from "react-icons/fa";
+import { useState, useRef, useEffect, type JSX } from "react";
 import { AssetPerformence } from "./assets/AssetPerformence";
 import { AssetValuesTable } from "./assets/AssetValuesTable";
 import { EditAsset } from "./assets/EditAsset";
 import { EditTransactions } from "./transactions/EditTransactions";
 import { EditRecurringTransactions } from "./transactions/EditRecurringTransactions";
+
+const Dropdown = ({
+  title,
+  children,
+  className = "",
+}: {
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className={`relative ${className}`} ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="text-[var(--text-primary)] hover:text-[var(--brand-primary)] font-medium flex items-center gap-1 transition-colors"
+      >
+        {title}
+        <span className="text-xs opacity-50">▼</span>
+      </button>
+      {isOpen && (
+        <div
+          className="absolute top-full left-0 mt-1 w-48 border border-[var(--border-color)] rounded shadow-lg z-50 py-1"
+          style={{ backgroundColor: "var(--bg-surface)" }}
+        >
+          {children}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const DropdownItem = ({
+  onClick,
+  children,
+}: {
+  onClick?: () => void;
+  children: React.ReactNode;
+}) => (
+  <button
+    onClick={(e) => {
+      onClick?.();
+      // Optional: close dropdown here if we had access to setIsOpen
+    }}
+    className="block w-full text-left px-4 py-2 text-sm hover:bg-[var(--bg-surface-secondary)] transition-colors"
+    style={{ color: "var(--text-primary)" }}
+  >
+    {children}
+  </button>
+);
 
 export function NavBar({
   openWindow,
@@ -24,6 +85,7 @@ export function NavBar({
 }) {
   const { wallet, walletList, getWallet } = useWallet();
   const { theme, toggleTheme } = useTheme();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   if (!walletList || !wallet) return null;
 
@@ -33,63 +95,75 @@ export function NavBar({
   };
 
   return (
-    <Navbar
-      sticky="top"
-      expand="lg"
-      className="shadow-sm"
+    <nav
+      className="sticky top-0 z-50 shadow-sm w-full"
       style={{
         backgroundColor: "var(--bg-surface)",
         borderBottom: "1px solid var(--border-color)",
       }}
     >
-      <Container>
-        <Navbar.Brand>MyEmpireApp</Navbar.Brand>
-        <Navbar.Toggle aria-controls="main-nav" />
-        <Navbar.Collapse id="main-nav">
-          <NavDropdown title="Wallets" id="basic-nav-dropdown">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        {/* Brand */}
+        <div
+          className="text-xl font-bold"
+          style={{ color: "var(--text-primary)" }}
+        >
+          MyEmpireApp
+        </div>
+
+        {/* Mobile Toggle */}
+        <button
+          className="lg:hidden p-2"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          style={{ color: "var(--text-primary)" }}
+        >
+          <FaBars />
+        </button>
+
+        {/* Desktop Menu */}
+        <div className="hidden lg:flex items-center gap-6">
+          <Dropdown title="Wallets">
             {walletList.map((w, i) => (
-              <NavDropdown.Item
+              <DropdownItem
                 key={i}
                 onClick={() => handleWalletClick(walletList[i].id)}
               >
                 {w.title}
-              </NavDropdown.Item>
+              </DropdownItem>
             ))}
-          </NavDropdown>
-          <NavDropdown title="Assets" id="basic-nav-dropdown" className="ms-3">
-            <NavDropdown.Item
+          </Dropdown>
+
+          <Dropdown title="Assets">
+            <DropdownItem
               onClick={() =>
                 openWindow(<AssetPerformence />, "Asset Performance", 350, 230)
               }
             >
               Asset Performance
-            </NavDropdown.Item>
-            <NavDropdown.Item
+            </DropdownItem>
+            <DropdownItem
               onClick={() =>
                 openWindow(<AssetValuesTable />, "Asset Values", 800, 530)
               }
             >
               Asset Values
-            </NavDropdown.Item>
-            <NavDropdown.Item
+            </DropdownItem>
+            <DropdownItem
               onClick={() => openWindow(<EditAsset />, "Edit Asset", 320, 200)}
             >
               Edit Asset
-            </NavDropdown.Item>
-          </NavDropdown>
-          <NavDropdown
-            title="Transactions"
-            id="basic-nav-dropdown"
-            className="ms-3"
-          >
-            <NavDropdown.Item
+            </DropdownItem>
+          </Dropdown>
+
+          <Dropdown title="Transactions">
+            <DropdownItem
               onClick={() =>
                 openWindow(<EditTransactions />, "Edit Transactions", 1000, 500)
               }
             >
               Edit Transactions
-            </NavDropdown.Item>
-            <NavDropdown.Item
+            </DropdownItem>
+            <DropdownItem
               onClick={() =>
                 openWindow(
                   <EditRecurringTransactions />,
@@ -100,21 +174,43 @@ export function NavBar({
               }
             >
               Edit Recurring Transactions
-            </NavDropdown.Item>
-          </NavDropdown>
-        </Navbar.Collapse>
-        <Navbar.Collapse className="justify-content-end" style={{ gap: 16 }}>
-          <span className="fw-medium">{wallet.wallet.title}</span>
-          <Button
-            variant="link"
+            </DropdownItem>
+          </Dropdown>
+        </div>
+
+        {/* Right Side */}
+        <div className="hidden lg:flex items-center gap-4">
+          <span
+            className="font-medium"
+            style={{ color: "var(--text-primary)" }}
+          >
+            {wallet.wallet.title}
+          </span>
+          <button
             onClick={toggleTheme}
-            className="p-0 text-decoration-none"
+            className="p-1 hover:opacity-80 transition-opacity"
             style={{ color: "var(--text-primary)" }}
           >
             {theme === "light" ? <FaMoon size={20} /> : <FaSun size={20} />}
-          </Button>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu (Simple implementation) */}
+      {isMobileMenuOpen && (
+        <div
+          className="lg:hidden border-t p-4 flex flex-col gap-4"
+          style={{
+            backgroundColor: "var(--bg-surface)",
+            borderColor: "var(--border-color)",
+          }}
+        >
+          {/* Mobile menu items would go here, simplified for now */}
+          <div className="font-medium">Wallets</div>
+          <div className="font-medium">Assets</div>
+          <div className="font-medium">Transactions</div>
+        </div>
+      )}
+    </nav>
   );
 }

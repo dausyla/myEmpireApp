@@ -1,6 +1,3 @@
-// AssetValuesTable.tsx
-import Table from "react-bootstrap/Table";
-import Badge from "react-bootstrap/Badge";
 import { EditableValue } from "../../../../utilies/components/EditableValue";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";
@@ -8,7 +5,6 @@ import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook"
 import { useData } from "../../../../contexts/DataContext/DataContextHook";
 import { AddDateButton } from "../../../../utilies/components/AddDateButton";
 import { EditableDate } from "../../../../utilies/components/EditableDate";
-import "./AssetValuesTable.css";
 
 export function AssetValuesTable() {
   const { wallet } = useWallet();
@@ -61,34 +57,26 @@ export function AssetValuesTable() {
     return (
       <tr
         key={date.id}
-        className={`${hasTransactions ? "table-info" : ""} ${valueEntry ? "fw-semibold" : ""}`}
-        style={{
-          backgroundColor: hasTransactions
-            ? "rgba(13, 110, 253, 0.05)"
-            : undefined,
-          borderLeft: hasTransactions ? "3px solid #0d6efd" : undefined,
-        }}
+        className={`transition-colors border-b border-[var(--border-color)] hover:bg-[var(--bg-surface-secondary)] ${
+          hasTransactions ? "bg-red-500/5 hover:bg-red-500/10" : ""
+        } ${valueEntry ? "font-semibold" : ""}`}
       >
         {/* Date */}
-        <td className="text-center align-middle py-2">
-          <div className="d-flex flex-column align-items-center">
+        <td className="text-center align-middle py-1 px-2 text-xs">
+          <div className="flex flex-col items-center">
             <EditableDate dateId={date.id} currentDate={date.date} />
             {hasTransactions && (
-              <Badge
-                bg="primary"
-                className="mt-1"
-                style={{ fontSize: "0.6em", padding: "2px 4px" }}
-              >
+              <span className="mt-1 inline-flex items-center px-1 py-0.5 rounded text-[0.6em] font-medium bg-blue-100 text-blue-800">
                 Activity
-              </Badge>
+              </span>
             )}
           </div>
         </td>
 
         {/* Value */}
-        <td className="text-end align-middle py-2">
-          <div className="d-flex align-items-center justify-content-end">
-            <span className="me-1 text-muted">$</span>
+        <td className="text-right align-middle py-1 px-2 text-xs">
+          <div className="flex items-center justify-end">
+            <span className="mr-1 text-[var(--text-secondary)]">$</span>
             {valueEntry ? (
               <EditableValue
                 value={currentValue}
@@ -98,7 +86,7 @@ export function AssetValuesTable() {
               />
             ) : (
               <span
-                className="text-muted cursor-pointer user-select-none asset-value-placeholder"
+                className="text-[var(--text-secondary)] cursor-pointer select-none px-1.5 py-px rounded border border-dashed border-[var(--border-color)] hover:bg-red-500/10 hover:border-red-500 hover:text-red-500 transition-colors"
                 onClick={() =>
                   addAssetValue({
                     asset_id: asset.id,
@@ -115,13 +103,13 @@ export function AssetValuesTable() {
         </td>
 
         {/* Gains */}
-        <td className="text-end align-middle py-2">
+        <td className="text-right align-middle py-1 px-2 text-xs">
           <span
-            className={`fw-bold ${gain != null ? (gain > 0 ? "text-success" : gain < 0 ? "text-danger" : "text-muted") : "text-muted"}`}
+            className={`font-bold ${gain != null ? (gain > 0 ? "text-green-500" : gain < 0 ? "text-red-500" : "text-[var(--text-secondary)]") : "text-[var(--text-secondary)]"}`}
           >
             {gain != null ? (
               <>
-                <span className="me-1">{gain >= 0 ? "+" : ""}</span>$
+                <span className="mr-1">{gain >= 0 ? "+" : ""}</span>$
                 {Math.abs(gain).toFixed(2)}
               </>
             ) : (
@@ -131,13 +119,13 @@ export function AssetValuesTable() {
         </td>
 
         {/* Percentage */}
-        <td className="text-end align-middle py-2">
+        <td className="text-right align-middle py-1 px-2 text-xs">
           <span
-            className={`fw-bold ${percentage != null ? (percentage > 0 ? "text-success" : percentage < 0 ? "text-danger" : "text-muted") : "text-muted"}`}
+            className={`font-bold ${percentage != null ? (percentage > 0 ? "text-green-500" : percentage < 0 ? "text-red-500" : "text-[var(--text-secondary)]") : "text-[var(--text-secondary)]"}`}
           >
             {percentage != null ? (
               <>
-                <span className="me-1">{percentage >= 0 ? "+" : ""}</span>
+                <span className="mr-1">{percentage >= 0 ? "+" : ""}</span>
                 {Math.abs(percentage).toFixed(2)}%
               </>
             ) : (
@@ -147,61 +135,51 @@ export function AssetValuesTable() {
         </td>
 
         {/* Transactions */}
-        <td className="text-end align-middle py-2">
-          <div className="d-flex align-items-center justify-content-end">
+        <td className="text-right align-middle py-1 px-2 text-xs">
+          <div className="flex items-center justify-end">
             <span
-              className={`fw-medium ${transactionAmount >= 0 ? "text-success" : "text-danger"}`}
+              className={`font-medium ${transactionAmount >= 0 ? "text-green-500" : "text-red-500"}`}
             >
               {transactionAmount !== 0 ? (
                 <>
-                  <span className="me-1">
+                  <span className="mr-1">
                     {transactionAmount >= 0 ? "+" : ""}
                   </span>
                   ${Math.abs(transactionAmount).toFixed(2)}
                 </>
               ) : (
-                <span className="text-muted">—</span>
+                <span className="text-[var(--text-secondary)]">—</span>
               )}
             </span>
             {dateTransactions.length > 0 && (
-              <Badge
-                bg="light"
-                text="dark"
-                className="ms-2"
-                style={{ fontSize: "0.6em", padding: "1px 3px" }}
-              >
+              <span className="ml-2 inline-flex items-center px-1 py-0.5 rounded text-[0.6em] font-medium bg-gray-100 text-gray-800">
                 {dateTransactions.length}
-              </Badge>
+              </span>
             )}
           </div>
         </td>
 
         {/* Generated */}
-        <td className="text-end align-middle py-2">
-          <div className="d-flex align-items-center justify-content-end">
+        <td className="text-right align-middle py-1 px-2 text-xs">
+          <div className="flex items-center justify-end">
             <span
-              className={`fw-medium ${generatedAmount >= 0 ? "text-success" : "text-warning"}`}
+              className={`font-medium ${generatedAmount >= 0 ? "text-green-500" : "text-yellow-500"}`}
             >
               {generatedAmount !== 0 ? (
                 <>
-                  <span className="me-1">
+                  <span className="mr-1">
                     {generatedAmount >= 0 ? "+" : ""}
                   </span>
                   ${Math.abs(generatedAmount).toFixed(2)}
                 </>
               ) : (
-                <span className="text-muted">—</span>
+                <span className="text-[var(--text-secondary)]">—</span>
               )}
             </span>
             {dateGenerated.length > 0 && (
-              <Badge
-                bg="light"
-                text="dark"
-                className="ms-2"
-                style={{ fontSize: "0.6em", padding: "1px 3px" }}
-              >
+              <span className="ml-2 inline-flex items-center px-1 py-0.5 rounded text-[0.6em] font-medium bg-gray-100 text-gray-800">
                 {dateGenerated.length}
-              </Badge>
+              </span>
             )}
           </div>
         </td>
@@ -210,60 +188,38 @@ export function AssetValuesTable() {
   });
 
   return (
-    <div className="asset-values-table-container">
-      <div className="table-responsive flex-grow-1">
-        <Table
-          hover
-          size="sm"
-          className="asset-values-table align-middle text-nowrap"
-        >
-          <thead>
+    <div className="flex flex-col h-full p-2.5">
+      <div className="overflow-auto flex-grow">
+        <table className="w-full text-xs text-left text-[var(--text-primary)] border-collapse">
+          <thead className="text-xs uppercase bg-[var(--bg-surface-primary)] text-[var(--text-primary)] sticky top-0 z-10">
             <tr>
-              <th
-                className="text-center py-2"
-                style={{ width: "16%", border: "none" }}
-              >
-                <span className="fw-bold ">📅 Date</span>
+              <th className="py-2 px-2 text-center font-bold border-b border-[var(--border-color)] w-[16%]">
+                📅 Date
               </th>
-              <th
-                className="text-center py-2"
-                style={{ width: "17%", border: "none" }}
-              >
-                <span className="fw-bold ">💰 Value</span>
+              <th className="py-2 px-2 text-center font-bold border-b border-[var(--border-color)] w-[17%]">
+                💰 Value
               </th>
-              <th
-                className="text-center py-2"
-                style={{ width: "16%", border: "none" }}
-              >
-                <span className="fw-bold ">📈 Gain</span>
+              <th className="py-2 px-2 text-center font-bold border-b border-[var(--border-color)] w-[16%]">
+                📈 Gain
               </th>
-              <th
-                className="text-center py-2"
-                style={{ width: "17%", border: "none" }}
-              >
-                <span className="fw-bold ">📊 %</span>
+              <th className="py-2 px-2 text-center font-bold border-b border-[var(--border-color)] w-[17%]">
+                📊 %
               </th>
-              <th
-                className="text-center py-2"
-                style={{ width: "17%", border: "none" }}
-              >
-                <span className="fw-bold ">💸 Transactions</span>
+              <th className="py-2 px-2 text-center font-bold border-b border-[var(--border-color)] w-[17%]">
+                💸 Transactions
               </th>
-              <th
-                className="text-center py-2"
-                style={{ width: "17%", border: "none" }}
-              >
-                <span className="fw-bold ">⚡ Generated</span>
+              <th className="py-2 px-2 text-center font-bold border-b border-[var(--border-color)] w-[17%]">
+                ⚡ Generated
               </th>
             </tr>
           </thead>
           <tbody>{rows}</tbody>
-        </Table>
+        </table>
       </div>
 
-      <div className="mt-2 d-flex justify-content-center">
-        <div className="add-date-section">
-          <small className="d-block text-center text-muted mb-2">
+      <div className="mt-2 flex justify-center">
+        <div className="min-w-[200px] border border-dashed border-[var(--border-color)] bg-[var(--bg-surface-secondary)] rounded-md p-2">
+          <small className="block text-center text-[var(--text-secondary)] mb-2 text-[0.7rem]">
             📅 Add New Date
           </small>
           <AddDateButton />

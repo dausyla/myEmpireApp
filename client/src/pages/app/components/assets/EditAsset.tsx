@@ -1,11 +1,7 @@
-// EditAsset.tsx
 import { useState, useEffect } from "react";
-import { Form, InputGroup } from "react-bootstrap";
 import { BsPalette, BsPercent } from "react-icons/bs";
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
-import "./EditAsset.css";
-
 export function EditAsset() {
   const { currentItem } = useApp();
   const { updateAsset } = useBatch();
@@ -32,21 +28,28 @@ export function EditAsset() {
     });
   };
 
+  const inputClass =
+    "w-full bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] rounded text-[0.8rem] px-2 py-1 min-h-[28px] transition-colors focus:border-[#e94057] focus:ring-2 focus:ring-[#e94057]/10 outline-none";
+  const labelClass =
+    "flex items-center gap-1.5 text-xs font-semibold text-[var(--text-secondary)] mb-1";
+
   return (
-    <div className="edit-asset-container">
+    <div className="flex flex-col h-full p-[15px]">
       {/* Header removed as it is now part of the Window component */}
 
       {/* Asset Configuration */}
-      <div className="row g-3 m-0">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 m-0">
         {/* Asset Name */}
-        <div className="col-12">
-          <div className="form-group-modern">
-            <label className="form-label-modern">
-              <span className="label-icon">📝</span>
+        <div className="col-span-1 md:col-span-2">
+          <div className="mb-2">
+            <label className={labelClass}>
+              <span className="text-[0.9rem] text-[var(--text-primary)]">
+                📝
+              </span>
               Asset Name
             </label>
-            <Form.Control
-              className="form-control-modern"
+            <input
+              className={inputClass}
               value={name}
               onChange={(e) => setName(e.target.value)}
               onBlur={handleSaveAsset}
@@ -56,22 +59,22 @@ export function EditAsset() {
         </div>
 
         {/* Color Picker */}
-        <div className="col-md-6">
-          <div className="form-group-modern m-1">
-            <label className="form-label-modern">
-              <BsPalette className="label-icon" />
+        <div className="col-span-1">
+          <div className="mb-2 m-1">
+            <label className={labelClass}>
+              <BsPalette className="text-[0.9rem] text-[var(--text-primary)]" />
               Color Theme
             </label>
-            <div className="d-flex gap-2 align-items-center">
-              <Form.Control
+            <div className="flex gap-2 items-center">
+              <input
                 type="color"
-                className="color-picker"
+                className="w-8 h-7 p-0.5 border border-[var(--border-color)] rounded bg-[var(--bg-surface-secondary)] cursor-pointer"
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
                 onBlur={handleSaveAsset}
               />
-              <Form.Control
-                className="color-input form-control-modern"
+              <input
+                className={`${inputClass} font-mono uppercase flex-1`}
                 value={color.toUpperCase()}
                 onChange={(e) => setColor(e.target.value)}
                 onBlur={handleSaveAsset}
@@ -82,15 +85,15 @@ export function EditAsset() {
         </div>
 
         {/* APY */}
-        <div className="col-md-6">
-          <div className="form-group-modern m-1">
-            <label className="form-label-modern">
-              <BsPercent className="label-icon" />
+        <div className="col-span-1">
+          <div className="mb-2 m-1">
+            <label className={labelClass}>
+              <BsPercent className="text-[0.9rem] text-[var(--text-primary)]" />
               Est. APY
             </label>
-            <InputGroup>
-              <Form.Control
-                className="form-control-modern"
+            <div className="flex">
+              <input
+                className={`${inputClass} rounded-r-none`}
                 type="number"
                 step="0.01"
                 value={apy}
@@ -98,7 +101,8 @@ export function EditAsset() {
                 onBlur={handleSaveAsset}
                 placeholder="0.00"
               />
-            </InputGroup>
+              {/* Removed InputGroup.Text as per previous user edit, but if needed it would be here */}
+            </div>
           </div>
         </div>
       </div>

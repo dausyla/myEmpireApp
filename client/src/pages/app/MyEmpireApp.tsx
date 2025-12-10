@@ -1,4 +1,3 @@
-import { Col, Container, Row } from "react-bootstrap";
 import { useRef } from "react";
 import { NavBar } from "./components/Navbar";
 import { AssetHierarchy } from "./components/AssetHierarchy/AssetHierarchy";
@@ -13,21 +12,20 @@ export function MyEmpireApp() {
     <>
       <NavBar openWindow={openWindow} />
 
-      <Container
+      <div
         ref={containerRef}
-        fluid
-        className="p-0"
-        style={{ height: "90vh", position: "relative" }}
+        className="w-full p-0 relative"
+        style={{ height: "90vh" }}
       >
-        <Row className="h-100 m-0">
-          <Col md={2} className="h-100 p-0">
+        <div className="flex h-full m-0">
+          <div className="w-1/6 h-full p-0 hidden md:block">
             <AssetHierarchy />
-          </Col>
-        </Row>
+          </div>
+        </div>
 
         {/* Render Windows */}
         {windows}
-      </Container>
+      </div>
     </>
   );
 }

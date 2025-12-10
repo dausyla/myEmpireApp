@@ -1,7 +1,5 @@
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 import { useData } from "../../../../contexts/DataContext/DataContextHook";
-import "./AssetPerformence.css";
-
 export function AssetPerformence() {
   const { currentItemId } = useApp();
   const { getAssetPerformance } = useData();
@@ -21,61 +19,64 @@ export function AssetPerformence() {
   const apy = perf ? perf.apy : 0;
 
   return (
-    <div className="asset-performance-container">
+    <div className="flex flex-col h-full p-[5px]">
       {/* Row 1: Detailed Metrics */}
-      <div className="row g-3 p-2 m-0">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-2 m-0">
         {/* Value */}
-        <div className="col-6 col-md-3">
-          <div className="performance-metric text-center">
-            <div className="metric-icon">💰</div>
-            <div className="d-flex flex-column align-items-center">
-              <div className="d-flex align-items-center mb-0">
-                <span className="text-muted me-1" style={{ fontSize: "0.8em" }}>
+        <div className="col-span-1">
+          <div className="text-center">
+            <div className="text-[1.2rem] mb-[2px]">💰</div>
+            <div className="flex flex-col items-center">
+              <div className="flex items-center mb-0">
+                <span className="text-[var(--text-secondary)] mr-1 text-[0.8em]">
                   $
                 </span>
                 <span
-                  className="fw-bold metric-value"
+                  className="font-bold text-[0.9rem]"
                   style={{ color: "#28a745" }}
                 >
                   {totalValue.toLocaleString()}
                 </span>
               </div>
-              <div className="metric-label small text-muted">Value</div>
+              <div className="text-[0.65rem] text-[var(--text-secondary)]">
+                Value
+              </div>
             </div>
           </div>
         </div>
         {/* Time */}
-        <div className="col-6 col-md-3">
-          <div className="performance-metric text-center">
-            <div className="metric-icon">⏱️</div>
-            <div className="d-flex flex-column align-items-center">
+        <div className="col-span-1">
+          <div className="text-center">
+            <div className="text-[1.2rem] mb-[2px]">⏱️</div>
+            <div className="flex flex-col items-center">
               <span
-                className="fw-bold metric-value"
+                className="font-bold text-[0.9rem]"
                 style={{ color: " #61ac73ff" }}
               >
                 {timeSpent.toLocaleString()} days
               </span>
-              <div className="metric-label small text-muted">Time</div>
+              <div className="text-[0.65rem] text-[var(--text-secondary)]">
+                Time
+              </div>
             </div>
           </div>
         </div>
 
         {/* Deposits */}
-        <div className="col-6 col-md-3">
-          <div className="performance-metric text-center">
-            <div className="metric-icon">📥</div>
-            <div className="d-flex flex-column align-items-center">
+        <div className="col-span-1">
+          <div className="text-center">
+            <div className="text-[1.2rem] mb-[2px]">📥</div>
+            <div className="flex flex-col items-center">
               <span
-                className={`fw-medium metric-value ${totalDeposit > 0 ? "text-success" : "text-muted"}`}
+                className={`font-medium text-[0.9rem] ${totalDeposit > 0 ? "text-green-500" : "text-[var(--text-secondary)]"}`}
               >
                 +${totalDeposit.toLocaleString()}
               </span>
-              <div className="metric-label small text-muted">Deposits</div>
+              <div className="text-[0.65rem] text-[var(--text-secondary)]">
+                Deposits
+              </div>
               {totalRewards > 0 && (
-                <small
-                  className="text-success mt-1"
-                  style={{ fontSize: "0.65em" }}
-                >
+                <small className="text-green-500 mt-1 text-[0.65em]">
                   +${totalRewards.toLocaleString()} rewards
                 </small>
               )}
@@ -84,21 +85,20 @@ export function AssetPerformence() {
         </div>
 
         {/* Withdrawals */}
-        <div className="col-6 col-md-3">
-          <div className="performance-metric text-center">
-            <div className="metric-icon">📤</div>
-            <div className="d-flex flex-column align-items-center">
+        <div className="col-span-1">
+          <div className="text-center">
+            <div className="text-[1.2rem] mb-[2px]">📤</div>
+            <div className="flex flex-col items-center">
               <span
-                className={`fw-medium metric-value ${totalWithdrawal > 0 ? "text-danger" : "text-muted"}`}
+                className={`font-medium text-[0.9rem] ${totalWithdrawal > 0 ? "text-red-500" : "text-[var(--text-secondary)]"}`}
               >
                 -${totalWithdrawal.toLocaleString()}
               </span>
-              <div className="metric-label small text-muted">Withdrawals</div>
+              <div className="text-[0.65rem] text-[var(--text-secondary)]">
+                Withdrawals
+              </div>
               {totalFees > 0 && (
-                <small
-                  className="text-warning mt-1"
-                  style={{ fontSize: "0.65em" }}
-                >
+                <small className="text-yellow-500 mt-1 text-[0.65em]">
                   -${totalFees.toLocaleString()} fees
                 </small>
               )}
@@ -108,59 +108,66 @@ export function AssetPerformence() {
       </div>
 
       {/* Divider */}
-      <hr className="my-1 mx-4 opacity-10" />
+      <hr className="my-1 mx-4 opacity-10 border-[var(--border-color)]" />
 
       {/* Row 2: Performance Summary */}
-
-      {/* Total Growth */}
-      <div className="row g-3 m-0 p-2">
-        <div className="col-6 col-md-3">
-          <div className="performance-metric text-center">
-            <div className="metric-icon">📈</div>
-            <div className="metric-value text-success fw-bold">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 m-0 p-2">
+        {/* Total Growth */}
+        <div className="col-span-1">
+          <div className="text-center">
+            <div className="text-[1.2rem] mb-[2px]">📈</div>
+            <div className="text-green-500 font-bold text-[0.9rem]">
               {totalGrowth.toFixed(2)}%
             </div>
-            <div className="metric-label small text-muted">Total Growth</div>
+            <div className="text-[0.65rem] text-[var(--text-secondary)]">
+              Total Growth
+            </div>
           </div>
         </div>
         {/* Interests */}
-        <div className="col-6 col-md-3">
-          <div className="performance-metric text-center">
-            <div className="metric-icon">💎</div>
-            <div className="metric-value text-primary fw-bold">
+        <div className="col-span-1">
+          <div className="text-center">
+            <div className="text-[1.2rem] mb-[2px]">💎</div>
+            <div className="text-blue-500 font-bold text-[0.9rem]">
               ${totalInterests.toLocaleString()}
             </div>
-            <div className="metric-label small text-muted">Total Interests</div>
+            <div className="text-[0.65rem] text-[var(--text-secondary)]">
+              Total Interests
+            </div>
           </div>
         </div>
         {/* APY */}
-        <div className="col-12 col-md-3">
-          <div className="performance-metric text-center">
-            <div className="metric-icon">🚀</div>
-            <div className="metric-value text-info fw-bold">
+        <div className="col-span-2 md:col-span-1">
+          <div className="text-center">
+            <div className="text-[1.2rem] mb-[2px]">🚀</div>
+            <div className="text-cyan-500 font-bold text-[0.9rem]">
               {apy.toFixed(2)}%
             </div>
-            <div className="metric-label small text-muted">Annual Yield</div>
+            <div className="text-[0.65rem] text-[var(--text-secondary)]">
+              Annual Yield
+            </div>
           </div>
         </div>
         {/* Net Flow */}
-        <div className="col-6 col-md-3">
-          <div className="performance-metric text-center">
-            <div className="metric-icon">⚡</div>
-            <div className="d-flex flex-column align-items-center">
+        <div className="col-span-1">
+          <div className="text-center">
+            <div className="text-[1.2rem] mb-[2px]">⚡</div>
+            <div className="flex flex-col items-center">
               <span
-                className={`fw-bold metric-value ${
+                className={`font-bold text-[0.9rem] ${
                   totalDeposit - totalWithdrawal > 0
-                    ? "text-success"
+                    ? "text-green-500"
                     : totalDeposit - totalWithdrawal < 0
-                      ? "text-danger"
-                      : "text-muted"
+                      ? "text-red-500"
+                      : "text-[var(--text-secondary)]"
                 }`}
               >
                 {totalDeposit - totalWithdrawal >= 0 ? "+" : ""}$
                 {(totalDeposit - totalWithdrawal).toLocaleString()}
               </span>
-              <div className="metric-label small text-muted">Net Flow</div>
+              <div className="text-[0.65rem] text-[var(--text-secondary)]">
+                Net Flow
+              </div>
             </div>
           </div>
         </div>

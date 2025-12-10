@@ -53,7 +53,6 @@ export const Window: React.FC<WindowProps> = ({
 
       if (type === "drag") {
         setIsDragging(true);
-        // Calculate offset from the current mouse position to the window's current position
         setDragOffset({
           x: e.clientX - position.x,
           y: e.clientY - position.y,
@@ -72,7 +71,6 @@ export const Window: React.FC<WindowProps> = ({
         let newX = e.clientX - dragOffset.x;
         let newY = e.clientY - dragOffset.y;
 
-        // Apply boundary constraints
         newX = Math.max(
           minX,
           Math.min(newX, (maxX || window.innerWidth) - size.width),
@@ -165,15 +163,10 @@ export const Window: React.FC<WindowProps> = ({
     }
   }, [isDragging, isResizing, handleMouseMove, handleMouseUp]);
 
-  // Debug
-  // React.useEffect(() => {
-  //   console.log(size);
-  // }, [size]);
-
   return (
     <div
       ref={windowRef}
-      className="window"
+      className={`absolute flex flex-col bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-lg shadow-lg overflow-hidden select-none ${isDragging || isResizing ? "select-none" : ""}`}
       style={{
         left: position.x,
         top: position.y,
@@ -184,51 +177,58 @@ export const Window: React.FC<WindowProps> = ({
     >
       {/* Title Bar */}
       <div
-        className="window-title-bar"
+        className="bg-[var(--brand-gradient)] text-white flex items-center justify-between p-1 cursor-move border-b border-white/10"
         onMouseDown={(e) => handleMouseDown(e, "drag")}
       >
-        <div className="window-title">{title}</div>
-        <button className="window-close-btn" onClick={onClose}>
+        <div className="text-base font-semibold flex-1 whitespace-nowrap overflow-hidden text-ellipsis drop-shadow-sm px-2">
+          {title}
+        </div>
+        <button
+          className="bg-white/20 border-none text-white cursor-pointer p-1.5 rounded-full flex items-center justify-center transition-colors w-7 h-7 hover:bg-white/40 hover:text-white hover:rotate-90"
+          onClick={onClose}
+        >
           <IoClose />
         </button>
       </div>
 
       {/* Content */}
-      <div className="window-content">{children}</div>
+      <div className="flex-1 overflow-auto bg-[var(--bg-surface)] text-[var(--text-primary)]">
+        {children}
+      </div>
 
       {/* Resize Handles */}
       <div
-        className="resize-handle resize-handle-nw"
+        className="absolute top-0 left-0 w-2 h-2 cursor-nw-resize bg-transparent hover:bg-blue-500/10"
         onMouseDown={(e) => handleMouseDown(e, "resize", "top-left")}
       />
       <div
-        className="resize-handle resize-handle-ne"
+        className="absolute top-0 right-0 w-2 h-2 cursor-ne-resize bg-transparent hover:bg-blue-500/10"
         onMouseDown={(e) => handleMouseDown(e, "resize", "top-right")}
       />
       <div
-        className="resize-handle resize-handle-sw"
+        className="absolute bottom-0 left-0 w-2 h-2 cursor-sw-resize bg-transparent hover:bg-blue-500/10"
         onMouseDown={(e) => handleMouseDown(e, "resize", "bottom-left")}
       />
       <div
-        className="resize-handle resize-handle-se"
+        className="absolute bottom-0 right-0 w-2 h-2 cursor-se-resize bg-transparent hover:bg-blue-500/10"
         onMouseDown={(e) => handleMouseDown(e, "resize", "bottom-right")}
       />
 
       {/* Edge resize handles */}
       <div
-        className="resize-handle resize-handle-n"
+        className="absolute top-0 left-2 right-2 h-1 cursor-n-resize bg-transparent hover:bg-blue-500/10"
         onMouseDown={(e) => handleMouseDown(e, "resize", "top")}
       />
       <div
-        className="resize-handle resize-handle-s"
+        className="absolute bottom-0 left-2 right-2 h-1 cursor-s-resize bg-transparent hover:bg-blue-500/10"
         onMouseDown={(e) => handleMouseDown(e, "resize", "bottom")}
       />
       <div
-        className="resize-handle resize-handle-w"
+        className="absolute top-2 bottom-2 left-0 w-1 cursor-w-resize bg-transparent hover:bg-blue-500/10"
         onMouseDown={(e) => handleMouseDown(e, "resize", "left")}
       />
       <div
-        className="resize-handle resize-handle-e"
+        className="absolute top-2 bottom-2 right-0 w-1 cursor-e-resize bg-transparent hover:bg-blue-500/10"
         onMouseDown={(e) => handleMouseDown(e, "resize", "right")}
       />
     </div>

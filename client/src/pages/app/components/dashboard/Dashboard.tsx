@@ -1,4 +1,3 @@
-import { Container, Row, Col, Card } from "react-bootstrap";
 import { KPIs } from "./KPIs";
 import { AssetRepartition } from "./AssetRepartition";
 import { PortfolioGrowth } from "./PortfolioGrowth";
@@ -6,49 +5,37 @@ import { InterestsRepartition } from "./InterestsRepartition";
 
 export function Dashboard() {
   return (
-    <Container fluid className="h-100 p-2">
-      <Row className="h-100 m-0">
-        <Col md={8}>
-          <div
-            style={{
-              flexDirection: "column",
-              display: "flex",
-              height: "100%",
-            }}
-          >
-            <Card className="shadow-sm mb-3">
-              <Card.Body>
+    <div className="h-full p-2 w-full">
+      <div className="flex flex-col md:flex-row h-full m-0 gap-3">
+        <div className="w-full md:w-2/3 h-full">
+          <div className="flex flex-col h-full gap-3">
+            <div className="bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-lg shadow-sm">
+              <div className="p-4">
                 <KPIs />
-              </Card.Body>
-            </Card>
-            <Card className="shadow-sm mb-3" style={{ flex: 1 }}>
-              <Card.Body>
+              </div>
+            </div>
+            <div className="bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-lg shadow-sm flex-1">
+              <div className="p-4 h-full">
                 <PortfolioGrowth />
-              </Card.Body>
-            </Card>
+              </div>
+            </div>
           </div>
-        </Col>
-        <Col md={4}>
-          <div
-            style={{
-              flexDirection: "column",
-              display: "flex",
-              height: "100%",
-            }}
-          >
-            <Card className="shadow-sm mb-3" style={{ flex: 1 }}>
-              <Card.Body>
+        </div>
+        <div className="w-full md:w-1/3 h-full">
+          <div className="flex flex-col h-full gap-3">
+            <div className="bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-lg shadow-sm flex-1">
+              <div className="p-4 h-full">
                 <AssetRepartition />
-              </Card.Body>
-            </Card>
-            <Card className="shadow-sm mb-3" style={{ flex: 1 }}>
-              <Card.Body>
+              </div>
+            </div>
+            <div className="bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-lg shadow-sm flex-1">
+              <div className="p-4 h-full">
                 <InterestsRepartition />
-              </Card.Body>
-            </Card>
+              </div>
+            </div>
           </div>
-        </Col>
-      </Row>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 }
