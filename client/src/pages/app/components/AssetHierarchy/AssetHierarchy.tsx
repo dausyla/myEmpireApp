@@ -24,7 +24,7 @@ export function AssetHierarchy() {
         borderColor: "var(--border-color)",
       }}
     >
-      <div className="p-2 border-b card rounded-none border-x-0 border-t-0 shadow-none">
+      <div className="p-1 border-b card rounded-none border-x-0 border-t-0 shadow-none">
         <div className="grid grid-cols-2 gap-2">
           <div>
             <button

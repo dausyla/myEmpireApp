@@ -52,6 +52,26 @@
   .input {
     @apply bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-xs px-1.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e94057]/20 focus:border-[#e94057] transition-all;
   }
+
+  .dropdown {
+    @apply hover:bg-[var(--bg-surface-secondary)] relative px-2 py-2 rounded-sm;
+  }
+
+  .dropdown-trigger {
+    @apply flex items-center gap-1 font-medium transition-colors cursor-pointer text-[var(--text-primary)] hover:text-[var(--brand-primary)];
+  }
+
+  .dropdown-menu {
+    @apply absolute top-full left-0 mt-1 w-48 py-1 rounded-md shadow-lg z-50 border border-[var(--border-color)] bg-[var(--bg-surface)];
+  }
+
+  .dropdown-item {
+    @apply block w-full text-left px-4 py-2 text-sm transition-colors text-[var(--text-primary)] hover:bg-[var(--bg-surface-secondary)] cursor-pointer;
+  }
+
+  .dropdown-item.active {
+    @apply bg-[var(--brand-primary)] text-white;
+  }
 }
 
 :root {

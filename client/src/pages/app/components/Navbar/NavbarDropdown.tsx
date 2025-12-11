@@ -26,22 +26,12 @@ export const NavbarDropdown = ({
   }, []);
 
   return (
-    <div className={`relative ${className}`} ref={dropdownRef}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="text-[var(--text-primary)] hover:text-[var(--brand-primary)] font-medium flex items-center gap-1 transition-colors"
-      >
+    <div className={`dropdown ${className}`} ref={dropdownRef}>
+      <button onClick={() => setIsOpen(!isOpen)} className="dropdown-trigger">
         {title}
         <span className="text-xs opacity-50">▼</span>
       </button>
-      {isOpen && (
-        <div
-          className="absolute top-full left-0 mt-1 w-48 border border-[var(--border-color)] rounded shadow-lg z-50 py-1"
-          style={{ backgroundColor: "var(--bg-surface)" }}
-        >
-          {children}
-        </div>
-      )}
+      {isOpen && <div className="dropdown-menu">{children}</div>}
     </div>
   );
 };
@@ -59,12 +49,7 @@ export const NavbarDropdownItem = ({
     onClick={() => {
       onClick?.();
     }}
-    className={`block w-full text-left px-4 py-2 text-sm transition-colors ${
-      active
-        ? "bg-[var(--brand-primary)] text-white"
-        : "hover:bg-[var(--bg-surface-secondary)]"
-    }`}
-    style={active ? {} : { color: "var(--text-primary)" }}
+    className={`dropdown-item ${active ? "active" : ""}`}
   >
     {children}
   </button>
