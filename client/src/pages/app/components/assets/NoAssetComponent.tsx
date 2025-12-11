@@ -29,10 +29,7 @@ export function NoAssetComponent() {
 
   return (
     <div className="flex justify-center items-center mt-12">
-      <div
-        className="w-[22rem] shadow-lg rounded-lg border border-[var(--border-color)] overflow-hidden"
-        style={{ backgroundColor: "var(--bg-surface)" }}
-      >
+      <div className="w-[22rem] card overflow-hidden">
         <div
           className="px-4 py-3 border-b border-[var(--border-color)] font-medium"
           style={{ backgroundColor: "var(--bg-surface-secondary)" }}
@@ -55,20 +52,14 @@ export function NoAssetComponent() {
                   handleCreate();
                 }
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent"
-              style={{
-                backgroundColor: "var(--bg-surface-secondary)",
-                color: "var(--text-primary)",
-                borderColor: "var(--border-color)",
-              }}
+              className="w-full input"
             />
           </div>
 
           <button
             onClick={handleCreate}
             disabled={!newName.trim()}
-            className="w-full px-4 py-2 bg-[var(--brand-primary)] text-white rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-            style={{ background: "var(--brand-gradient)" }}
+            className="w-full btn btn-primary py-2 rounded font-medium"
           >
             Create
           </button>

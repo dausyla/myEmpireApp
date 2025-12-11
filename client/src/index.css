@@ -3,28 +3,46 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-1.5 px-2 py-1 rounded-sm text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-1.5 px-1.5 py-1.5 rounded-xs text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-ghost {
     @apply bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-surface-secondary)] hover:text-[var(--text-primary)];
   }
 
-  .btn-primary {
+  .btn-primary-full {
     @apply text-white border-none;
     background: var(--brand-gradient);
   }
-  .btn-primary:hover {
+  .btn-primary-full:hover {
     background: var(--brand-gradient-hover);
     box-shadow: 0 4px 12px rgba(233, 64, 87, 0.25);
   }
 
-  .btn-danger {
-    @apply text-[#dc3545] hover:bg-red-500/10;
+  .btn-primary {
+    @apply text-[#e94057];
+  }
+  .btn-primary:hover {
+    @apply text-white;
+    background: var(--brand-gradient);
   }
 
+  /* Hover should be white on red color */
+  .btn-danger {
+    @apply text-[#dc3545] hover:bg-[#ff0000] hover:text-white;
+  }
+
+  /* Hover should be white on green color */
   .btn-success {
-    @apply text-[#28a745] hover:bg-green-500/10;
+    @apply text-[#28a745] hover:bg-[#28a745] hover:text-white;
+  }
+
+  .btn-small {
+    @apply text-xs px-1 py-1;
+  }
+
+  .btn-round {
+    @apply rounded-full;
   }
 
   .card {
@@ -32,7 +50,7 @@
   }
 
   .input {
-    @apply bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e94057]/20 focus:border-[#e94057] transition-all;
+    @apply bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-xs px-1.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e94057]/20 focus:border-[#e94057] transition-all;
   }
 }
 

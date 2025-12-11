@@ -70,7 +70,7 @@ export function NavBar({
           </span>
           <button
             onClick={toggleTheme}
-            className="p-1 btn btn-ghost hover:opacity-80 transition-opacity"
+            className="p-1 btn btn-ghost btn-round hover:opacity-80 transition-opacity"
             style={{ color: "var(--text-primary)" }}
           >
             {theme === "light" ? <FaMoon size={20} /> : <FaSun size={20} />}

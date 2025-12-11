@@ -184,7 +184,7 @@ export const Window: React.FC<WindowProps> = ({
           {title}
         </div>
         <button
-          className="bg-white/20 border-none text-white cursor-pointer p-1.5 rounded-full flex items-center justify-center transition-colors w-7 h-7 hover:bg-white/40 hover:text-white hover:rotate-90"
+          className="btn btn-danger btn-small btn-round"
           onClick={onClose}
         >
           <IoClose />

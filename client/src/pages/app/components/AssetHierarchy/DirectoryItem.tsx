@@ -82,24 +82,24 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
           </div>
 
           {/* Action buttons (visible on hover) */}
-          <div className="flex gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          <div className="flex opacity-0 transition-opacity duration-200 group-hover:opacity-100">
             <button
               title="Ajouter un dossier"
-              className="p-1 rounded bg-transparent border-0 text-[var(--text-secondary)] flex items-center justify-center text-xs transition-colors hover:bg-[var(--bg-surface)] hover:text-[#28a745]"
+              className="btn btn-primary btn-small"
               onClick={handleAddDir}
             >
               <FaFolder />
             </button>
             <button
               title="Ajouter un fichier"
-              className="p-1 rounded bg-transparent border-0 text-[var(--text-secondary)] flex items-center justify-center text-xs transition-colors hover:bg-[var(--bg-surface)] hover:text-[#0d6efd]"
+              className="btn btn-success btn-small"
               onClick={handleAddAsset}
             >
               <FaFileAlt />
             </button>
             <button
               title="Supprimer le dossier"
-              className="p-1 rounded bg-transparent border-0 text-[var(--text-secondary)] flex items-center justify-center text-xs transition-colors hover:bg-[var(--bg-surface)] hover:text-[#dc3545]"
+              className="btn btn-danger btn-small"
               onClick={handleDelete}
             >
               <FaTrash />

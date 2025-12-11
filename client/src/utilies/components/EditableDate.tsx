@@ -63,10 +63,9 @@ export function EditableDate({
         <div className="editable-view" onClick={() => setIsEditing(true)}>
           <span className="fw-medium">{currentDate.replace(/-/g, "/")}</span>
           <button
-            className="utility-btn danger ms-2"
+            className="btn btn-danger ms-2"
             onClick={remove}
             title="Delete Date"
-            style={{ opacity: 0.5 }}
           >
             <BsTrash style={{ fontSize: "0.8em" }} />
           </button>

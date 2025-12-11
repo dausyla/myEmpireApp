@@ -137,8 +137,7 @@ export function EditTransactions() {
           Edit Transactions
         </h5>
         <button
-          className="px-3 py-1.5 bg-[var(--brand-primary)] text-white rounded text-sm font-medium flex items-center hover:opacity-90 transition-opacity"
-          style={{ background: "var(--brand-gradient)" }}
+          className="btn btn-primary-full"
           onClick={() => setIsAddingTransaction(!isAddingTransaction)}
         >
           <BsPlus className="mr-1 text-lg" />
@@ -148,10 +147,7 @@ export function EditTransactions() {
 
       {/* Add Transaction Form */}
       {isAddingTransaction && (
-        <div
-          className="mb-4 p-4 rounded-lg border border-[var(--border-color)]"
-          style={{ backgroundColor: "var(--bg-surface-secondary)" }}
-        >
+        <div className="mb-4 p-4 card">
           <h6 className="mb-3 font-medium text-[var(--text-primary)]">
             Add New Transaction
           </h6>
@@ -170,12 +166,7 @@ export function EditTransactions() {
                   }))
                 }
                 placeholder="Transaction description"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
-                style={{
-                  backgroundColor: "var(--bg-surface)",
-                  color: "var(--text-primary)",
-                  borderColor: "var(--border-color)",
-                }}
+                className="w-full input"
               />
             </div>
             <div className="md:col-span-3">
@@ -193,12 +184,7 @@ export function EditTransactions() {
                   }))
                 }
                 placeholder="0.00"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
-                style={{
-                  backgroundColor: "var(--bg-surface)",
-                  color: "var(--text-primary)",
-                  borderColor: "var(--border-color)",
-                }}
+                className="w-full input"
               />
             </div>
             <div className="md:col-span-3">
@@ -213,12 +199,7 @@ export function EditTransactions() {
                     type: e.target.value as TransactionTypes,
                   }))
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
-                style={{
-                  backgroundColor: "var(--bg-surface)",
-                  color: "var(--text-primary)",
-                  borderColor: "var(--border-color)",
-                }}
+                className="w-full input"
               >
                 <option value="deposit">Deposit</option>
                 <option value="withdrawal">Withdrawal</option>
@@ -238,12 +219,7 @@ export function EditTransactions() {
                     date_id: e.target.value,
                   }))
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
-                style={{
-                  backgroundColor: "var(--bg-surface)",
-                  color: "var(--text-primary)",
-                  borderColor: "var(--border-color)",
-                }}
+                className="w-full input"
               >
                 <option value="">Select date</option>
                 {availableDates.map((date) => (
@@ -265,12 +241,7 @@ export function EditTransactions() {
                     from_asset_id: e.target.value,
                   }))
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
-                style={{
-                  backgroundColor: "var(--bg-surface)",
-                  color: "var(--text-primary)",
-                  borderColor: "var(--border-color)",
-                }}
+                className="w-full input"
               >
                 <option value="">None</option>
                 {availableAssets.map((asset) => (
@@ -292,12 +263,7 @@ export function EditTransactions() {
                     to_asset_id: e.target.value,
                   }))
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
-                style={{
-                  backgroundColor: "var(--bg-surface)",
-                  color: "var(--text-primary)",
-                  borderColor: "var(--border-color)",
-                }}
+                className="w-full input"
               >
                 <option value="">None</option>
                 {availableAssets.map((asset) => (
@@ -310,13 +276,13 @@ export function EditTransactions() {
             <div className="col-span-12">
               <div className="flex gap-2">
                 <button
-                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-medium"
+                  className="btn btn-success"
                   onClick={handleAddTransaction}
                 >
                   Add Transaction
                 </button>
                 <button
-                  className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors font-medium"
+                  className="btn btn-ghost border border-[var(--border-color)]"
                   onClick={() => setIsAddingTransaction(false)}
                 >
                   Cancel
@@ -413,12 +379,7 @@ export function EditTransactions() {
                             e.target.value as TransactionTypes,
                           )
                         }
-                        className="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-[var(--brand-primary)] w-[120px]"
-                        style={{
-                          backgroundColor: "var(--bg-surface)",
-                          color: "var(--text-primary)",
-                          borderColor: "var(--border-color)",
-                        }}
+                        className="input w-[120px] py-1"
                       >
                         <option value="deposit">Deposit</option>
                         <option value="withdrawal">Withdrawal</option>
@@ -434,7 +395,7 @@ export function EditTransactions() {
                     </td>
                     <td className="p-3 text-sm">
                       <button
-                        className="p-1.5 text-red-500 border border-red-500 rounded hover:bg-red-500 hover:text-white transition-colors"
+                        className="btn btn-danger btn-small border border-red-500"
                         onClick={() => handleDeleteTransaction(transaction)}
                       >
                         <BsTrash />
@@ -451,10 +412,7 @@ export function EditTransactions() {
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-          <div
-            className="w-full max-w-md rounded-lg shadow-xl overflow-hidden"
-            style={{ backgroundColor: "var(--bg-surface)" }}
-          >
+          <div className="w-full max-w-md card overflow-hidden">
             <div className="px-6 py-4 border-b border-[var(--border-color)] flex justify-between items-center">
               <h3 className="text-lg font-semibold text-[var(--text-primary)]">
                 Confirm Delete
@@ -485,15 +443,12 @@ export function EditTransactions() {
             </div>
             <div className="px-6 py-4 bg-[var(--bg-surface-secondary)] flex justify-end gap-3">
               <button
-                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+                className="btn btn-ghost border border-[var(--border-color)]"
                 onClick={() => setShowDeleteModal(false)}
               >
                 Cancel
               </button>
-              <button
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-                onClick={confirmDelete}
-              >
+              <button className="btn btn-danger" onClick={confirmDelete}>
                 Delete Transaction
               </button>
             </div>
