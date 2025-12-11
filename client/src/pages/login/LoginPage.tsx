@@ -129,8 +129,7 @@ export const LoginPage = () => {
               <div className="flex flex-col gap-3">
                 <button
                   type="submit"
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white transition-transform hover:scale-[1.02] active:scale-[0.98]"
-                  style={{ background: "var(--brand-gradient)" }}
+                  className="w-full btn btn-primary py-3 px-4 rounded-full shadow-sm text-sm font-semibold transition-transform hover:scale-[1.02] active:scale-[0.98]"
                 >
                   {isSigningUp ? "S'inscrire" : "Se connecter"}
                 </button>
@@ -138,11 +137,9 @@ export const LoginPage = () => {
                 <button
                   type="button"
                   onClick={handleGoogle}
-                  className="w-full flex justify-center items-center gap-2 py-3 px-4 border rounded-full shadow-sm text-sm font-semibold transition-colors hover:bg-gray-50"
+                  className="w-full btn btn-ghost border border-[var(--border-color)] rounded-full shadow-sm text-sm font-semibold transition-colors hover:bg-gray-50"
                   style={{
-                    borderColor: "var(--border-color)",
                     color: "var(--text-primary)",
-                    backgroundColor: "transparent",
                   }}
                 >
                   <svg

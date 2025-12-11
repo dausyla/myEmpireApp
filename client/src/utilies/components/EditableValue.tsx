@@ -61,10 +61,10 @@ export function EditableValue({
             onKeyDown={handleKeyDown}
             autoFocus
           />
-          <button className="utility-btn success" onClick={saveValue}>
+          <button className="btn btn-success" onClick={saveValue}>
             <BsCheck />
           </button>
-          <button className="utility-btn danger" onClick={cancel}>
+          <button className="btn btn-danger" onClick={cancel}>
             <BsX />
           </button>
         </div>

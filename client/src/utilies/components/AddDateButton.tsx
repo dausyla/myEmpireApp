@@ -34,19 +34,19 @@ export function AddDateButton() {
             autoFocus
           />
           <button
-            className="utility-btn success"
+            className="btn btn-success"
             onClick={addDateButton}
             disabled={!isValid}
           >
             <BsCheck />
           </button>
-          <button className="utility-btn danger" onClick={() => setNewDate("")}>
+          <button className="btn btn-danger" onClick={() => setNewDate("")}>
             <BsX />
           </button>
         </div>
       ) : (
         <button
-          className="add-date-btn"
+          className="w-full btn btn-ghost border border-dashed border-[var(--border-color)] hover:border-[#e94057]"
           onClick={() => {
             const today = new Date().toISOString().split("T")[0];
             setNewDate(today);

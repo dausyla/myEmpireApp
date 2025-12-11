@@ -24,18 +24,11 @@ export function AssetHierarchy() {
         borderColor: "var(--border-color)",
       }}
     >
-      <div
-        className="p-2 border-b"
-        style={{
-          backgroundColor: "var(--bg-surface)",
-          borderColor: "var(--border-color)",
-        }}
-      >
+      <div className="p-2 border-b card rounded-none border-x-0 border-t-0 shadow-none">
         <div className="grid grid-cols-2 gap-2">
           <div>
             <button
-              className="w-full flex items-center justify-center gap-1.5 px-2 py-1 rounded text-sm font-medium transition-colors hover:bg-[var(--bg-surface-secondary)] hover:text-[#e94057]"
-              style={{ color: "var(--text-primary)" }}
+              className="w-full btn btn-ghost hover:text-[#e94057]"
               // onClick={() => addNewAsset({})}
             >
               <FaFileAlt /> New Asset
@@ -43,8 +36,7 @@ export function AssetHierarchy() {
           </div>
           <div>
             <button
-              className="w-full flex items-center justify-center gap-1.5 px-2 py-1 rounded text-sm font-medium transition-colors hover:bg-[var(--bg-surface-secondary)] hover:text-[#e94057]"
-              style={{ color: "var(--text-primary)" }}
+              className="w-full btn btn-ghost hover:text-[#e94057]"
               // onClick={() => addNewDir({})}
             >
               <FaFolder /> New Dir
