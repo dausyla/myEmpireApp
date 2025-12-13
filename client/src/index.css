@@ -62,7 +62,7 @@
   }
 
   .dropdown-menu {
-    @apply absolute top-full left-0 mt-1 w-48 py-1 rounded-md shadow-lg z-50 border border-[var(--border-color)] bg-[var(--bg-surface)];
+    @apply absolute top-full left-0 mt-1 w-48 py-1 rounded-md shadow-lg z-[9999] border border-[var(--border-color)] bg-[var(--bg-surface)];
   }
 
   .dropdown-item {

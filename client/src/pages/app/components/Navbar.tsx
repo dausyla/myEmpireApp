@@ -28,7 +28,7 @@ export function NavBar({
 
   return (
     <nav
-      className="sticky top-0 z-50 shadow-sm w-full"
+      className="sticky top-0 z-[2000] shadow-sm w-full"
       style={{
         backgroundColor: "var(--bg-surface)",
         borderBottom: "1px solid var(--border-color)",

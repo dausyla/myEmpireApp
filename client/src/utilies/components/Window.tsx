@@ -15,6 +15,7 @@ export interface WindowProps {
   maxX?: number;
   maxY?: number;
   onClose: () => void;
+  onFocus?: () => void;
   children: React.ReactNode;
   zIndex?: number;
 }
@@ -32,6 +33,7 @@ export const Window: React.FC<WindowProps> = ({
   maxX,
   maxY,
   onClose,
+  onFocus,
   children,
   zIndex = 1000,
 }) => {
@@ -167,6 +169,10 @@ export const Window: React.FC<WindowProps> = ({
     <div
       ref={windowRef}
       className={`absolute flex flex-col bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-lg shadow-lg overflow-hidden select-none ${isDragging || isResizing ? "select-none" : ""}`}
+      onMouseDown={() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        onFocus && onFocus();
+      }}
       style={{
         left: position.x,
         top: position.y,

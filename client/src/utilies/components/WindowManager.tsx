@@ -78,6 +78,18 @@ export const useWindowManager = ({
   const maxX = containerBounds.left + containerBounds.width - 10;
   const maxY = containerBounds.height - 10;
 
+  const bringToFront = (id: string) => {
+    setWindows((prev) => {
+      const windowIndex = prev.findIndex((w) => w.id === id);
+      if (windowIndex === -1 || windowIndex === prev.length - 1) return prev;
+
+      const newWindows = [...prev];
+      const [windowToMove] = newWindows.splice(windowIndex, 1);
+      newWindows.push(windowToMove);
+      return newWindows;
+    });
+  };
+
   const renderedWindows = (
     <>
       {windows.map((win, index) => (
@@ -93,6 +105,7 @@ export const useWindowManager = ({
           maxX={maxX}
           maxY={maxY}
           onClose={() => closeWindow(win.id)}
+          onFocus={() => bringToFront(win.id)}
           zIndex={1000 + index}
         >
           {win.element}
