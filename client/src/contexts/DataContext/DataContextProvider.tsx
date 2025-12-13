@@ -61,11 +61,18 @@ export const DataContextProvider = ({ children }: { children: ReactNode }) => {
     const transactions = getSortedTransactions(asset);
 
     const result: Record<number, AssetPerformancePerDate> = {};
+    let lastValue = 0;
 
     dates.forEach((date, index) => {
       // Value
       const valueObj = values.find((v) => v.date_id === date.id);
-      const value = valueObj ? valueObj.value : 0;
+      let value = 0;
+      if (valueObj) {
+        value = valueObj.value;
+        lastValue = value;
+      } else {
+        value = lastValue;
+      }
 
       // Transactions for this date
       const dateTransactions = transactions.filter(

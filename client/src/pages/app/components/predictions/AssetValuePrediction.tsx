@@ -1,32 +1,13 @@
 import { useState, useMemo, useEffect } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
 import { useData } from "../../../../contexts/DataContext/DataContextHook";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-);
+import { AssetValueChart } from "./AssetValueChart";
 
 export function AssetValuePrediction() {
   const { wallet } = useWallet();
-  const { getAssetPerformance } = useData();
+  const { getAssetPerformance, getAssetPerformancePerDates, getSortedDates } =
+    useData();
   const { currentItem } = useApp();
   const [years, setYears] = useState(10);
   const [selectedAssetId, setSelectedAssetId] = useState<number | "all">(() => {
@@ -46,8 +27,14 @@ export function AssetValuePrediction() {
 
   if (!wallet) return null;
 
-  const predictions = useMemo(() => {
-    const labels = Array.from({ length: years + 1 }, (_, i) => `Year ${i}`);
+  const chartData = useMemo(() => {
+    const sortedDates = getSortedDates();
+    const historicalLabels = sortedDates.map((d) => d.date);
+    const futureLabels = Array.from(
+      { length: years },
+      (_, i) => `Year ${i + 1}`,
+    );
+    const labels = [...historicalLabels, ...futureLabels];
 
     let currentTotalValue = 0;
     let monthlyContribution = 0;
@@ -58,13 +45,27 @@ export function AssetValuePrediction() {
         ? wallet.assets
         : wallet.assets.filter((a) => a.id === selectedAssetId);
 
-    // Calculate initial state
+    // --- Historical Data Calculation ---
+    const historicalDataMap: Record<number, number> = {};
+    sortedDates.forEach((d) => (historicalDataMap[d.id] = 0));
+
+    assetsToConsider.forEach((asset) => {
+      const perfPerDate = getAssetPerformancePerDates(asset.id);
+      Object.entries(perfPerDate).forEach(([dateId, perf]) => {
+        if (historicalDataMap[Number(dateId)] !== undefined) {
+          historicalDataMap[Number(dateId)] += perf.value;
+        }
+      });
+    });
+
+    const historicalValues = sortedDates.map((d) => historicalDataMap[d.id]);
+
+    // --- Prediction Calculation ---
+    // Calculate initial state for prediction (based on current latest values)
     assetsToConsider.forEach((asset) => {
       const perf = getAssetPerformance(asset.id);
       if (perf) {
         currentTotalValue += perf.totalValue;
-        // Weighted APY calculation could be more complex, simplified here
-        // Assuming average APY for simplicity or 0 if not set
         weightedApy += (asset.estimated_apy || 0) * perf.totalValue;
       }
     });
@@ -72,7 +73,6 @@ export function AssetValuePrediction() {
     if (currentTotalValue > 0) {
       weightedApy = weightedApy / currentTotalValue;
     } else {
-      // Fallback if no value, average of APYs
       const totalApy = assetsToConsider.reduce(
         (sum, a) => sum + (a.estimated_apy || 0),
         0,
@@ -87,19 +87,16 @@ export function AssetValuePrediction() {
       let amount = t.amount;
       if (t.type === "withdrawal" || t.type === "fee") amount = -amount;
 
-      // Filter by asset if selected
       if (selectedAssetId !== "all") {
         if (
           t.to_asset_id !== selectedAssetId &&
           t.from_asset_id !== selectedAssetId
         )
           return;
-        // Logic for asset specific flow could be complex, simplifying to:
-        // If it goes to this asset, add. If it comes from this asset, subtract.
         if (t.to_asset_id === selectedAssetId) {
-          // deposit to this asset
+          // deposit
         } else if (t.from_asset_id === selectedAssetId) {
-          amount = -Math.abs(amount); // Ensure it's negative
+          amount = -Math.abs(amount);
         }
       }
 
@@ -119,63 +116,41 @@ export function AssetValuePrediction() {
       }
     });
 
-    const dataPoints = [currentTotalValue];
-    let runningValue = currentTotalValue;
+    const predictionValues = [];
+    // The first point of prediction should connect to the last point of history
+    // But chart.js handles gaps if we use nulls, or we can just pad the array.
+    // Better approach:
+    // Historical dataset: [v1, v2, v3, null, null]
+    // Prediction dataset: [null, null, v3, v4, v5]
+
+    // Let's pad prediction with nulls for historical part
+    const predictionPadding = Array(historicalValues.length - 1).fill(null);
+    // Start prediction from last historical value
+    const lastHistoricalValue =
+      historicalValues[historicalValues.length - 1] || 0;
+    predictionValues.push(...predictionPadding, lastHistoricalValue);
+
+    let runningValue = lastHistoricalValue;
 
     for (let i = 1; i <= years; i++) {
-      // Add yearly contribution (simplified compound interest calculation)
-      // FV = PV * (1 + r)^n + PMT * ...
-      // Doing iterative for clarity
-
-      // Add contributions for the year
       runningValue += monthlyContribution * 12;
-
-      // Apply interest
       runningValue *= 1 + weightedApy / 100;
-
-      dataPoints.push(runningValue);
+      predictionValues.push(runningValue);
     }
 
     return {
       labels,
-      datasets: [
-        {
-          label: "Projected Value",
-          data: dataPoints,
-          borderColor: "#e94057",
-          backgroundColor: "rgba(233, 64, 87, 0.5)",
-          tension: 0.3,
-        },
-      ],
+      historicalData: historicalValues,
+      predictionData: predictionValues,
     };
-  }, [wallet, years, selectedAssetId, getAssetPerformance]);
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-        labels: {
-          color: "var(--text-primary)",
-        },
-      },
-      title: {
-        display: true,
-        text: "Asset Value Prediction",
-        color: "var(--text-primary)",
-      },
-    },
-    scales: {
-      y: {
-        ticks: { color: "var(--text-secondary)" },
-        grid: { color: "var(--border-color)" },
-      },
-      x: {
-        ticks: { color: "var(--text-secondary)" },
-        grid: { color: "var(--border-color)" },
-      },
-    },
-  };
+  }, [
+    wallet,
+    years,
+    selectedAssetId,
+    getAssetPerformance,
+    getAssetPerformancePerDates,
+    getSortedDates,
+  ]);
 
   return (
     <div className="h-full flex flex-col p-4">
@@ -220,8 +195,12 @@ export function AssetValuePrediction() {
         </div>
       </div>
 
-      <div className="flex-grow card p-4 relative">
-        <Line options={options} data={predictions} />
+      <div className="flex-grow relative min-h-0">
+        <AssetValueChart
+          historicalData={chartData.historicalData}
+          predictionData={chartData.predictionData}
+          labels={chartData.labels}
+        />
       </div>
       <div className="mt-4 text-xs text-[var(--text-secondary)]">
         * Prediction assumes constant APY and recurring transactions.
