@@ -5,6 +5,7 @@ import { AssetValuesTable } from "../assets/AssetValuesTable";
 import { EditAsset } from "../assets/EditAsset";
 import { EditTransactions } from "../transactions/EditTransactions";
 import { EditRecurringTransactions } from "../transactions/EditRecurringTransactions";
+import { AssetValuePrediction } from "../predictions/AssetValuePrediction";
 
 interface NavbarMenuProps {
   walletList: { id: number; title: string }[] | null;
@@ -79,6 +80,21 @@ export const NavbarMenu = ({
           }
         >
           Recurring Transactions
+        </NavbarDropdownItem>
+      </NavbarDropdown>
+
+      <NavbarDropdown title="Predictions">
+        <NavbarDropdownItem
+          onClick={() =>
+            openWindow(
+              <AssetValuePrediction />,
+              "Asset Value Prediction",
+              800,
+              600,
+            )
+          }
+        >
+          Asset Value Prediction
         </NavbarDropdownItem>
       </NavbarDropdown>
     </div>

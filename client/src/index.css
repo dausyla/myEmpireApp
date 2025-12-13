@@ -54,7 +54,7 @@
   }
 
   .dropdown {
-    @apply hover:bg-[var(--bg-surface-secondary)] relative px-2 py-2 rounded-sm;
+    @apply hover:bg-[var(--bg-surface-secondary)] relative px-2 py-2 rounded-sm cursor-pointer;
   }
 
   .dropdown-trigger {
