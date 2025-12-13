@@ -183,7 +183,8 @@ export const Window: React.FC<WindowProps> = ({
     >
       {/* Title Bar */}
       <div
-        className="bg-[var(--brand-gradient)] text-white flex items-center justify-between p-1 cursor-move border-b border-white/10"
+        className="text-white flex items-center justify-between p-1 cursor-move border-b border-white/10"
+        style={{ background: "var(--brand-gradient)" }}
         onMouseDown={(e) => handleMouseDown(e, "drag")}
       >
         <div className="text-base font-semibold flex-1 whitespace-nowrap overflow-hidden text-ellipsis drop-shadow-sm px-2">
