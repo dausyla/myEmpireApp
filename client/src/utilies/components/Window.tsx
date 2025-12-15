@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback } from "react";
 import { IoClose } from "react-icons/io5";
 import "./Window.css";
+import { WindowContext } from "./WindowContext";
 
 export interface WindowProps {
   title: string;
@@ -18,6 +19,7 @@ export interface WindowProps {
   onFocus?: () => void;
   children: React.ReactNode;
   zIndex?: number;
+  headerActions?: React.ReactNode;
 }
 
 export const Window: React.FC<WindowProps> = ({
@@ -36,6 +38,7 @@ export const Window: React.FC<WindowProps> = ({
   onFocus,
   children,
   zIndex = 1000,
+  headerActions,
 }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [size, setSize] = useState({
@@ -46,6 +49,8 @@ export const Window: React.FC<WindowProps> = ({
   const [isResizing, setIsResizing] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [resizeType, setResizeType] = useState<string>("");
+  const [internalHeaderActions, setInternalHeaderActions] =
+    useState<React.ReactNode>(null);
 
   const windowRef = useRef<HTMLDivElement>(null);
 
@@ -168,7 +173,7 @@ export const Window: React.FC<WindowProps> = ({
   return (
     <div
       ref={windowRef}
-      className={`absolute flex flex-col bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-lg shadow-lg overflow-hidden select-none ${isDragging || isResizing ? "select-none" : ""}`}
+      className={`absolute flex flex-col bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg overflow-hidden select-none ${isDragging || isResizing ? "select-none" : ""}`}
       onMouseDown={() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         onFocus && onFocus();
@@ -181,27 +186,38 @@ export const Window: React.FC<WindowProps> = ({
         zIndex,
       }}
     >
-      {/* Title Bar */}
-      <div
-        className="text-white flex items-center justify-between p-1 cursor-move border-b border-white/10"
-        style={{ background: "var(--brand-gradient)" }}
-        onMouseDown={(e) => handleMouseDown(e, "drag")}
+      <WindowContext.Provider
+        value={{ setHeaderActions: setInternalHeaderActions }}
       >
-        <div className="text-base font-semibold flex-1 whitespace-nowrap overflow-hidden text-ellipsis drop-shadow-sm px-2">
-          {title}
-        </div>
-        <button
-          className="btn btn-danger btn-small btn-round"
-          onClick={onClose}
+        {/* Title Bar */}
+        <div
+          className="text-white flex items-center justify-between p-1 cursor-move border-b border-white/10 shadow-sm z-20 relative"
+          style={{ background: "var(--bg-surface-secondary)" }}
+          onMouseDown={(e) => handleMouseDown(e, "drag")}
         >
-          <IoClose />
-        </button>
-      </div>
+          <div
+            className="text-base font-semibold flex-1 whitespace-nowrap overflow-hidden text-ellipsis px-2 text-left"
+            style={{ color: "var(--text-primary)" }}
+          >
+            {title}
+          </div>
+          <div className="flex items-center gap-2">
+            {headerActions}
+            {internalHeaderActions}
+            <button
+              className="btn btn-danger btn-small btn-round"
+              onClick={onClose}
+            >
+              <IoClose />
+            </button>
+          </div>
+        </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-auto bg-[var(--bg-surface)] text-[var(--text-primary)]">
-        {children}
-      </div>
+        {/* Content */}
+        <div className="flex-1 overflow-auto bg-[var(--bg-surface)] text-[var(--text-primary)]">
+          {children}
+        </div>
+      </WindowContext.Provider>
 
       {/* Resize Handles */}
       <div

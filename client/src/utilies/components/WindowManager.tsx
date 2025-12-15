@@ -7,6 +7,7 @@ export interface ManagedWindow {
   title: string;
   initialWidth: number;
   initialHeight: number;
+  headerActions?: React.ReactNode;
 }
 
 export interface WindowManagerProps {
@@ -20,6 +21,7 @@ export interface WindowManagerReturn {
     title: string,
     initialWidth: number,
     initialHeight: number,
+    headerActions?: React.ReactNode,
   ) => void;
   closeWindow: (id: string) => void;
   windowCount: number;
@@ -60,11 +62,12 @@ export const useWindowManager = ({
     title: string,
     initialWidth: number,
     initialHeight: number,
+    headerActions?: React.ReactNode,
   ) => {
     const id = `window-${Date.now()}`;
     setWindows((prev) => [
       ...prev,
-      { id, element, title, initialWidth, initialHeight },
+      { id, element, title, initialWidth, initialHeight, headerActions },
     ]);
   };
 
@@ -107,6 +110,7 @@ export const useWindowManager = ({
           onClose={() => closeWindow(win.id)}
           onFocus={() => bringToFront(win.id)}
           zIndex={1000 + index}
+          headerActions={win.headerActions}
         >
           {win.element}
         </Window>

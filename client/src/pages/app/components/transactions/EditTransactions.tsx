@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BsTrash, BsPlus } from "react-icons/bs";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
@@ -8,6 +8,7 @@ import { EditableValue } from "../../../../utilies/components/EditableValue";
 import type { Transaction, TransactionTypes } from "@shared/WalletTypes";
 
 import { EditableDate } from "../../../../utilies/components/EditableDate";
+import { useWindowContext } from "../../../../utilies/components/WindowContext";
 
 export function EditTransactions() {
   const { wallet } = useWallet();
@@ -18,6 +19,19 @@ export function EditTransactions() {
   const [transactionToDelete, setTransactionToDelete] =
     useState<Transaction | null>(null);
   const [isAddingTransaction, setIsAddingTransaction] = useState(false);
+  const { setHeaderActions } = useWindowContext();
+
+  useEffect(() => {
+    setHeaderActions(
+      <button
+        className="btn btn-primary-full"
+        onClick={() => setIsAddingTransaction((prev) => !prev)}
+      >
+        <BsPlus className="mr-1 text-lg" />
+        Add
+      </button>,
+    );
+  }, [setHeaderActions]);
 
   // Form state for new transaction
   const [newTransaction, setNewTransaction] = useState({
@@ -131,23 +145,10 @@ export function EditTransactions() {
   });
 
   return (
-    <div className="h-full flex flex-col p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h5 className="mb-0 font-bold text-lg text-[var(--text-primary)]">
-          Edit Transactions
-        </h5>
-        <button
-          className="btn btn-primary-full"
-          onClick={() => setIsAddingTransaction(!isAddingTransaction)}
-        >
-          <BsPlus className="mr-1 text-lg" />
-          Add
-        </button>
-      </div>
-
+    <div className="h-full flex flex-col">
       {/* Add Transaction Form */}
       {isAddingTransaction && (
-        <div className="mb-4 p-4 card">
+        <div className="m-4 p-2 card">
           <h6 className="mb-3 font-medium text-[var(--text-primary)]">
             Add New Transaction
           </h6>
@@ -294,7 +295,7 @@ export function EditTransactions() {
       )}
 
       {/* Transactions Table */}
-      <div className="flex-grow overflow-auto border border-[var(--border-color)] rounded-lg">
+      <div className="flex-grow overflow-auto">
         <table className="w-full text-left border-collapse whitespace-nowrap">
           <thead
             className="sticky top-0 z-10"
