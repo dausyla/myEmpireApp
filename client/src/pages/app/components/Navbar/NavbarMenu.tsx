@@ -89,8 +89,8 @@ export const NavbarMenu = ({
             openWindow(
               <AssetValuePrediction />,
               "Asset Value Prediction",
-              800,
-              600,
+              700,
+              500,
             )
           }
         >

@@ -23,16 +23,11 @@ ChartJS.register(
 import { useTheme } from "../../../../contexts/ThemeContext/ThemeContextHook";
 
 interface AssetValueChartProps {
-  historicalData: number[];
-  predictionData: number[];
   labels: string[];
+  datasets: any[];
 }
 
-export function AssetValueChart({
-  historicalData,
-  predictionData,
-  labels,
-}: AssetValueChartProps) {
+export function AssetValueChart({ labels, datasets }: AssetValueChartProps) {
   const { theme } = useTheme();
 
   // Force re-render when theme changes by using it in a key or just by hook presence
@@ -55,6 +50,7 @@ export function AssetValueChart({
     },
     scales: {
       y: {
+        stacked: true,
         ticks: { color: theme === "dark" ? "#fff" : "#000" },
         grid: { color: theme === "dark" ? "#555" : "#ccc" },
       },
@@ -67,22 +63,7 @@ export function AssetValueChart({
 
   const data = {
     labels,
-    datasets: [
-      {
-        label: "Historical Value",
-        data: historicalData,
-        borderColor: "#8a2387",
-        backgroundColor: "rgba(138, 35, 135, 0.5)",
-        tension: 0.3,
-      },
-      {
-        label: "Projected Value",
-        data: predictionData,
-        borderColor: "#e94057",
-        backgroundColor: "rgba(233, 64, 87, 0.5)",
-        tension: 0.3,
-      },
-    ],
+    datasets,
   };
 
   return <Line options={options} data={data} />;

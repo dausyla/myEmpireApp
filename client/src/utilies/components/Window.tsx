@@ -201,7 +201,10 @@ export const Window: React.FC<WindowProps> = ({
           >
             {title}
           </div>
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2"
+            onMouseDown={(e) => e.stopPropagation()}
+          >
             {headerActions}
             {internalHeaderActions}
             <button
