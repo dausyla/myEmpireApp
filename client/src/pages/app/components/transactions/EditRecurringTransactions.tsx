@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BsTrash, BsPlus } from "react-icons/bs";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
@@ -8,6 +8,7 @@ import type {
   RecurringTransaction,
   TransactionTypes,
 } from "@shared/WalletTypes";
+import { useWindowContext } from "../../../../utilies/components/WindowContext";
 
 export function EditRecurringTransactions() {
   const { wallet } = useWallet();
@@ -17,6 +18,19 @@ export function EditRecurringTransactions() {
   const [recurringToDelete, setRecurringToDelete] =
     useState<RecurringTransaction | null>(null);
   const [isAddingRecurring, setIsAddingRecurring] = useState(false);
+  const { setHeaderActions } = useWindowContext();
+
+  useEffect(() => {
+    setHeaderActions(
+      <button
+        className="btn btn-primary-full"
+        onClick={() => setIsAddingRecurring((prev) => !prev)}
+      >
+        <BsPlus className="mr-1 text-lg" />
+        Add
+      </button>,
+    );
+  }, [setHeaderActions]);
 
   // Form state for new recurring transaction
   const [newRecurring, setNewRecurring] = useState({
@@ -109,23 +123,10 @@ export function EditRecurringTransactions() {
   };
 
   return (
-    <div className="h-full flex flex-col p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h5 className="mb-0 font-bold text-lg text-[var(--text-primary)]">
-          Edit Recurring Transactions
-        </h5>
-        <button
-          className="btn btn-primary-full"
-          onClick={() => setIsAddingRecurring(!isAddingRecurring)}
-        >
-          <BsPlus className="mr-1 text-lg" />
-          Add
-        </button>
-      </div>
-
+    <div className="h-full flex flex-col">
       {/* Add Recurring Transaction Form */}
       {isAddingRecurring && (
-        <div className="mb-4 p-4 card">
+        <div className="m-4 p-2 card">
           <h6 className="mb-3 font-medium text-[var(--text-primary)]">
             Add New Recurring Transaction
           </h6>
@@ -274,7 +275,7 @@ export function EditRecurringTransactions() {
       )}
 
       {/* Recurring Transactions Table */}
-      <div className="flex-grow overflow-auto border border-[var(--border-color)] rounded-lg">
+      <div className="flex-grow overflow-auto">
         <table className="w-full text-left border-collapse whitespace-nowrap">
           <thead
             className="sticky top-0 z-10"
