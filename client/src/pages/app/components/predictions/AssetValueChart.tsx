@@ -20,6 +20,8 @@ ChartJS.register(
   Legend,
 );
 
+import { useTheme } from "../../../../contexts/ThemeContext/ThemeContextHook";
+
 interface AssetValueChartProps {
   historicalData: number[];
   predictionData: number[];
@@ -31,6 +33,10 @@ export function AssetValueChart({
   predictionData,
   labels,
 }: AssetValueChartProps) {
+  const { theme } = useTheme();
+
+  // Force re-render when theme changes by using it in a key or just by hook presence
+  // The hook presence causes re-render, so options will be re-evaluated.
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -38,23 +44,23 @@ export function AssetValueChart({
       legend: {
         position: "top" as const,
         labels: {
-          color: "var(--text-primary)",
+          color: theme === "dark" ? "#fff" : "#000",
         },
       },
       title: {
         display: true,
         text: "Asset Value Prediction",
-        color: "var(--text-primary)",
+        color: theme === "dark" ? "#fff" : "#000",
       },
     },
     scales: {
       y: {
-        ticks: { color: "var(--text-secondary)" },
-        grid: { color: "var(--border-color)" },
+        ticks: { color: theme === "dark" ? "#fff" : "#000" },
+        grid: { color: theme === "dark" ? "#555" : "#ccc" },
       },
       x: {
-        ticks: { color: "var(--text-secondary)" },
-        grid: { color: "var(--border-color)" },
+        ticks: { color: theme === "dark" ? "#fff" : "#000" },
+        grid: { color: theme === "dark" ? "#555" : "#ccc" },
       },
     },
   };
