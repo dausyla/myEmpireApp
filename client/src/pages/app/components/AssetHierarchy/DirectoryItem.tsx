@@ -101,6 +101,7 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
               title="Supprimer le dossier"
               className="btn btn-danger btn-small"
               onClick={handleDelete}
+              disabled={depth === 0}
             >
               <FaTrash />
             </button>

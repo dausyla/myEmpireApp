@@ -5,7 +5,7 @@ import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
 
 export function AssetHierarchy() {
   const { wallet } = useWallet();
-  const {} = useBatch();
+  const { addAsset, addDir } = useBatch();
 
   if (!wallet) return null;
 
@@ -29,7 +29,15 @@ export function AssetHierarchy() {
           <div>
             <button
               className="w-full btn btn-ghost hover:text-[#e94057]"
-              // onClick={() => addNewAsset({})}
+              onClick={() =>
+                addAsset({
+                  dir_id: root.id,
+                  name: "New Asset",
+                  color: "#e94057",
+                  estimated_apy: 0,
+                  count_first_input: false,
+                })
+              }
             >
               <FaFileAlt /> New Asset
             </button>
@@ -37,7 +45,14 @@ export function AssetHierarchy() {
           <div>
             <button
               className="w-full btn btn-ghost hover:text-[#e94057]"
-              // onClick={() => addNewDir({})}
+              onClick={() =>
+                addDir({
+                  wallet_id: wallet.wallet.id,
+                  name: "New Dir",
+                  description: "",
+                  parent_dir_id: root.id,
+                })
+              }
             >
               <FaFolder /> New Dir
             </button>

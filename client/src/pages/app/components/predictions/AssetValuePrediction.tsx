@@ -53,7 +53,7 @@ export function AssetValuePrediction() {
   ]);
 
   return (
-    <div className="h-full flex flex-col p-4">
+    <div className="h-full flex flex-col p-1">
       <div className="flex-grow relative min-h-0">
         <AssetValueChart
           labels={chartData.labels}

@@ -27,8 +27,6 @@ export const calculatePredictionAsset = (
   const futureLabels = Array.from({ length: years }, (_, i) => `Year ${i + 1}`);
   const labels = [...historicalLabels, ...futureLabels];
 
-  const datasets: PredictionDataset[] = [];
-
   // Helper to get asset color
   const assetColor = getColorString(asset.color);
   const fadedColor = getFadedColor(asset.color);
@@ -39,170 +37,197 @@ export const calculatePredictionAsset = (
   );
   const lastValue = historicalValues[historicalValues.length - 1] || 0;
 
+  // 2. Calculate monthly contribution
+  const monthlyContribution = calculateMonthlyContribution(
+    asset,
+    recurringTransactions,
+  );
+
+  let datasets: PredictionDataset[] = [];
+
   if (!isDetailed) {
-    // --- Non-Detailed Mode (Single Total Line) ---
-
-    // Calculate Prediction Parameters
-    const apy = asset.estimated_apy || 0;
-
-    // Calculate monthly contribution for this specific asset
-    let monthlyContribution = 0;
-    recurringTransactions.forEach((t) => {
-      if (t.to_asset_id !== asset.id && t.from_asset_id !== asset.id) return;
-
-      let amount = t.amount;
-      if (t.type === "withdrawal" || t.type === "fee") amount = -amount;
-
-      // If transfer out of this asset
-      if (t.from_asset_id === asset.id) amount = -Math.abs(amount);
-
-      switch (t.period) {
-        case "daily":
-          monthlyContribution += amount * 30;
-          break;
-        case "weekly":
-          monthlyContribution += amount * 4;
-          break;
-        case "monthly":
-          monthlyContribution += amount;
-          break;
-        case "yearly":
-          monthlyContribution += amount / 12;
-          break;
-      }
-    });
-
-    // Generate Prediction Data
-    const predictionValues = [];
-    const predictionPadding = Array(historicalValues.length - 1).fill(null);
-    predictionValues.push(...predictionPadding, lastValue);
-
-    let runningValue = lastValue;
-    for (let i = 1; i <= years; i++) {
-      runningValue += monthlyContribution * 12;
-      runningValue *= 1 + apy / 100;
-      predictionValues.push(runningValue);
-    }
-
-    datasets.push({
-      label: asset.name,
-      data: predictionValues.map((v, i) =>
-        i < historicalValues.length ? historicalValues[i] : v,
-      ),
-      borderColor: assetColor,
-      backgroundColor: fadedColor,
-      fill: true,
-    });
+    datasets = calculateStandardPrediction(
+      asset,
+      years,
+      historicalValues,
+      lastValue,
+      monthlyContribution,
+      assetColor,
+      fadedColor,
+    );
   } else {
-    // --- Detailed Mode (Per Asset Components) ---
-
-    // --- Base Line (Constant) ---
-    const baseData = [...historicalValues];
-    for (let i = 0; i < years; i++) {
-      baseData.push(lastValue);
-    }
-
-    datasets.push({
-      label: asset.name,
-      data: baseData,
-      borderColor: assetColor,
-      backgroundColor: fadedColor,
-      fill: true,
-    });
-
-    // --- Interests & Inputs Calculation ---
-
-    // Calculate monthly contribution for this specific asset
-    let monthlyContribution = 0;
-    recurringTransactions.forEach((t) => {
-      if (t.to_asset_id !== asset.id && t.from_asset_id !== asset.id) return;
-
-      let amount = t.amount;
-      if (t.type === "withdrawal" || t.type === "fee") amount = -amount;
-
-      // If transfer out of this asset
-      if (t.from_asset_id === asset.id) amount = -Math.abs(amount);
-
-      switch (t.period) {
-        case "daily":
-          monthlyContribution += amount * 30;
-          break;
-        case "weekly":
-          monthlyContribution += amount * 4;
-          break;
-        case "monthly":
-          monthlyContribution += amount;
-          break;
-        case "yearly":
-          monthlyContribution += amount / 12;
-          break;
-      }
-    });
-
-    const apy = asset.estimated_apy || 0;
-
-    let accumulatedInterests = 0;
-    let accumulatedInputs = 0;
-
-    const interestsPoints = [];
-    const inputsPoints = [];
-    let total = lastValue;
-
-    for (let i = 1; i <= years; i++) {
-      for (let j = 1; j <= 12; j++) {
-        // Add inputs
-        const monthlyInputs = monthlyContribution;
-        accumulatedInputs += monthlyInputs;
-        total += monthlyInputs;
-
-        // Add interests (on the whole amount)
-        const monthlyInterests = total * (apy / 100 / 12);
-        accumulatedInterests += monthlyInterests;
-        total += monthlyInterests;
-      }
-
-      interestsPoints.push(accumulatedInterests);
-      inputsPoints.push(accumulatedInputs);
-    }
-
-    // Add to datasets
-    // Interests Line
-    const interestsFullData = [...Array(historicalValues.length).fill(null)];
-    interestsFullData[historicalValues.length - 1] = 0; // Connect
-    interestsFullData.push(...interestsPoints);
-
-    if (asset.estimated_apy && asset.estimated_apy > 0) {
-      const c = adjustColor(assetColor, 20);
-      datasets.push({
-        label: asset.name + " - Interests",
-        data: interestsFullData,
-        borderColor: c,
-        backgroundColor: getFadedColor(c),
-        borderDash: [5, 5],
-        fill: "-1",
-      });
-
-      // Inputs Line
-      const inputsFullData = [...Array(historicalValues.length).fill(null)];
-      inputsFullData[historicalValues.length - 1] = 0; // Connect
-      inputsFullData.push(...inputsPoints);
-
-      if (monthlyContribution > 0) {
-        const c = adjustColor(assetColor, -20);
-        datasets.push({
-          label: asset.name + " - Inputs",
-          data: inputsFullData,
-          borderColor: c,
-          backgroundColor: getFadedColor(c),
-          borderDash: [2, 2],
-          fill: "-1",
-        });
-      }
-    }
+    datasets = calculateDetailedPrediction(
+      asset,
+      years,
+      historicalValues,
+      lastValue,
+      monthlyContribution,
+      assetColor,
+      fadedColor,
+    );
   }
 
   return { labels, datasets };
 };
+
+function calculateMonthlyContribution(
+  asset: Asset,
+  recurringTransactions: RecurringTransaction[],
+): number {
+  let monthlyContribution = 0;
+  recurringTransactions.forEach((t) => {
+    if (t.to_asset_id !== asset.id && t.from_asset_id !== asset.id) return;
+
+    let amount = t.amount;
+    if (t.type === "withdrawal" || t.type === "fee") amount = -amount;
+
+    // If transfer out of this asset
+    if (t.from_asset_id === asset.id) amount = -Math.abs(amount);
+
+    switch (t.period) {
+      case "daily":
+        monthlyContribution += amount * 30;
+        break;
+      case "weekly":
+        monthlyContribution += amount * 4;
+        break;
+      case "monthly":
+        monthlyContribution += amount;
+        break;
+      case "yearly":
+        monthlyContribution += amount / 12;
+        break;
+    }
+  });
+  return monthlyContribution;
+}
+
+function calculateStandardPrediction(
+  asset: Asset,
+  years: number,
+  historicalValues: number[],
+  lastValue: number,
+  monthlyContribution: number,
+  assetColor: string,
+  fadedColor: string,
+): PredictionDataset[] {
+  const datasets: PredictionDataset[] = [];
+  const apy = asset.estimated_apy || 0;
+
+  // Generate Prediction Data
+  const predictionValues = [];
+  const predictionPadding = Array(historicalValues.length - 1).fill(null);
+  predictionValues.push(...predictionPadding, lastValue);
+
+  let runningValue = lastValue;
+  for (let i = 1; i <= years; i++) {
+    runningValue += monthlyContribution * 12;
+    runningValue *= 1 + apy / 100;
+    predictionValues.push(runningValue);
+  }
+
+  datasets.push({
+    label: asset.name,
+    data: predictionValues.map((v, i) =>
+      i < historicalValues.length ? historicalValues[i] : v,
+    ),
+    borderColor: assetColor,
+    backgroundColor: fadedColor,
+    fill: true,
+  });
+
+  return datasets;
+}
+
+function calculateDetailedPrediction(
+  asset: Asset,
+  years: number,
+  historicalValues: number[],
+  lastValue: number,
+  monthlyContribution: number,
+  assetColor: string,
+  fadedColor: string,
+): PredictionDataset[] {
+  const datasets: PredictionDataset[] = [];
+
+  // --- Base Line (Constant) ---
+  const baseData = [...historicalValues];
+  for (let i = 0; i < years; i++) {
+    baseData.push(lastValue);
+  }
+
+  datasets.push({
+    label: asset.name,
+    data: baseData,
+    borderColor: assetColor,
+    backgroundColor: fadedColor,
+    fill: true,
+  });
+
+  // --- Interests & Inputs Calculation ---
+  const apy = asset.estimated_apy || 0;
+
+  let accumulatedInterests = 0;
+  let accumulatedInputs = 0;
+
+  const interestsPoints = [];
+  const inputsPoints = [];
+  let total = lastValue;
+
+  for (let i = 1; i <= years; i++) {
+    for (let j = 1; j <= 12; j++) {
+      // Add inputs
+      const monthlyInputs = monthlyContribution;
+      accumulatedInputs += monthlyInputs;
+      total += monthlyInputs;
+
+      // Add interests (on the whole amount)
+      const monthlyInterests = total * (apy / 100 / 12);
+      accumulatedInterests += monthlyInterests;
+      total += monthlyInterests;
+    }
+
+    interestsPoints.push(accumulatedInterests);
+    inputsPoints.push(accumulatedInputs);
+  }
+
+  // Add to datasets
+  // Interests Line
+  const interestsFullData = [...Array(historicalValues.length).fill(null)];
+  interestsFullData[historicalValues.length - 1] = 0; // Connect
+  interestsFullData.push(...interestsPoints);
+
+  if (asset.estimated_apy && asset.estimated_apy > 0) {
+    const c = adjustColor(assetColor, 20);
+    datasets.push({
+      label: asset.name + " - Interests",
+      data: interestsFullData,
+      borderColor: c,
+      backgroundColor: getFadedColor(c),
+      borderDash: [5, 5],
+      fill: "-1",
+    });
+
+    // Inputs Line
+    const inputsFullData = [...Array(historicalValues.length).fill(null)];
+    inputsFullData[historicalValues.length - 1] = 0; // Connect
+    inputsFullData.push(...inputsPoints);
+
+    if (monthlyContribution > 0) {
+      const c = adjustColor(assetColor, -20);
+      datasets.push({
+        label: asset.name + " - Inputs",
+        data: inputsFullData,
+        borderColor: c,
+        backgroundColor: getFadedColor(c),
+        borderDash: [2, 2],
+        fill: "-1",
+      });
+    }
+  }
+
+  return datasets;
+}
 
 // Helper to adjust color brightness
 function adjustColor(color: string, amount: number) {

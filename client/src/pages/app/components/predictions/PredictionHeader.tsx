@@ -17,7 +17,7 @@ export function PredictionHeader({
       onMouseDown={(e) => e.stopPropagation()}
     >
       <div className="flex items-center gap-2">
-        <label className="text-white/80">Years:</label>
+        <label className="text-[var(--text-primary)]">Years:</label>
         <input
           type="number"
           min="0"
@@ -29,30 +29,22 @@ export function PredictionHeader({
           className="input w-16 py-1 px-2 h-8 text-center"
         />
       </div>
-      <div className="flex items-center gap-2 border-l border-white/20 pl-4">
-        <label className="text-white/80">Detail:</label>
-        <div className="flex bg-[var(--bg-surface)] rounded-md overflow-hidden border border-[var(--border-color)]">
-          <button
-            className={`px-3 py-1 text-xs transition-colors ${
-              !isDetailed
-                ? "bg-[var(--primary)] text-white"
-                : "text-[var(--text-secondary)] hover:bg-[var(--bg-surface-secondary)]"
-            }`}
-            onClick={() => setIsDetailed(false)}
-          >
-            Off
-          </button>
-          <button
-            className={`px-3 py-1 text-xs transition-colors ${
-              isDetailed
-                ? "bg-[var(--primary)] text-white"
-                : "text-[var(--text-secondary)] hover:bg-[var(--bg-surface-secondary)]"
-            }`}
-            onClick={() => setIsDetailed(true)}
-          >
-            On
-          </button>
-        </div>
+      <div className="flex items-center gap-2 border-l border-[var(--border-color)] pl-4">
+        <label className="text-[var(--text-primary)]">Detail:</label>
+        <button
+          onClick={() => setIsDetailed(!isDetailed)}
+          className={`relative inline-flex h-4 w-8 items-center rounded-full transition-colors focus:outline-none focus:ring-1 focus:ring-[#e94077] ${
+            isDetailed
+              ? "bg-[#e94077]"
+              : "bg-gray-300 border border-[var(--border-color)]"
+          }`}
+        >
+          <span
+            className={`${
+              isDetailed ? "translate-x-4" : "translate-x-1"
+            } inline-block h-3 w-3 transform rounded-full bg-white transition-transform`}
+          />
+        </button>
       </div>
     </div>
   );
