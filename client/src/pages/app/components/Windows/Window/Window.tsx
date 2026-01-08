@@ -34,6 +34,7 @@ export interface WindowProps {
     height: number;
   }[];
   headerActions?: React.ReactNode;
+  containerOffset?: { x: number; y: number };
 }
 
 export const Window: React.FC<WindowProps> = ({
@@ -55,6 +56,7 @@ export const Window: React.FC<WindowProps> = ({
   headerActions,
   onBoundsUpdate,
   getOtherWindowBounds,
+  containerOffset = { x: 0, y: 0 },
 }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [size, setSize] = useState({
@@ -126,8 +128,12 @@ export const Window: React.FC<WindowProps> = ({
         const SNAP_THRESHOLD = 10;
         const otherBounds = getOtherWindowBounds ? getOtherWindowBounds() : [];
 
+        // Calculate mouse position relative to the container
+        const mouseContainerX = e.clientX - containerOffset.x;
+        const mouseContainerY = e.clientY - containerOffset.y;
+
         if (resizeType.includes("right")) {
-          let targetX = e.clientX;
+          let targetX = mouseContainerX;
           // Snap to other windows' left or right edges
           for (const bounds of otherBounds) {
             if (Math.abs(targetX - bounds.x) < SNAP_THRESHOLD) {
@@ -139,20 +145,24 @@ export const Window: React.FC<WindowProps> = ({
             }
           }
 
+          // Convert back to viewport coordinates for width calculation if needed,
+          // but here we calculate width based on container-relative positions which is cleaner
+          // actually rect.left is viewport relative.
+          // Let's stick to calculating newWidth based on the difference or absolute positions.
+          // If we use targetX (container relative), we should compare it to position.x (container relative).
+
           newWidth = Math.max(
             minWidth,
             Math.min(
-              targetX - rect.left,
+              targetX - position.x,
               (maxX || window.innerWidth) - position.x,
             ),
           );
         }
         if (resizeType.includes("bottom")) {
-          let targetY = e.clientY;
+          let targetY = mouseContainerY;
           // Snap to other windows' top or bottom edges
           for (const bounds of otherBounds) {
-            console.log(`bounds.y: ${bounds.y}`);
-            console.log(`targetY: ${targetY}`);
             if (Math.abs(targetY - bounds.y) < SNAP_THRESHOLD) {
               targetY = bounds.y;
             } else if (
@@ -165,13 +175,13 @@ export const Window: React.FC<WindowProps> = ({
           newHeight = Math.max(
             minHeight,
             Math.min(
-              targetY - rect.top,
+              targetY - position.y,
               (maxY || window.innerHeight) - position.y,
             ),
           );
         }
         if (resizeType.includes("left")) {
-          let targetX = e.clientX;
+          let targetX = mouseContainerX;
           // Snap to other windows' left or right edges
           for (const bounds of otherBounds) {
             if (Math.abs(targetX - bounds.x) < SNAP_THRESHOLD) {
@@ -183,14 +193,14 @@ export const Window: React.FC<WindowProps> = ({
             }
           }
 
-          const deltaX = rect.left - targetX;
+          const deltaX = position.x - targetX;
           const maxDeltaX = position.x - minX;
           const constrainedDeltaX = Math.min(deltaX, maxDeltaX);
           newWidth = Math.max(minWidth, size.width + constrainedDeltaX);
           newX = position.x - (newWidth - size.width);
         }
         if (resizeType.includes("top")) {
-          let targetY = e.clientY;
+          let targetY = mouseContainerY;
           // Snap to other windows' top or bottom edges
           for (const bounds of otherBounds) {
             if (Math.abs(targetY - bounds.y) < SNAP_THRESHOLD) {
@@ -202,7 +212,7 @@ export const Window: React.FC<WindowProps> = ({
             }
           }
 
-          const deltaY = rect.top - targetY;
+          const deltaY = position.y - targetY;
           const maxDeltaY = position.y - minY;
           const constrainedDeltaY = Math.min(deltaY, maxDeltaY);
           newHeight = Math.max(minHeight, size.height + constrainedDeltaY);
@@ -227,6 +237,7 @@ export const Window: React.FC<WindowProps> = ({
       maxX,
       maxY,
       getOtherWindowBounds,
+      containerOffset,
     ],
   );
 

@@ -136,6 +136,7 @@ export const useWindowManager = ({
           headerActions={win.headerActions}
           onBoundsUpdate={(bounds) => updateWindowBounds(win.id, bounds)}
           getOtherWindowBounds={() => getOtherWindowBounds(win.id)}
+          containerOffset={{ x: containerBounds.left, y: containerBounds.top }}
         >
           {win.element}
         </Window>
