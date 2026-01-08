@@ -17,7 +17,7 @@ export function PredictionHeader({
       onMouseDown={(e) => e.stopPropagation()}
     >
       <div className="flex items-center gap-2">
-        <label className="text-[var(--text-primary)]">Years:</label>
+        <label className="text-(--text-primary)">Years:</label>
         <input
           type="number"
           min="0"
@@ -29,14 +29,14 @@ export function PredictionHeader({
           className="input w-16 py-1 px-2 h-8 text-center"
         />
       </div>
-      <div className="flex items-center gap-2 border-l border-[var(--border-color)] pl-4">
-        <label className="text-[var(--text-primary)]">Detail:</label>
+      <div className="flex items-center gap-2 border-l border-(--border-color) pl-4">
+        <label className="text-(--text-primary)">Detail:</label>
         <button
           onClick={() => setIsDetailed(!isDetailed)}
           className={`relative inline-flex h-4 w-8 items-center rounded-full transition-colors focus:outline-none focus:ring-1 focus:ring-[#e94077] ${
             isDetailed
               ? "bg-[#e94077]"
-              : "bg-gray-300 border border-[var(--border-color)]"
+              : "bg-gray-300 border border-(--border-color)"
           }`}
         >
           <span

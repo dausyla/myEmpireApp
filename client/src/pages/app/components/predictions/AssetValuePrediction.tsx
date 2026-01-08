@@ -54,13 +54,13 @@ export function AssetValuePrediction() {
 
   return (
     <div className="h-full flex flex-col p-1">
-      <div className="flex-grow relative min-h-0">
+      <div className="grow relative min-h-0">
         <AssetValueChart
           labels={chartData.labels}
           datasets={chartData.datasets}
         />
       </div>
-      <div className="mt-4 text-xs text-[var(--text-secondary)]">
+      <div className="mt-4 text-xs text-(--text-secondary)">
         * Prediction assumes constant APY and recurring transactions.
       </div>
     </div>

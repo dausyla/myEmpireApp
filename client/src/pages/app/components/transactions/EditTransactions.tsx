@@ -149,12 +149,12 @@ export function EditTransactions() {
       {/* Add Transaction Form */}
       {isAddingTransaction && (
         <div className="m-4 p-2 card">
-          <h6 className="mb-3 font-medium text-[var(--text-primary)]">
+          <h6 className="mb-3 font-medium text-(--text-primary)">
             Add New Transaction
           </h6>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div className="md:col-span-6">
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 Description
               </label>
               <input
@@ -171,7 +171,7 @@ export function EditTransactions() {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 Amount
               </label>
               <input
@@ -189,7 +189,7 @@ export function EditTransactions() {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 Type
               </label>
               <select
@@ -209,7 +209,7 @@ export function EditTransactions() {
               </select>
             </div>
             <div className="md:col-span-4">
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 Date
               </label>
               <select
@@ -231,7 +231,7 @@ export function EditTransactions() {
               </select>
             </div>
             <div className="md:col-span-4">
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 From Asset (optional)
               </label>
               <select
@@ -253,7 +253,7 @@ export function EditTransactions() {
               </select>
             </div>
             <div className="md:col-span-4">
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 To Asset (optional)
               </label>
               <select
@@ -283,7 +283,7 @@ export function EditTransactions() {
                   Add Transaction
                 </button>
                 <button
-                  className="btn btn-ghost border border-[var(--border-color)]"
+                  className="btn btn-ghost border border-(--border-color)"
                   onClick={() => setIsAddingTransaction(false)}
                 >
                   Cancel
@@ -295,40 +295,43 @@ export function EditTransactions() {
       )}
 
       {/* Transactions Table */}
-      <div className="flex-grow overflow-auto">
+      <div className="grow overflow-auto">
         <table className="w-full text-left border-collapse whitespace-nowrap">
           <thead
             className="sticky top-0 z-10"
-            style={{ backgroundColor: "var(--bg-surface-secondary)" }}
+            style={{ backgroundColor: "--bg-surface-secondary" }}
           >
             <tr>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 Date
               </th>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 Description
               </th>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 Amount
               </th>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 Type
               </th>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 From Asset
               </th>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 To Asset
               </th>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[var(--border-color)]">
+          <tbody className="divide-y divide-(--border-color)">
             {sortedTransactions.length === 0 ? (
               <tr>
-                <td colSpan={7} className="p-4 text-center text-gray-500">
+                <td
+                  colSpan={7}
+                  className="p-4 text-center text-(--text-primary)"
+                >
                   No transactions found
                 </td>
               </tr>
@@ -338,15 +341,15 @@ export function EditTransactions() {
                 return (
                   <tr
                     key={transaction.id}
-                    className="hover:bg-[var(--bg-surface-secondary)] transition-colors"
+                    className="hover:bg-(--bg-surface-secondary) transition-colors"
                   >
-                    <td className="p-3 text-sm text-[var(--text-primary)]">
+                    <td className="p-3 text-sm text-(--text-primary)">
                       <EditableDate
                         dateId={transaction.date_id}
                         currentDate={getDate(transaction.date_id)}
                       />
                     </td>
-                    <td className="p-3 text-sm text-[var(--text-primary)]">
+                    <td className="p-3 text-sm text-(--text-primary)">
                       <EditableText
                         value={transaction.description}
                         modifyValue={(value) =>
@@ -358,7 +361,7 @@ export function EditTransactions() {
                         }
                       />
                     </td>
-                    <td className="p-3 text-sm text-[var(--text-primary)]">
+                    <td className="p-3 text-sm text-(--text-primary)">
                       <EditableValue
                         value={transaction.amount}
                         modifyValue={(value) =>
@@ -388,10 +391,10 @@ export function EditTransactions() {
                         <option value="reward">Reward</option>
                       </select>
                     </td>
-                    <td className="p-3 text-sm text-[var(--text-primary)]">
+                    <td className="p-3 text-sm text-(--text-primary)">
                       {assetNames.from}
                     </td>
-                    <td className="p-3 text-sm text-[var(--text-primary)]">
+                    <td className="p-3 text-sm text-(--text-primary)">
                       {assetNames.to}
                     </td>
                     <td className="p-3 text-sm">
@@ -414,8 +417,8 @@ export function EditTransactions() {
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
           <div className="w-full max-w-md card overflow-hidden">
-            <div className="px-6 py-4 border-b border-[var(--border-color)] flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+            <div className="px-6 py-4 border-b border-(--border-color) flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-(--text-primary)">
                 Confirm Delete
               </h3>
               <button
@@ -426,7 +429,7 @@ export function EditTransactions() {
               </button>
             </div>
             <div className="p-6">
-              <p className="text-[var(--text-primary)] mb-4">
+              <p className="text-(--text-primary) mb-4">
                 Are you sure you want to delete this transaction?
               </p>
               {transactionToDelete && (
@@ -442,9 +445,9 @@ export function EditTransactions() {
                 This action cannot be undone.
               </div>
             </div>
-            <div className="px-6 py-4 bg-[var(--bg-surface-secondary)] flex justify-end gap-3">
+            <div className="px-6 py-4 bg-(--bg-surface-secondary) flex justify-end gap-3">
               <button
-                className="btn btn-ghost border border-[var(--border-color)]"
+                className="btn btn-ghost border border-(--border-color)"
                 onClick={() => setShowDeleteModal(false)}
               >
                 Cancel

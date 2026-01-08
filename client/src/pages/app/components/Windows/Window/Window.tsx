@@ -286,7 +286,7 @@ export const Window: React.FC<WindowProps> = ({
         />
 
         {/* Content */}
-        <div className="flex-1 overflow-auto bg-[var(--bg-surface)] text-[var(--text-primary)]">
+        <div className="flex-1 overflow-auto bg-(--bg-surface) text-(--text-primary)">
           {children}
         </div>
       </WindowContext.Provider>

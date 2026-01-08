@@ -127,12 +127,12 @@ export function EditRecurringTransactions() {
       {/* Add Recurring Transaction Form */}
       {isAddingRecurring && (
         <div className="m-4 p-2 card">
-          <h6 className="mb-3 font-medium text-[var(--text-primary)]">
+          <h6 className="mb-3 font-medium text-(--text-primary)">
             Add New Recurring Transaction
           </h6>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div className="md:col-span-6">
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 Description
               </label>
               <input
@@ -149,7 +149,7 @@ export function EditRecurringTransactions() {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 Amount
               </label>
               <input
@@ -167,7 +167,7 @@ export function EditRecurringTransactions() {
               />
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 Type
               </label>
               <select
@@ -187,7 +187,7 @@ export function EditRecurringTransactions() {
               </select>
             </div>
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 Period
               </label>
               <select
@@ -211,7 +211,7 @@ export function EditRecurringTransactions() {
               </select>
             </div>
             <div className="md:col-span-4">
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 From Asset (optional)
               </label>
               <select
@@ -233,7 +233,7 @@ export function EditRecurringTransactions() {
               </select>
             </div>
             <div className="md:col-span-5">
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 To Asset (optional)
               </label>
               <select
@@ -263,7 +263,7 @@ export function EditRecurringTransactions() {
                   Add Recurring Transaction
                 </button>
                 <button
-                  className="btn btn-ghost border border-[var(--border-color)]"
+                  className="btn btn-ghost border border-(--border-color)"
                   onClick={() => setIsAddingRecurring(false)}
                 >
                   Cancel
@@ -275,37 +275,37 @@ export function EditRecurringTransactions() {
       )}
 
       {/* Recurring Transactions Table */}
-      <div className="flex-grow overflow-auto">
+      <div className="grow overflow-auto">
         <table className="w-full text-left border-collapse whitespace-nowrap">
           <thead
             className="sticky top-0 z-10"
             style={{ backgroundColor: "var(--bg-surface-secondary)" }}
           >
             <tr>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 Description
               </th>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 Amount
               </th>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 Type
               </th>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 Period
               </th>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 From Asset
               </th>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 To Asset
               </th>
-              <th className="p-3 font-semibold text-sm border-b border-[var(--border-color)] text-[var(--text-primary)]">
+              <th className="p-3 font-semibold text-sm border-b border-(--border-color) text-(--text-primary)">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[var(--border-color)]">
+          <tbody className="divide-y divide-(--border-color)">
             {wallet.recurring_transactions.length === 0 ? (
               <tr>
                 <td colSpan={7} className="p-4 text-center text-gray-500">
@@ -316,9 +316,9 @@ export function EditRecurringTransactions() {
               wallet.recurring_transactions.map((recurring) => (
                 <tr
                   key={recurring.id}
-                  className="hover:bg-[var(--bg-surface-secondary)] transition-colors"
+                  className="hover:bg-(--bg-surface-secondary) transition-colors"
                 >
-                  <td className="p-3 text-sm text-[var(--text-primary)]">
+                  <td className="p-3 text-sm text-(--text-primary)">
                     <EditableText
                       value={recurring.description}
                       modifyValue={(value) =>
@@ -330,7 +330,7 @@ export function EditRecurringTransactions() {
                       }
                     />
                   </td>
-                  <td className="p-3 text-sm text-[var(--text-primary)]">
+                  <td className="p-3 text-sm text-(--text-primary)">
                     <EditableValue
                       value={recurring.amount}
                       modifyValue={(value) =>
@@ -378,10 +378,10 @@ export function EditRecurringTransactions() {
                       <option value="yearly">Yearly</option>
                     </select>
                   </td>
-                  <td className="p-3 text-sm text-[var(--text-primary)]">
+                  <td className="p-3 text-sm text-(--text-primary)">
                     {getAssetName(recurring.from_asset_id)}
                   </td>
-                  <td className="p-3 text-sm text-[var(--text-primary)]">
+                  <td className="p-3 text-sm text-(--text-primary)">
                     {getAssetName(recurring.to_asset_id)}
                   </td>
                   <td className="p-3 text-sm">
@@ -403,8 +403,8 @@ export function EditRecurringTransactions() {
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
           <div className="w-full max-w-md card overflow-hidden">
-            <div className="px-6 py-4 border-b border-[var(--border-color)] flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+            <div className="px-6 py-4 border-b border-(--border-color) flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-(--text-primary)">
                 Confirm Delete
               </h3>
               <button
@@ -415,7 +415,7 @@ export function EditRecurringTransactions() {
               </button>
             </div>
             <div className="p-6">
-              <p className="text-[var(--text-primary)] mb-4">
+              <p className="text-(--text-primary) mb-4">
                 Are you sure you want to delete this recurring transaction?
               </p>
               {recurringToDelete && (
@@ -431,9 +431,9 @@ export function EditRecurringTransactions() {
                 This action cannot be undone.
               </div>
             </div>
-            <div className="px-6 py-4 bg-[var(--bg-surface-secondary)] flex justify-end gap-3">
+            <div className="px-6 py-4 bg-(--bg-surface-secondary) flex justify-end gap-3">
               <button
-                className="btn btn-ghost border border-[var(--border-color)]"
+                className="btn btn-ghost border border-(--border-color)"
                 onClick={() => setShowDeleteModal(false)}
               >
                 Cancel
