@@ -60,11 +60,7 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
       {/* Directory line */}
       {dir.id !== 0 && (
         <div
-          className={`group flex items-center justify-between px-3 py-1.5 cursor-pointer transition-colors border-l-[3px] border-transparent hover:bg-white/5 text-[0.9rem] ${
-            isOpened
-              ? "text-[var(--text-primary)]"
-              : "text-[var(--text-primary)]"
-          }`}
+          className={`group flex items-center justify-between px-3 py-1.5 cursor-pointer transition-colors border-l-[3px] border-transparent hover:bg-gray-500/15 text-[0.9rem] text-(--text-primary)`}
           style={{ paddingLeft: `${depth * 16 + 12}px` }}
           onClick={() => setIsOpened(!isOpened)}
           onMouseEnter={() => setHovered(true)}

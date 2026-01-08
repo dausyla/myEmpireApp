@@ -22,10 +22,10 @@ export function AssetItem({
   return (
     <div
       key={asset.id}
-      className={`group flex items-center justify-between px-3 py-1.5 cursor-pointer transition-colors border-l-[3px] border-transparent hover:bg-white/5 text-[0.9rem] ${
+      className={`group flex items-center justify-between px-3 py-1.5 cursor-pointer transition-colors border-l-[3px] border-transparent hover:bg-gray-500/15 text-[0.9rem] ${
         currentItemId?.id === asset.id
-          ? "border-l-[#e94057] bg-white/5 text-[var(--text-primary)]"
-          : "text-[var(--text-primary)]"
+          ? "border-l-[#e94057] bg-gray-500/15 text-(--text-primary)"
+          : "text-(--text-primary)"
       }`}
       style={{ paddingLeft: `${(depth + 1) * 16 + 12}px` }}
       onClick={() => setCurrentItemId({ type: "asset", id: asset.id })}
@@ -34,7 +34,7 @@ export function AssetItem({
     >
       <div className="flex items-center gap-2">
         <FaFileAlt
-          className="text-[var(--text-secondary)]"
+          className="text-(--text-secondary)"
           style={{ fontSize: "0.9em" }}
         />
         <span className="truncate">{asset.name}</span>
