@@ -4,6 +4,7 @@ import { FaSun, FaMoon, FaBars } from "react-icons/fa";
 import { useState, type JSX } from "react";
 import { NavbarMenu } from "./Navbar/NavbarMenu";
 import { NavbarMobileMenu } from "./Navbar/NavbarMobileMenu";
+import { NavbarDropdown, NavbarDropdownItem } from "./Navbar/NavbarDropdown";
 
 export function NavBar({
   openWindow,
@@ -28,7 +29,7 @@ export function NavBar({
 
   return (
     <nav
-      className="sticky top-0 z-[2000] shadow-sm w-full"
+      className="sticky top-0 z-2000 shadow-sm w-full"
       style={{
         backgroundColor: "var(--bg-surface)",
         borderBottom: "1px solid var(--border-color)",
@@ -53,21 +54,21 @@ export function NavBar({
         </button>
 
         {/* Desktop Menu */}
-        <NavbarMenu
-          walletList={walletList}
-          currentWalletId={wallet.wallet.id}
-          onWalletClick={handleWalletClick}
-          openWindow={openWindow}
-        />
+        <NavbarMenu openWindow={openWindow} />
 
         {/* Right Side */}
         <div className="hidden md:flex items-center gap-4">
-          <span
-            className="font-medium"
-            style={{ color: "var(--text-primary)" }}
-          >
-            {wallet.wallet.title}
-          </span>
+          <NavbarDropdown title={wallet.wallet.title}>
+            {walletList.map((w) => (
+              <NavbarDropdownItem
+                key={w.id}
+                onClick={() => handleWalletClick(w.id)}
+                active={w.id === wallet.wallet.id}
+              >
+                {w.title}
+              </NavbarDropdownItem>
+            ))}
+          </NavbarDropdown>
           <button
             onClick={toggleTheme}
             className="p-1 btn btn-ghost btn-round hover:opacity-80 transition-opacity"

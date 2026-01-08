@@ -8,9 +8,6 @@ import { EditRecurringTransactions } from "../transactions/EditRecurringTransact
 import { AssetValuePrediction } from "../predictions/AssetValuePrediction";
 
 interface NavbarMenuProps {
-  walletList: { id: number; title: string }[] | null;
-  currentWalletId?: number;
-  onWalletClick: (id: number) => void;
   openWindow: (
     element: JSX.Element,
     title: string,
@@ -19,26 +16,9 @@ interface NavbarMenuProps {
   ) => void;
 }
 
-export const NavbarMenu = ({
-  walletList,
-  currentWalletId,
-  onWalletClick,
-  openWindow,
-}: NavbarMenuProps) => {
+export const NavbarMenu = ({ openWindow }: NavbarMenuProps) => {
   return (
     <div className="hidden md:flex items-center gap-2">
-      <NavbarDropdown title="Wallets">
-        {walletList?.map((w) => (
-          <NavbarDropdownItem
-            key={w.id}
-            onClick={() => onWalletClick(w.id)}
-            active={w.id === currentWalletId}
-          >
-            {w.title}
-          </NavbarDropdownItem>
-        ))}
-      </NavbarDropdown>
-
       <NavbarDropdown title="Assets">
         <NavbarDropdownItem
           onClick={() =>
