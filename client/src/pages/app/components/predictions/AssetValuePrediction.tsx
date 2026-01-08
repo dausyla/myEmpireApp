@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { useWindowContext } from "../../../../utilies/components/WindowContext";
+import { useWindowContext } from "../Windows/WindowContext";
 import { useData } from "../../../../contexts/DataContext/DataContextHook";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";

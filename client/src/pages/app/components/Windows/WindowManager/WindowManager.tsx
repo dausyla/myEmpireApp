@@ -1,5 +1,5 @@
-import { useState, useEffect, type JSX } from "react";
-import { Window } from "./Window";
+import React, { useState, useEffect, type JSX } from "react";
+import { Window } from "../Window/Window";
 
 export interface ManagedWindow {
   id: string;
@@ -94,11 +94,30 @@ export const useWindowManager = ({
     });
   };
 
+  // Track window bounds for snapping
+  const windowBoundsRef = React.useRef<
+    Record<string, { x: number; y: number; width: number; height: number }>
+  >({});
+
+  const updateWindowBounds = (
+    id: string,
+    bounds: { x: number; y: number; width: number; height: number },
+  ) => {
+    windowBoundsRef.current[id] = bounds;
+  };
+
+  const getOtherWindowBounds = (id: string) => {
+    return Object.entries(windowBoundsRef.current)
+      .filter(([key]) => key !== id)
+      .map(([, bounds]) => bounds);
+  };
+
   const renderedWindows = (
     <>
       {windows.map((win, index) => (
         <Window
           key={win.id}
+          id={win.id}
           title={win.title}
           initialX={minX + 50 + index * 30} // Stagger windows
           initialY={20 + index * 30}
@@ -108,10 +127,15 @@ export const useWindowManager = ({
           minY={minY}
           maxX={maxX}
           maxY={maxY}
-          onClose={() => closeWindow(win.id)}
+          onClose={() => {
+            delete windowBoundsRef.current[win.id];
+            closeWindow(win.id);
+          }}
           onFocus={() => bringToFront(win.id)}
           zIndex={1000 + index}
           headerActions={win.headerActions}
+          onBoundsUpdate={(bounds) => updateWindowBounds(win.id, bounds)}
+          getOtherWindowBounds={() => getOtherWindowBounds(win.id)}
         >
           {win.element}
         </Window>

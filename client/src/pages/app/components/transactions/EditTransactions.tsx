@@ -8,7 +8,7 @@ import { EditableValue } from "../../../../utilies/components/EditableValue";
 import type { Transaction, TransactionTypes } from "@shared/WalletTypes";
 
 import { EditableDate } from "../../../../utilies/components/EditableDate";
-import { useWindowContext } from "../../../../utilies/components/WindowContext";
+import { useWindowContext } from "../Windows/WindowContext";
 
 export function EditTransactions() {
   const { wallet } = useWallet();

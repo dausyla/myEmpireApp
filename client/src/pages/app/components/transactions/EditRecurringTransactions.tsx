@@ -8,7 +8,7 @@ import type {
   RecurringTransaction,
   TransactionTypes,
 } from "@shared/WalletTypes";
-import { useWindowContext } from "../../../../utilies/components/WindowContext";
+import { useWindowContext } from "../Windows/WindowContext";
 
 export function EditRecurringTransactions() {
   const { wallet } = useWallet();

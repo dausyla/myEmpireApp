@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { NavBar } from "./components/Navbar";
 import { AssetHierarchy } from "./components/AssetHierarchy/AssetHierarchy";
-import { useWindowManager } from "../../utilies/components/WindowManager";
+import { useWindowManager } from "./components/Windows/WindowManager/WindowManager";
 
 export function MyEmpireApp() {
   const containerRef = useRef<HTMLDivElement>(null);

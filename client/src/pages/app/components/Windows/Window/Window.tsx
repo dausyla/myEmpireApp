@@ -1,7 +1,8 @@
 import React, { useState, useRef, useCallback } from "react";
-import { IoClose } from "react-icons/io5";
 import "./Window.css";
-import { WindowContext } from "./WindowContext";
+import { WindowContext } from "../WindowContext";
+import { WindowHeader } from "./WindowHeader";
+import { WindowResizeHandles } from "./WindowResizeHandles";
 
 export interface WindowProps {
   title: string;
@@ -19,6 +20,19 @@ export interface WindowProps {
   onFocus?: () => void;
   children: React.ReactNode;
   zIndex?: number;
+  id?: string;
+  onBoundsUpdate?: (bounds: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }) => void;
+  getOtherWindowBounds?: () => {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }[];
   headerActions?: React.ReactNode;
 }
 
@@ -39,6 +53,8 @@ export const Window: React.FC<WindowProps> = ({
   children,
   zIndex = 1000,
   headerActions,
+  onBoundsUpdate,
+  getOtherWindowBounds,
 }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [size, setSize] = useState({
@@ -53,6 +69,13 @@ export const Window: React.FC<WindowProps> = ({
     useState<React.ReactNode>(null);
 
   const windowRef = useRef<HTMLDivElement>(null);
+
+  // Update bounds on mount and when position/size changes
+  React.useEffect(() => {
+    if (onBoundsUpdate) {
+      onBoundsUpdate({ ...position, ...size });
+    }
+  }, [position, size, onBoundsUpdate]);
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent, type: "drag" | "resize", resizeDir?: string) => {
@@ -100,33 +123,86 @@ export const Window: React.FC<WindowProps> = ({
         let newX = position.x;
         let newY = position.y;
 
+        const SNAP_THRESHOLD = 10;
+        const otherBounds = getOtherWindowBounds ? getOtherWindowBounds() : [];
+
         if (resizeType.includes("right")) {
+          let targetX = e.clientX;
+          // Snap to other windows' left or right edges
+          for (const bounds of otherBounds) {
+            if (Math.abs(targetX - bounds.x) < SNAP_THRESHOLD) {
+              targetX = bounds.x;
+            } else if (
+              Math.abs(targetX - (bounds.x + bounds.width)) < SNAP_THRESHOLD
+            ) {
+              targetX = bounds.x + bounds.width;
+            }
+          }
+
           newWidth = Math.max(
             minWidth,
             Math.min(
-              e.clientX - rect.left,
+              targetX - rect.left,
               (maxX || window.innerWidth) - position.x,
             ),
           );
         }
         if (resizeType.includes("bottom")) {
+          let targetY = e.clientY;
+          // Snap to other windows' top or bottom edges
+          for (const bounds of otherBounds) {
+            console.log(`bounds.y: ${bounds.y}`);
+            console.log(`targetY: ${targetY}`);
+            if (Math.abs(targetY - bounds.y) < SNAP_THRESHOLD) {
+              targetY = bounds.y;
+            } else if (
+              Math.abs(targetY - (bounds.y + bounds.height)) < SNAP_THRESHOLD
+            ) {
+              targetY = bounds.y + bounds.height;
+            }
+          }
+
           newHeight = Math.max(
             minHeight,
             Math.min(
-              e.clientY - rect.top,
+              targetY - rect.top,
               (maxY || window.innerHeight) - position.y,
             ),
           );
         }
         if (resizeType.includes("left")) {
-          const deltaX = rect.left - e.clientX;
+          let targetX = e.clientX;
+          // Snap to other windows' left or right edges
+          for (const bounds of otherBounds) {
+            if (Math.abs(targetX - bounds.x) < SNAP_THRESHOLD) {
+              targetX = bounds.x;
+            } else if (
+              Math.abs(targetX - (bounds.x + bounds.width)) < SNAP_THRESHOLD
+            ) {
+              targetX = bounds.x + bounds.width;
+            }
+          }
+
+          const deltaX = rect.left - targetX;
           const maxDeltaX = position.x - minX;
           const constrainedDeltaX = Math.min(deltaX, maxDeltaX);
           newWidth = Math.max(minWidth, size.width + constrainedDeltaX);
           newX = position.x - (newWidth - size.width);
         }
         if (resizeType.includes("top")) {
-          const deltaY = rect.top - e.clientY;
+          let targetY = e.clientY;
+          // Snap to other windows' top or bottom edges
+          for (const bounds of otherBounds) {
+            if (Math.abs(targetY - bounds.y) < SNAP_THRESHOLD) {
+              targetY = bounds.y;
+            } else if (
+              Math.abs(targetY - (bounds.y + bounds.height)) < SNAP_THRESHOLD
+            ) {
+              targetY = bounds.y + bounds.height;
+            }
+          }
+
+          const deltaY = rect.top - targetY;
           const maxDeltaY = position.y - minY;
           const constrainedDeltaY = Math.min(deltaY, maxDeltaY);
           newHeight = Math.max(minHeight, size.height + constrainedDeltaY);
@@ -150,6 +226,7 @@ export const Window: React.FC<WindowProps> = ({
       minY,
       maxX,
       maxY,
+      getOtherWindowBounds,
     ],
   );
 
@@ -189,32 +266,13 @@ export const Window: React.FC<WindowProps> = ({
       <WindowContext.Provider
         value={{ setHeaderActions: setInternalHeaderActions }}
       >
-        {/* Title Bar */}
-        <div
-          className="text-white flex items-center justify-between p-1 cursor-move border-b border-white/10 shadow-sm z-20 relative"
-          style={{ background: "var(--bg-surface-secondary)" }}
+        <WindowHeader
+          title={title}
+          headerActions={headerActions}
+          internalHeaderActions={internalHeaderActions}
+          onClose={onClose}
           onMouseDown={(e) => handleMouseDown(e, "drag")}
-        >
-          <div
-            className="text-base font-semibold flex-1 whitespace-nowrap overflow-hidden text-ellipsis px-2 text-left"
-            style={{ color: "var(--text-primary)" }}
-          >
-            {title}
-          </div>
-          <div
-            className="flex items-center gap-2"
-            onMouseDown={(e) => e.stopPropagation()}
-          >
-            {headerActions}
-            {internalHeaderActions}
-            <button
-              className="btn btn-danger btn-small btn-round"
-              onClick={onClose}
-            >
-              <IoClose />
-            </button>
-          </div>
-        </div>
+        />
 
         {/* Content */}
         <div className="flex-1 overflow-auto bg-[var(--bg-surface)] text-[var(--text-primary)]">
@@ -222,40 +280,8 @@ export const Window: React.FC<WindowProps> = ({
         </div>
       </WindowContext.Provider>
 
-      {/* Resize Handles */}
-      <div
-        className="absolute top-0 left-0 w-2 h-2 cursor-nw-resize bg-transparent hover:bg-blue-500/10"
-        onMouseDown={(e) => handleMouseDown(e, "resize", "top-left")}
-      />
-      <div
-        className="absolute top-0 right-0 w-2 h-2 cursor-ne-resize bg-transparent hover:bg-blue-500/10"
-        onMouseDown={(e) => handleMouseDown(e, "resize", "top-right")}
-      />
-      <div
-        className="absolute bottom-0 left-0 w-2 h-2 cursor-sw-resize bg-transparent hover:bg-blue-500/10"
-        onMouseDown={(e) => handleMouseDown(e, "resize", "bottom-left")}
-      />
-      <div
-        className="absolute bottom-0 right-0 w-2 h-2 cursor-se-resize bg-transparent hover:bg-blue-500/10"
-        onMouseDown={(e) => handleMouseDown(e, "resize", "bottom-right")}
-      />
-
-      {/* Edge resize handles */}
-      <div
-        className="absolute top-0 left-2 right-2 h-1 cursor-n-resize bg-transparent hover:bg-blue-500/10"
-        onMouseDown={(e) => handleMouseDown(e, "resize", "top")}
-      />
-      <div
-        className="absolute bottom-0 left-2 right-2 h-1 cursor-s-resize bg-transparent hover:bg-blue-500/10"
-        onMouseDown={(e) => handleMouseDown(e, "resize", "bottom")}
-      />
-      <div
-        className="absolute top-2 bottom-2 left-0 w-1 cursor-w-resize bg-transparent hover:bg-blue-500/10"
-        onMouseDown={(e) => handleMouseDown(e, "resize", "left")}
-      />
-      <div
-        className="absolute top-2 bottom-2 right-0 w-1 cursor-e-resize bg-transparent hover:bg-blue-500/10"
-        onMouseDown={(e) => handleMouseDown(e, "resize", "right")}
+      <WindowResizeHandles
+        onMouseDown={(e, direction) => handleMouseDown(e, "resize", direction)}
       />
     </div>
   );
