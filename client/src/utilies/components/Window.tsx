@@ -173,7 +173,7 @@ export const Window: React.FC<WindowProps> = ({
   return (
     <div
       ref={windowRef}
-      className={`absolute flex flex-col bg-[var(--bg-surface-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg overflow-hidden select-none ${isDragging || isResizing ? "select-none" : ""}`}
+      className={`absolute flex flex-col card shadow-lg select-none ${isDragging || isResizing ? "select-none" : ""}`}
       onMouseDown={() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         onFocus && onFocus();

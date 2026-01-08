@@ -77,9 +77,10 @@ export const useWindowManager = ({
 
   // Calculate boundaries
   const hierarchyWidth = containerBounds.width * (2 / 12);
-  const minX = containerBounds.left + hierarchyWidth + 10;
-  const maxX = containerBounds.left + containerBounds.width - 10;
-  const maxY = containerBounds.height - 10;
+  const minX = containerBounds.left + hierarchyWidth + 1;
+  const maxX = containerBounds.left + containerBounds.width - 1;
+  const minY = 1;
+  const maxY = containerBounds.height - 1;
 
   const bringToFront = (id: string) => {
     setWindows((prev) => {
@@ -104,7 +105,7 @@ export const useWindowManager = ({
           initialWidth={win.initialWidth}
           initialHeight={win.initialHeight}
           minX={minX}
-          minY={10}
+          minY={minY}
           maxX={maxX}
           maxY={maxY}
           onClose={() => closeWindow(win.id)}

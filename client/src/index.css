@@ -3,11 +3,11 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-1.5 px-1.5 py-1.5 rounded-xs text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-1.5 px-1.5 py-1.5 text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-ghost {
-    @apply bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-surface-secondary)] hover:text-[var(--text-primary)];
+    @apply bg-transparent text-(--text-secondary) hover:bg-(--bg-surface-secondary) hover:text-(--text-primary);
   }
 
   .btn-primary-full {
@@ -46,31 +46,31 @@
   }
 
   .card {
-    @apply bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-lg shadow-sm;
+    @apply bg-(--bg-surface) border border-(--border-color) shadow-sm overflow-hidden;
   }
 
   .input {
-    @apply bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-xs px-1.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e94057]/20 focus:border-[#e94057] transition-all;
+    @apply bg-(--bg-surface) border border-(--border-color) text-(--text-primary) px-1.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e94057]/20 focus:border-[#e94057] transition-all;
   }
 
   .dropdown {
-    @apply hover:bg-[var(--bg-surface-secondary)] relative px-2 py-2 rounded-sm cursor-pointer;
+    @apply hover:bg-(--bg-surface-secondary) relative px-2 py-2 cursor-pointer;
   }
 
   .dropdown-trigger {
-    @apply flex items-center gap-1 font-medium transition-colors cursor-pointer text-[var(--text-primary)] hover:text-[var(--brand-primary)];
+    @apply flex items-center gap-1 font-medium transition-colors cursor-pointer text-(--text-primary) hover:text-(--brand-primary);
   }
 
   .dropdown-menu {
-    @apply absolute top-full left-0 mt-1 w-48 py-1 rounded-md shadow-lg z-[9999] border border-[var(--border-color)] bg-[var(--bg-surface)];
+    @apply absolute top-full left-0 w-48 shadow-lg z-9999 border border-(--border-color) bg-(--bg-surface);
   }
 
   .dropdown-item {
-    @apply block w-full text-left px-4 py-2 text-sm transition-colors text-[var(--text-primary)] hover:bg-[var(--bg-surface-secondary)] cursor-pointer;
+    @apply block w-full text-left px-4 py-2 text-sm transition-colors text-(--text-primary) hover:bg-(--bg-surface-secondary) cursor-pointer;
   }
 
   .dropdown-item.active {
-    @apply bg-[var(--brand-primary)] text-white;
+    @apply bg-(--brand-primary) text-white;
   }
 }
 
