@@ -66,15 +66,6 @@ export function AssetHierarchy() {
       </div>
       <div className="flex-1 overflow-y-auto py-2">
         <div className="p-0">
-          <div
-            className={`px-3 py-1.5 cursor-pointer hover:bg-gray-500/15 text-[0.9rem] font-bold flex items-center gap-2 ${
-              isGlobalSelected ? "text-[#e94057]" : "text-(--text-primary)"
-            }`}
-            onClick={() => setCurrentItemId({ type: "directory", id: root.id })}
-          >
-            <FaFolder className="text-yellow-500" />
-            Global
-          </div>
           <DirectoryItem dir={root} />
         </div>
       </div>

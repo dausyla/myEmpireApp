@@ -1,4 +1,11 @@
-import { FaFolder, FaFolderOpen, FaTrash, FaFileAlt } from "react-icons/fa";
+import {
+  FaFolder,
+  FaFolderOpen,
+  FaTrash,
+  FaFileAlt,
+  FaCaretRight,
+  FaCaretDown,
+} from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import { AssetItem } from "./AssetItem";
 import { useState } from "react";
@@ -50,6 +57,10 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentItemId({ type: "directory", id: dir.id });
+  };
+
+  const handleToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsOpened(!isOpened);
   };
 
@@ -82,6 +93,12 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
           onMouseLeave={() => setHovered(false)}
         >
           <div className="flex items-center gap-2 flex-1 overflow-hidden">
+            <div
+              onClick={handleToggle}
+              className="cursor-pointer hover:text-[#e94057] transition-colors"
+            >
+              {isOpened ? <FaCaretDown /> : <FaCaretRight />}
+            </div>
             {isOpened ? (
               <FaFolderOpen className="text-yellow-500" />
             ) : (
