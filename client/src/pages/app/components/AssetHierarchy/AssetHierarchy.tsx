@@ -2,10 +2,12 @@ import { DirectoryItem } from "./DirectoryItem";
 import { FaFileAlt, FaFolder } from "react-icons/fa";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
+import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 
 export function AssetHierarchy() {
   const { wallet } = useWallet();
   const { addAsset, addDir } = useBatch();
+  const { setCurrentItemId, currentItemId } = useApp();
 
   if (!wallet) return null;
 
@@ -15,6 +17,9 @@ export function AssetHierarchy() {
     console.log("No root dir...");
     return null;
   }
+
+  const isGlobalSelected =
+    currentItemId?.type === "directory" && currentItemId.id === root.id;
 
   return (
     <div
@@ -61,6 +66,15 @@ export function AssetHierarchy() {
       </div>
       <div className="flex-1 overflow-y-auto py-2">
         <div className="p-0">
+          <div
+            className={`px-3 py-1.5 cursor-pointer hover:bg-gray-500/15 text-[0.9rem] font-bold flex items-center gap-2 ${
+              isGlobalSelected ? "text-[#e94057]" : "text-(--text-primary)"
+            }`}
+            onClick={() => setCurrentItemId({ type: "directory", id: root.id })}
+          >
+            <FaFolder className="text-yellow-500" />
+            Global
+          </div>
           <DirectoryItem dir={root} />
         </div>
       </div>

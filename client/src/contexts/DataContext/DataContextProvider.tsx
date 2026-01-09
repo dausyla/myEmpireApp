@@ -176,11 +176,122 @@ export const DataContextProvider = ({ children }: { children: ReactNode }) => {
     };
   };
 
+  // Helper to get all assets in a directory recursively
+  const getAllAssetsInDirectory = (dirId: number): Asset[] => {
+    if (!wallet) return [];
+    if (dirId === 0) return wallet.assets;
+
+    const assets = wallet.assets.filter((a) => a.dir_id === dirId);
+    const subDirs = wallet.dirs.filter((d) => d.parent_dir_id === dirId);
+
+    let allAssets = [...assets];
+    subDirs.forEach((subDir) => {
+      allAssets = [...allAssets, ...getAllAssetsInDirectory(subDir.id)];
+    });
+
+    return allAssets;
+  };
+
+  const getDirectoryPerformancePerDates = (
+    dirId: number,
+  ): Record<number, AssetPerformancePerDate> => {
+    if (!wallet) return {};
+
+    const assets = getAllAssetsInDirectory(dirId);
+
+    const result: Record<number, AssetPerformancePerDate> = {};
+    const dates = getSortedDates();
+
+    // Initialize result with 0s
+    dates.forEach((date) => {
+      result[date.id] = {
+        value: 0,
+        deposits: 0,
+        withdrawals: 0,
+        fees: 0,
+        rewards: 0,
+        timeSpent: 0,
+      };
+    });
+
+    // Sum up performance of each asset
+    assets.forEach((asset) => {
+      const assetPerf = getAssetPerformancePerDates(asset.id);
+      Object.entries(assetPerf).forEach(([dateIdStr, perf]) => {
+        const dateId = Number(dateIdStr);
+        if (result[dateId]) {
+          result[dateId].value += perf.value;
+          result[dateId].deposits += perf.deposits;
+          result[dateId].withdrawals += perf.withdrawals;
+          result[dateId].fees += perf.fees;
+          result[dateId].rewards += perf.rewards;
+          // Time spent is the same for the date interval, don't sum it.
+          // However, we need to set it once.
+          // Actually, getAssetPerformancePerDates calculates timeSpent based on date diff.
+          // So it should be the same for all assets for a given date.
+          result[dateId].timeSpent = perf.timeSpent;
+        }
+      });
+    });
+
+    return result;
+  };
+
+  const getDirectoryPerformance = (dirId: number): AssetPerformance | null => {
+    const perDates = getDirectoryPerformancePerDates(dirId);
+    const dateIds = Object.keys(perDates).map(Number);
+    if (dateIds.length === 0) return null;
+
+    let totalDeposit = 0;
+    let totalWithdrawal = 0;
+    let totalFees = 0;
+    let totalRewards = 0;
+    let timeSpent = 0;
+
+    Object.values(perDates).forEach((d) => {
+      totalDeposit += d.deposits;
+      totalWithdrawal += d.withdrawals;
+      totalFees += d.fees;
+      totalRewards += d.rewards;
+      timeSpent += d.timeSpent;
+    });
+
+    // Get last value
+    const lastDateId = Math.max(...dateIds);
+    const totalValue = perDates[lastDateId].value;
+
+    // --- Performance ---
+    const netInvested =
+      totalDeposit - totalWithdrawal - totalFees + totalRewards;
+    const totalInterests = totalValue - netInvested;
+    const totalGrowth =
+      netInvested > 0 ? (totalInterests / netInvested) * 100 : 0;
+    const apy =
+      timeSpent > 0
+        ? ((totalValue / netInvested) ** (365 / timeSpent) - 1) * 100
+        : 0;
+
+    return {
+      totalValue,
+      timeSpent: Math.round(timeSpent),
+      totalDeposit,
+      totalWithdrawal,
+      totalFees,
+      totalRewards,
+      totalInterests,
+      totalGrowth: round(totalGrowth),
+      apy: isFinite(apy) ? round(apy) : 0,
+    };
+  };
+
   return (
     <DataContext.Provider
       value={{
         getAssetPerformance,
         getAssetPerformancePerDates,
+        getDirectoryPerformance,
+        getDirectoryPerformancePerDates,
+        getAllAssetsInDirectory,
         getSortedDates,
         getSortedValues,
         getSortedTransactions,

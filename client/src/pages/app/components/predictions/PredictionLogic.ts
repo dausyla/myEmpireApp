@@ -70,6 +70,119 @@ export const calculatePredictionAsset = (
   return { labels, datasets };
 };
 
+export const calculatePredictionDirectory = (
+  assets: Asset[],
+  years: number,
+  isDetailed: boolean,
+  getAssetPerformancePerDates: (
+    assetId: number,
+  ) => Record<number, AssetPerformancePerDate>,
+  recurringTransactions: RecurringTransaction[],
+  sortedDates: any[],
+): PredictionResult => {
+  const historicalLabels = sortedDates.map((d) => d.date);
+  const futureLabels = Array.from({ length: years }, (_, i) => `Year ${i + 1}`);
+  const labels = [...historicalLabels, ...futureLabels];
+
+  // We will sum up the datasets
+  // If !isDetailed: 1 dataset "Total Value"
+  // If isDetailed: 3 datasets "Total Value", "Total Interests", "Total Inputs"
+
+  let totalBaseData: number[] = [];
+  let totalInterestsData: number[] = [];
+  let totalInputsData: number[] = [];
+
+  // Initialize arrays
+  const totalPoints = labels.length;
+  totalBaseData = Array(totalPoints).fill(0);
+  if (isDetailed) {
+    totalInterestsData = Array(totalPoints).fill(0);
+    totalInputsData = Array(totalPoints).fill(0);
+  }
+
+  assets.forEach((asset) => {
+    const assetPerf = getAssetPerformancePerDates(asset.id);
+    const res = calculatePredictionAsset(
+      asset,
+      years,
+      isDetailed,
+      assetPerf,
+      recurringTransactions,
+      sortedDates,
+    );
+
+    res.datasets.forEach((ds) => {
+      const data = ds.data.map((v) => (v === null ? 0 : v));
+
+      if (!isDetailed) {
+        // Only one dataset per asset
+        data.forEach((val, i) => {
+          if (i < totalBaseData.length) totalBaseData[i] += val;
+        });
+      } else {
+        // 3 datasets: Base, Interests, Inputs
+        // We identify them by label suffix? Or order?
+        // calculateDetailedPrediction returns: [Base, Interests (optional), Inputs (optional)]
+        // Base label is asset.name
+        // Interests label is asset.name + " - Interests"
+        // Inputs label is asset.name + " - Inputs"
+
+        if (ds.label === asset.name) {
+          data.forEach((val, i) => {
+            if (i < totalBaseData.length) totalBaseData[i] += val;
+          });
+        } else if (ds.label.includes(" - Interests")) {
+          data.forEach((val, i) => {
+            if (i < totalInterestsData.length) totalInterestsData[i] += val;
+          });
+        } else if (ds.label.includes(" - Inputs")) {
+          data.forEach((val, i) => {
+            if (i < totalInputsData.length) totalInputsData[i] += val;
+          });
+        }
+      }
+    });
+  });
+
+  const datasets: PredictionDataset[] = [];
+  const dirColor = "#F59E0B"; // Amber-500
+  const fadedDirColor = getFadedColor(dirColor);
+
+  datasets.push({
+    label: "Total Value",
+    data: totalBaseData,
+    borderColor: dirColor,
+    backgroundColor: fadedDirColor,
+    fill: true,
+  });
+
+  if (isDetailed) {
+    // Interests
+    const cInt = adjustColor(dirColor, 20);
+    datasets.push({
+      label: "Total Interests",
+      data: totalInterestsData,
+      borderColor: cInt,
+      backgroundColor: getFadedColor(cInt),
+      borderDash: [5, 5],
+      fill: "-1",
+    });
+
+    // Inputs
+    const cInp = adjustColor(dirColor, -20);
+    datasets.push({
+      label: "Total Inputs",
+      data: totalInputsData,
+      borderColor: cInp,
+      backgroundColor: getFadedColor(cInp),
+      borderDash: [2, 2],
+      fill: "-1",
+    });
+  }
+
+  return { labels, datasets };
+};
+
 function calculateMonthlyContribution(
   asset: Asset,
   recurringTransactions: RecurringTransaction[],

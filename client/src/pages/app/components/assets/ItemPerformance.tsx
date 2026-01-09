@@ -1,12 +1,15 @@
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 import { useData } from "../../../../contexts/DataContext/DataContextHook";
-export function AssetPerformence() {
+export function ItemPerformance() {
   const { currentItemId } = useApp();
-  const { getAssetPerformance } = useData();
+  const { getAssetPerformance, getDirectoryPerformance } = useData();
 
-  if (!currentItemId || currentItemId.type === "directory") return null;
+  if (!currentItemId) return null;
 
-  const perf = getAssetPerformance(currentItemId.id);
+  const perf =
+    currentItemId.type === "asset"
+      ? getAssetPerformance(currentItemId.id)
+      : getDirectoryPerformance(currentItemId.id);
 
   const totalValue = perf ? perf.totalValue : 0;
   const timeSpent = perf ? perf.timeSpent : 0;

@@ -1,8 +1,8 @@
 import type { JSX } from "react";
 import { NavbarDropdown, NavbarDropdownItem } from "./NavbarDropdown";
-import { AssetPerformence } from "../assets/AssetPerformence";
-import { AssetValuesTable } from "../assets/AssetValuesTable";
-import { EditAsset } from "../assets/EditAsset";
+import { ItemPerformance } from "../assets/ItemPerformance";
+import { ItemValues } from "../assets/ItemValues";
+import { EditItem } from "../assets/EditItem";
 import { EditTransactions } from "../transactions/EditTransactions";
 import { EditRecurringTransactions } from "../transactions/EditRecurringTransactions";
 import { AssetValuePrediction } from "../predictions/AssetValuePrediction";
@@ -22,22 +22,20 @@ export const NavbarMenu = ({ openWindow }: NavbarMenuProps) => {
       <NavbarDropdown title="Assets">
         <NavbarDropdownItem
           onClick={() =>
-            openWindow(<AssetPerformence />, "Asset Performance", 350, 230)
+            openWindow(<ItemPerformance />, "Item Performance", 350, 230)
           }
         >
           Performance
         </NavbarDropdownItem>
         <NavbarDropdownItem
-          onClick={() =>
-            openWindow(<AssetValuesTable />, "Asset Values", 800, 530)
-          }
+          onClick={() => openWindow(<ItemValues />, "Values", 800, 530)}
         >
           Values Table
         </NavbarDropdownItem>
         <NavbarDropdownItem
-          onClick={() => openWindow(<EditAsset />, "Edit Asset", 320, 200)}
+          onClick={() => openWindow(<EditItem />, "Edit Item", 320, 200)}
         >
-          Edit Asset
+          Edit Item
         </NavbarDropdownItem>
       </NavbarDropdown>
 
@@ -68,13 +66,13 @@ export const NavbarMenu = ({ openWindow }: NavbarMenuProps) => {
           onClick={() =>
             openWindow(
               <AssetValuePrediction />,
-              "Asset Value Prediction",
+              "Item Value Prediction",
               700,
               500,
             )
           }
         >
-          Asset Value Prediction
+          Item Value Prediction
         </NavbarDropdownItem>
       </NavbarDropdown>
     </div>

@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { Directory } from "@shared/WalletTypes";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
+import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 
 interface DirectoryItemProps {
   dir: Directory;
@@ -13,6 +14,7 @@ interface DirectoryItemProps {
 
 export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
   const { wallet } = useWallet();
+  const { currentItemId, setCurrentItemId } = useApp();
   const [isOpened, setIsOpened] = useState(false);
   const [, setHovered] = useState(false);
   const { addDir, addAsset, deleteDir } = useBatch();
@@ -45,6 +47,12 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
     deleteDir(dir.id);
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentItemId({ type: "directory", id: dir.id });
+    setIsOpened(!isOpened);
+  };
+
   const subDirs = wallet.dirs
     .filter((d) => d.parent_dir_id === dir.id)
     .sort((a, b) => a.name.localeCompare(b.name))
@@ -55,14 +63,21 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((a) => <AssetItem key={a.id} asset={a} depth={depth} />);
 
+  const isSelected =
+    currentItemId?.type === "directory" && currentItemId.id === dir.id;
+
   return (
     <>
       {/* Directory line */}
       {dir.id !== 0 && (
         <div
-          className={`group flex items-center justify-between px-3 py-1.5 cursor-pointer transition-colors border-l-[3px] border-transparent hover:bg-gray-500/15 text-[0.9rem] text-(--text-primary)`}
+          className={`group flex items-center justify-between px-3 py-1.5 cursor-pointer transition-colors border-l-[3px] border-transparent hover:bg-gray-500/15 text-[0.9rem] ${
+            isSelected
+              ? "border-l-[#e94057] bg-gray-500/15 text-(--text-primary)"
+              : "text-(--text-primary)"
+          }`}
           style={{ paddingLeft: `${depth * 16 + 12}px` }}
-          onClick={() => setIsOpened(!isOpened)}
+          onClick={handleClick}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >

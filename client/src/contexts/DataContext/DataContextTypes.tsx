@@ -14,6 +14,11 @@ export type DataContextType = {
   getAssetPerformancePerDates: (
     assetId: number,
   ) => Record<number, AssetPerformancePerDate>;
+  getDirectoryPerformance: (dirId: number) => AssetPerformance | null;
+  getDirectoryPerformancePerDates: (
+    dirId: number,
+  ) => Record<number, AssetPerformancePerDate>;
+  getAllAssetsInDirectory: (dirId: number) => Asset[];
   getSortedDates: () => WalletDate[];
   getSortedValues: (asset: Asset) => AssetValue[];
   getSortedTransactions: (asset: Asset) => Transaction[];
