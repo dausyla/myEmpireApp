@@ -26,12 +26,20 @@ export const NavbarDropdown = ({
   }, []);
 
   return (
-    <div className={`dropdown ${className}`} ref={dropdownRef}>
-      <button onClick={() => setIsOpen(!isOpen)} className="dropdown-trigger">
+    <div
+      className={`dropdown ${className}`}
+      ref={dropdownRef}
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      <div className="dropdown-trigger">
         {title}
         <span className="text-xs opacity-50">▼</span>
-      </button>
-      {isOpen && <div className="dropdown-menu">{children}</div>}
+      </div>
+      {isOpen && (
+        <div className="dropdown-menu" onClick={(e) => e.stopPropagation()}>
+          {children}
+        </div>
+      )}
     </div>
   );
 };

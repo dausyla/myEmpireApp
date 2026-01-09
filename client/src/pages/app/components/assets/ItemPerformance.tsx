@@ -31,7 +31,7 @@ export function ItemPerformance() {
             <div className="text-[1.2rem] mb-[2px]">💰</div>
             <div className="flex flex-col items-center">
               <div className="flex items-center mb-0">
-                <span className="text-[var(--text-secondary)] mr-1 text-[0.8em]">
+                <span className="text-(--text-secondary) mr-1 text-[0.8em]">
                   $
                 </span>
                 <span
@@ -41,7 +41,7 @@ export function ItemPerformance() {
                   {totalValue.toLocaleString()}
                 </span>
               </div>
-              <div className="text-[0.65rem] text-[var(--text-secondary)]">
+              <div className="text-[0.65rem] text-(--text-secondary)">
                 Value
               </div>
             </div>
@@ -58,9 +58,7 @@ export function ItemPerformance() {
               >
                 {timeSpent.toLocaleString()} days
               </span>
-              <div className="text-[0.65rem] text-[var(--text-secondary)]">
-                Time
-              </div>
+              <div className="text-[0.65rem] text-(--text-secondary)">Time</div>
             </div>
           </div>
         </div>
@@ -71,11 +69,11 @@ export function ItemPerformance() {
             <div className="text-[1.2rem] mb-[2px]">📥</div>
             <div className="flex flex-col items-center">
               <span
-                className={`font-medium text-[0.9rem] ${totalDeposit > 0 ? "text-green-500" : "text-[var(--text-secondary)]"}`}
+                className={`font-medium text-[0.9rem] ${totalDeposit > 0 ? "text-green-500" : "text-(--text-secondary)"}`}
               >
                 +${totalDeposit.toLocaleString()}
               </span>
-              <div className="text-[0.65rem] text-[var(--text-secondary)]">
+              <div className="text-[0.65rem] text-(--text-secondary)">
                 Deposits
               </div>
               {totalRewards > 0 && (
@@ -93,11 +91,11 @@ export function ItemPerformance() {
             <div className="text-[1.2rem] mb-[2px]">📤</div>
             <div className="flex flex-col items-center">
               <span
-                className={`font-medium text-[0.9rem] ${totalWithdrawal > 0 ? "text-red-500" : "text-[var(--text-secondary)]"}`}
+                className={`font-medium text-[0.9rem] ${totalWithdrawal > 0 ? "text-red-500" : "text-(--text-secondary)"}`}
               >
                 -${totalWithdrawal.toLocaleString()}
               </span>
-              <div className="text-[0.65rem] text-[var(--text-secondary)]">
+              <div className="text-[0.65rem] text-(--text-secondary)">
                 Withdrawals
               </div>
               {totalFees > 0 && (
@@ -111,7 +109,7 @@ export function ItemPerformance() {
       </div>
 
       {/* Divider */}
-      <hr className="my-1 mx-4 opacity-10 border-[var(--border-color)]" />
+      <hr className="my-1 mx-4 opacity-10 border-(--border-color)" />
 
       {/* Row 2: Performance Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 m-0 p-2">
@@ -122,7 +120,7 @@ export function ItemPerformance() {
             <div className="text-green-500 font-bold text-[0.9rem]">
               {totalGrowth.toFixed(2)}%
             </div>
-            <div className="text-[0.65rem] text-[var(--text-secondary)]">
+            <div className="text-[0.65rem] text-(--text-secondary)">
               Total Growth
             </div>
           </div>
@@ -134,7 +132,7 @@ export function ItemPerformance() {
             <div className="text-blue-500 font-bold text-[0.9rem]">
               ${totalInterests.toLocaleString()}
             </div>
-            <div className="text-[0.65rem] text-[var(--text-secondary)]">
+            <div className="text-[0.65rem] text-(--text-secondary)">
               Total Interests
             </div>
           </div>
@@ -146,7 +144,7 @@ export function ItemPerformance() {
             <div className="text-cyan-500 font-bold text-[0.9rem]">
               {apy.toFixed(2)}%
             </div>
-            <div className="text-[0.65rem] text-[var(--text-secondary)]">
+            <div className="text-[0.65rem] text-(--text-secondary)">
               Annual Yield
             </div>
           </div>
@@ -162,13 +160,13 @@ export function ItemPerformance() {
                     ? "text-green-500"
                     : totalDeposit - totalWithdrawal < 0
                       ? "text-red-500"
-                      : "text-[var(--text-secondary)]"
+                      : "text-(--text-secondary)"
                 }`}
               >
                 {totalDeposit - totalWithdrawal >= 0 ? "+" : ""}$
                 {(totalDeposit - totalWithdrawal).toLocaleString()}
               </span>
-              <div className="text-[0.65rem] text-[var(--text-secondary)]">
+              <div className="text-[0.65rem] text-(--text-secondary)">
                 Net Flow
               </div>
             </div>

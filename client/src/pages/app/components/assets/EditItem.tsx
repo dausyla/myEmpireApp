@@ -57,9 +57,7 @@ export function EditItem() {
         <div className="col-span-1 md:col-span-2">
           <div className="mb-2">
             <label className={labelClass}>
-              <span className="text-[0.9rem] text-[var(--text-primary)]">
-                📝
-              </span>
+              <span className="text-[0.9rem] text-(--text-primary)">📝</span>
               Name
             </label>
             <input
@@ -77,7 +75,7 @@ export function EditItem() {
           <div className="col-span-1 md:col-span-2">
             <div className="mb-2">
               <label className={labelClass}>
-                <BsFileText className="text-[0.9rem] text-[var(--text-primary)]" />
+                <BsFileText className="text-[0.9rem] text-(--text-primary)" />
                 Description
               </label>
               <textarea
@@ -97,13 +95,13 @@ export function EditItem() {
             <div className="col-span-1">
               <div className="mb-2 m-1">
                 <label className={labelClass}>
-                  <BsPalette className="text-[0.9rem] text-[var(--text-primary)]" />
+                  <BsPalette className="text-[0.9rem] text-(--text-primary)" />
                   Color Theme
                 </label>
                 <div className="flex gap-2 items-center">
                   <input
                     type="color"
-                    className="w-8 h-7 p-0.5 border border-[var(--border-color)] rounded bg-[var(--bg-surface-secondary)] cursor-pointer"
+                    className="w-8 h-7 p-0.5 border border-(--border-color) rounded bg-(--bg-surface-secondary) cursor-pointer"
                     value={color}
                     onChange={(e) => setColor(e.target.value)}
                     onBlur={handleSave}
@@ -122,7 +120,7 @@ export function EditItem() {
             <div className="col-span-1">
               <div className="mb-2 m-1">
                 <label className={labelClass}>
-                  <BsPercent className="text-[0.9rem] text-[var(--text-primary)]" />
+                  <BsPercent className="text-[0.9rem] text-(--text-primary)" />
                   Est. APY
                 </label>
                 <div className="flex">
