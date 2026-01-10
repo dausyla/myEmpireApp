@@ -24,10 +24,18 @@ export const WalletContextProvider = ({
 
     if (!description) description = "My wallet description.";
 
-    await api<WalletResponse>(ENDPOINTS.WALLETS.CREATE, "POST", {
-      title,
-      description,
-    }).then(setWallet);
+    const newWallet = await api<WalletResponse>(
+      ENDPOINTS.WALLETS.CREATE,
+      "POST",
+      {
+        title,
+        description,
+      },
+    );
+
+    setWallet(newWallet);
+    await getWalletList(); // Refresh the list to include the new wallet
+    return newWallet;
   };
 
   const getWalletList = async () => {

@@ -19,11 +19,11 @@ export function NoWallet() {
   return (
     <>
       <div
-        className="w-[22rem] shadow-lg rounded-lg border border-[var(--border-color)] overflow-hidden mx-auto"
+        className="w-88 shadow-lg rounded-lg border border-(--border-color) overflow-hidden mx-auto"
         style={{ backgroundColor: "var(--bg-surface)" }}
       >
         <div className="p-5">
-          <h5 className="text-xl font-medium mb-4 text-[var(--text-primary)]">
+          <h5 className="text-xl font-medium mb-4 text-(--text-primary)">
             Create a New Portfolio
           </h5>
           <div className="mb-4 space-y-3">
@@ -38,7 +38,7 @@ export function NoWallet() {
                   handleCreate();
                 }
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-(--brand-primary) focus:border-transparent"
               style={{
                 backgroundColor: "var(--bg-surface-secondary)",
                 color: "var(--text-primary)",
@@ -57,7 +57,7 @@ export function NoWallet() {
                   handleCreate();
                 }
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-(--brand-primary) focus:border-transparent"
               style={{
                 backgroundColor: "var(--bg-surface-secondary)",
                 color: "var(--text-primary)",
@@ -82,7 +82,7 @@ export function NoWallet() {
           <button
             onClick={handleCreate}
             disabled={!newName.trim()}
-            className="w-full px-4 py-2 bg-[var(--brand-primary)] text-white rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            className="w-full px-4 py-2 bg-(--brand-primary) text-white rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             style={{ background: "var(--brand-gradient)" }}
           >
             Create

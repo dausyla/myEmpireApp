@@ -5,7 +5,9 @@ export const WalletContext = createContext<WalletContextType>({
   wallet: null,
   setWallet: () => {},
   walletList: null,
-  createWallet: async () => {},
+  createWallet: async () => {
+    throw new Error("Not implemented");
+  },
   getWallet: async () => {},
   getWalletList: async () => {},
 });

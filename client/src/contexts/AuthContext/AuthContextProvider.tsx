@@ -32,7 +32,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
       localStorage.setItem("token", data.token);
       setUser(data.user as User);
-      navigate("/app");
+      navigate("/select-wallet");
     } catch (e) {
       console.log(e);
     }
@@ -47,7 +47,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
       localStorage.setItem("token", data.token);
       setUser(data.user as User);
-      navigate("/app");
+      navigate("/select-wallet");
     } catch (e) {
       console.log(e);
     }

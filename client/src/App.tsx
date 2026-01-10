@@ -12,6 +12,7 @@ import { BatchContextProvider } from "./contexts/BatchContext/BatchContextProvid
 import { DataContextProvider } from "./contexts/DataContext/DataContextProvider";
 import { AppContextProvider } from "./contexts/AppContext/AppContextProvider";
 import { ThemeContextProvider } from "./contexts/ThemeContext/ThemeContextProvider";
+import { SelectWalletPage } from "./pages/selectWallet/SelectWalletPage";
 
 // Register Chart.js to enable chart rendering
 ChartJS.register(...registerables);
@@ -23,21 +24,34 @@ function App() {
         <AuthContextProvider>
           <Routes>
             <Route
-              path="/app"
               element={
                 <ProtectedRoute>
                   <WalletContextProvider>
-                    <BatchContextProvider>
-                      <DataContextProvider>
-                        <AppContextProvider>
-                          <MyEmpireApp />
-                        </AppContextProvider>
-                      </DataContextProvider>
-                    </BatchContextProvider>
+                    <Routes>
+                      <Route
+                        path="/app"
+                        element={
+                          <BatchContextProvider>
+                            <DataContextProvider>
+                              <AppContextProvider>
+                                <MyEmpireApp />
+                              </AppContextProvider>
+                            </DataContextProvider>
+                          </BatchContextProvider>
+                        }
+                      />
+                      <Route
+                        path="/select-wallet"
+                        element={<SelectWalletPage />}
+                      />
+                    </Routes>
                   </WalletContextProvider>
                 </ProtectedRoute>
               }
-            />
+            >
+              <Route path="/app" />
+              <Route path="/select-wallet" />
+            </Route>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<NoRouteMatch />} />
