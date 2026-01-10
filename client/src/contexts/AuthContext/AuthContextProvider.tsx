@@ -16,8 +16,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     api<User>(ENDPOINTS.AUTH.ME, "GET")
       .then(setUser)
       .catch((e) => {
-        toast.error(e);
-        navigate("/login");
+        // Just log error, don't redirect globally
+        console.log("Not logged in or failed to fetch user");
       })
       .finally(() => setFetchingUser(false));
   }, []);

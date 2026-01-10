@@ -1,17 +1,21 @@
-import { useEffect, type ReactNode } from "react";
 import { useAuthContext } from "../contexts/AuthContext/AuthContextHook";
-import { useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-export const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+export const ProtectedRoute = () => {
   const { isFetchingUser, user } = useAuthContext();
-  const nav = useNavigate();
+  const location = useLocation();
 
-  // Si pas d'utilisateur -> redirect login + garde l'URL actuelle
-  useEffect(() => {
-    if (!isFetchingUser && !user) {
-      nav("/login");
-    }
-  }, [isFetchingUser, user]);
+  if (isFetchingUser) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-[#0f1115]">
+        <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
-  return <>{children}</>;
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return <Outlet />;
 };

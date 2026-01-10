@@ -2,12 +2,10 @@ import { DirectoryItem } from "./DirectoryItem";
 import { FaFileAlt, FaFolder } from "react-icons/fa";
 import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook";
 import { useBatch } from "../../../../contexts/BatchContext/BatchContextHook";
-import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 
 export function AssetHierarchy() {
   const { wallet } = useWallet();
   const { addAsset, addDir } = useBatch();
-  const { setCurrentItemId, currentItemId } = useApp();
 
   if (!wallet) return null;
 
@@ -17,9 +15,6 @@ export function AssetHierarchy() {
     console.log("No root dir...");
     return null;
   }
-
-  const isGlobalSelected =
-    currentItemId?.type === "directory" && currentItemId.id === root.id;
 
   return (
     <div

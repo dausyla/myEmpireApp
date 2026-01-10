@@ -1,8 +1,13 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
 import { registerables, Chart as ChartJS } from "chart.js";
 import { Home } from "./pages/home/Home";
-import { NoRouteMatch } from "./pages/NoRouteMatch";
 import { MyEmpireApp } from "./pages/app/MyEmpireApp";
 import { WalletContextProvider } from "./contexts/WalletContext/WalletContextProvider";
 import { LoginPage } from "./pages/login/LoginPage";
@@ -23,38 +28,32 @@ function App() {
       <ThemeContextProvider>
         <AuthContextProvider>
           <Routes>
-            <Route
-              element={
-                <ProtectedRoute>
+            <Route element={<ProtectedRoute />}>
+              <Route
+                element={
                   <WalletContextProvider>
-                    <Routes>
-                      <Route
-                        path="/app"
-                        element={
-                          <BatchContextProvider>
-                            <DataContextProvider>
-                              <AppContextProvider>
-                                <MyEmpireApp />
-                              </AppContextProvider>
-                            </DataContextProvider>
-                          </BatchContextProvider>
-                        }
-                      />
-                      <Route
-                        path="/select-wallet"
-                        element={<SelectWalletPage />}
-                      />
-                    </Routes>
+                    <Outlet />
                   </WalletContextProvider>
-                </ProtectedRoute>
-              }
-            >
-              <Route path="/app" />
-              <Route path="/select-wallet" />
+                }
+              >
+                <Route
+                  path="/app"
+                  element={
+                    <BatchContextProvider>
+                      <DataContextProvider>
+                        <AppContextProvider>
+                          <MyEmpireApp />
+                        </AppContextProvider>
+                      </DataContextProvider>
+                    </BatchContextProvider>
+                  }
+                />
+                <Route path="/select-wallet" element={<SelectWalletPage />} />
+              </Route>
             </Route>
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="*" element={<NoRouteMatch />} />
+            <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>
         </AuthContextProvider>
       </ThemeContextProvider>
