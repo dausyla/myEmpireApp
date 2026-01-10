@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+import { FaTrash } from "react-icons/fa";
 import { NavbarDropdown, NavbarDropdownItem } from "./NavbarDropdown";
 import { ItemPerformance } from "../assets/ItemPerformance";
 import { ItemValues } from "../assets/ItemValues";
@@ -307,6 +308,15 @@ export const NavbarMenu = ({
           </NavbarDropdownItem>
         ))}
       </NavbarDropdown>
+
+      <button
+        onClick={closeAll}
+        className="p-2 btn btn-ghost hover:text-[#ff3030] btn-round hover:opacity-80 transition-opacity ml-2"
+        title="Clear Container"
+        // style={{ color: "var(--text-secondary)" }}
+      >
+        <FaTrash size={16} />
+      </button>
     </div>
   );
 };
