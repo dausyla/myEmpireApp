@@ -1,6 +1,7 @@
 import { useAuthContext } from "../../../../contexts/AuthContext/AuthContextHook";
 import { NavbarDropdown, NavbarDropdownItem } from "./NavbarDropdown";
 import { FaUserCircle, FaSignOutAlt, FaCog, FaUserEdit } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 export const UserDropdown = () => {
   const { user, logout } = useAuthContext();
@@ -25,14 +26,18 @@ export const UserDropdown = () => {
         </p>
       </div>
 
-      <NavbarDropdownItem onClick={() => console.log("Edit Profile")}>
+      <NavbarDropdownItem
+        onClick={() => toast("Feature coming soon", { icon: "🚧" })}
+      >
         <div className="flex items-center gap-2">
           <FaUserEdit />
           Edit Profile
         </div>
       </NavbarDropdownItem>
 
-      <NavbarDropdownItem onClick={() => console.log("Settings")}>
+      <NavbarDropdownItem
+        onClick={() => toast("Feature coming soon", { icon: "🚧" })}
+      >
         <div className="flex items-center gap-2">
           <FaCog />
           Settings

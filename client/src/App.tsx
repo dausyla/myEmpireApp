@@ -1,4 +1,5 @@
 import "./App.css";
+import { Toaster } from "react-hot-toast";
 import {
   BrowserRouter as Router,
   Routes,
@@ -25,6 +26,7 @@ ChartJS.register(...registerables);
 function App() {
   return (
     <Router basename="/myEmpireApp">
+      <Toaster position="top-center" />
       <ThemeContextProvider>
         <AuthContextProvider>
           <Routes>
