@@ -7,15 +7,25 @@ import { NavbarMobileMenu } from "./Navbar/NavbarMobileMenu";
 import { NavbarDropdown, NavbarDropdownItem } from "./Navbar/NavbarDropdown";
 import { UserDropdown } from "./Navbar/UserDropdown";
 
+import type { WindowLayoutItem } from "./Windows/WindowManager/WindowManager";
+
 export function NavBar({
   openWindow,
+  getLayout,
+  closeAll,
 }: {
   openWindow: (
     element: JSX.Element,
     title: string,
     initialWidth: number,
     initialHeight: number,
+    headerActions?: React.ReactNode,
+    componentKey?: string,
+    x?: number,
+    y?: number,
   ) => void;
+  getLayout: () => WindowLayoutItem[];
+  closeAll: () => void;
 }) {
   const { wallet, walletList, getWallet } = useWallet();
   const { theme, toggleTheme } = useTheme();
@@ -55,7 +65,11 @@ export function NavBar({
         </button>
 
         {/* Desktop Menu */}
-        <NavbarMenu openWindow={openWindow} />
+        <NavbarMenu
+          openWindow={openWindow}
+          getLayout={getLayout}
+          closeAll={closeAll}
+        />
 
         {/* Right Side */}
         <div className="hidden md:flex items-center gap-4">

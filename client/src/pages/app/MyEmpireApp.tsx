@@ -6,11 +6,17 @@ import { useWindowManager } from "./components/Windows/WindowManager/WindowManag
 export function MyEmpireApp() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { windows, openWindow } = useWindowManager({ containerRef });
+  const { windows, openWindow, getLayout, closeAll } = useWindowManager({
+    containerRef,
+  });
 
   return (
     <>
-      <NavBar openWindow={openWindow} />
+      <NavBar
+        openWindow={openWindow}
+        getLayout={getLayout}
+        closeAll={closeAll}
+      />
 
       <div
         ref={containerRef}

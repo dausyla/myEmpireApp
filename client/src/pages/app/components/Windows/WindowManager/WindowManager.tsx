@@ -8,10 +8,22 @@ export interface ManagedWindow {
   initialWidth: number;
   initialHeight: number;
   headerActions?: React.ReactNode;
+  componentKey?: string;
+  initialX?: number;
+  initialY?: number;
 }
 
 export interface WindowManagerProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
+}
+
+export interface WindowLayoutItem {
+  componentKey: string;
+  title: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 export interface WindowManagerReturn {
@@ -22,8 +34,13 @@ export interface WindowManagerReturn {
     initialWidth: number,
     initialHeight: number,
     headerActions?: React.ReactNode,
+    componentKey?: string,
+    x?: number,
+    y?: number,
   ) => void;
   closeWindow: (id: string) => void;
+  closeAll: () => void;
+  getLayout: () => WindowLayoutItem[];
   windowCount: number;
 }
 
@@ -63,16 +80,35 @@ export const useWindowManager = ({
     initialWidth: number,
     initialHeight: number,
     headerActions?: React.ReactNode,
+    componentKey?: string,
+    x?: number,
+    y?: number,
   ) => {
-    const id = `window-${Date.now()}`;
+    const id = `window-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     setWindows((prev) => [
       ...prev,
-      { id, element, title, initialWidth, initialHeight, headerActions },
+      {
+        id,
+        element,
+        title,
+        initialWidth,
+        initialHeight,
+        headerActions,
+        componentKey,
+        initialX: x,
+        initialY: y,
+      },
     ]);
   };
 
   const closeWindow = (id: string) => {
     setWindows((prev) => prev.filter((w) => w.id !== id));
+    delete windowBoundsRef.current[id];
+  };
+
+  const closeAll = () => {
+    setWindows([]);
+    windowBoundsRef.current = {};
   };
 
   // Calculate boundaries
@@ -112,6 +148,23 @@ export const useWindowManager = ({
       .map(([, bounds]) => bounds);
   };
 
+  const getLayout = (): WindowLayoutItem[] => {
+    return windows
+      .map((win) => {
+        const bounds = windowBoundsRef.current[win.id];
+        if (!bounds || !win.componentKey) return null;
+        return {
+          componentKey: win.componentKey,
+          title: win.title,
+          x: bounds.x,
+          y: bounds.y,
+          width: bounds.width,
+          height: bounds.height,
+        };
+      })
+      .filter((item): item is WindowLayoutItem => item !== null);
+  };
+
   const renderedWindows = (
     <>
       {windows.map((win, index) => (
@@ -119,8 +172,8 @@ export const useWindowManager = ({
           key={win.id}
           id={win.id}
           title={win.title}
-          initialX={minX + 50 + index * 30} // Stagger windows
-          initialY={20 + index * 30}
+          initialX={win.initialX ?? minX + 50 + index * 30} // Stagger windows if no explicit X
+          initialY={win.initialY ?? 20 + index * 30}
           initialWidth={win.initialWidth}
           initialHeight={win.initialHeight}
           minX={minX}
@@ -128,7 +181,6 @@ export const useWindowManager = ({
           maxX={maxX}
           maxY={maxY}
           onClose={() => {
-            delete windowBoundsRef.current[win.id];
             closeWindow(win.id);
           }}
           onFocus={() => bringToFront(win.id)}
@@ -148,6 +200,8 @@ export const useWindowManager = ({
     windows: renderedWindows,
     openWindow,
     closeWindow,
+    closeAll,
+    getLayout,
     windowCount: windows.length,
   };
 };
