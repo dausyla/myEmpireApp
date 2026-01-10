@@ -55,19 +55,18 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   const google = () => {};
 
-  const logout = async (email: string, password: string) => {
+  const logout = async () => {
     try {
-      const data = await api<{ token: string; user: User }>(
-        ENDPOINTS.AUTH.LOGOUT,
-        "POST",
-        { email, password },
-      );
-
-      localStorage.setItem("token", data.token);
-      setUser(data.user as User);
-      navigate("/app");
+      await api(ENDPOINTS.AUTH.LOGOUT, "POST");
+      localStorage.removeItem("token");
+      setUser(undefined);
+      navigate("/login");
     } catch (e) {
       console.log(e);
+      // Even if API fails, we should probably clear local state
+      localStorage.removeItem("token");
+      setUser(undefined);
+      navigate("/login");
     }
   };
 

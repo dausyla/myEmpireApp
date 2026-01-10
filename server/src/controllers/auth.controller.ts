@@ -50,3 +50,11 @@ export const loginWithGoogle = async (req: Request, res: Response) => {
 
   res.json({ url: data.url });
 };
+
+export const logout = async (req: Request, res: Response) => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) return res.status(400).json({ error: error.message });
+
+  res.json({ message: "Logged out successfully" });
+};
