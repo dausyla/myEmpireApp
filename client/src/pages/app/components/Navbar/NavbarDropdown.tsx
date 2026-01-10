@@ -1,4 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, createContext, useContext } from "react";
+
+const DropdownContext = createContext<{ close: () => void } | null>(null);
 
 export const NavbarDropdown = ({
   title,
@@ -25,22 +27,18 @@ export const NavbarDropdown = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const close = () => setIsOpen(false);
+
   return (
-    <div
-      className={`dropdown ${className}`}
-      ref={dropdownRef}
-      onClick={() => setIsOpen(!isOpen)}
-    >
-      <div className="dropdown-trigger">
-        {title}
-        <span className="text-xs opacity-50">▼</span>
-      </div>
-      {isOpen && (
-        <div className="dropdown-menu" onClick={(e) => e.stopPropagation()}>
-          {children}
+    <DropdownContext.Provider value={{ close }}>
+      <div className={`dropdown ${className}`} ref={dropdownRef}>
+        <div className="dropdown-trigger" onClick={() => setIsOpen(!isOpen)}>
+          {title}
+          <span className="text-xs opacity-50">▼</span>
         </div>
-      )}
-    </div>
+        {isOpen && <div className="dropdown-menu">{children}</div>}
+      </div>
+    </DropdownContext.Provider>
   );
 };
 
@@ -52,13 +50,18 @@ export const NavbarDropdownItem = ({
   onClick?: () => void;
   children: React.ReactNode;
   active?: boolean;
-}) => (
-  <button
-    onClick={() => {
-      onClick?.();
-    }}
-    className={`dropdown-item ${active ? "active" : ""}`}
-  >
-    {children}
-  </button>
-);
+}) => {
+  const dropdown = useContext(DropdownContext);
+
+  return (
+    <button
+      onClick={() => {
+        onClick?.();
+        dropdown?.close();
+      }}
+      className={`dropdown-item ${active ? "active" : ""}`}
+    >
+      {children}
+    </button>
+  );
+};
