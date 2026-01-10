@@ -5,6 +5,7 @@ import { useState, type JSX } from "react";
 import { NavbarMenu } from "./Navbar/NavbarMenu";
 import { NavbarMobileMenu } from "./Navbar/NavbarMobileMenu";
 import { NavbarDropdown, NavbarDropdownItem } from "./Navbar/NavbarDropdown";
+import { UserDropdown } from "./Navbar/UserDropdown";
 
 export function NavBar({
   openWindow,
@@ -69,6 +70,9 @@ export function NavBar({
               </NavbarDropdownItem>
             ))}
           </NavbarDropdown>
+
+          <UserDropdown />
+
           <button
             onClick={toggleTheme}
             className="p-1 btn btn-ghost btn-round hover:opacity-80 transition-opacity"
