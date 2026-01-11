@@ -282,6 +282,10 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
               const temp = draft.assets.find((a) => a.id === op.tempId);
               if (temp) Object.assign(temp, real);
             }
+            if (op.table === "dirs") {
+              const temp = draft.dirs.find((d) => d.id === op.tempId);
+              if (temp) Object.assign(temp, real);
+            }
           }
         });
 
