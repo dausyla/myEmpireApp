@@ -81,7 +81,7 @@ export function AssetValuePrediction() {
           datasets={chartData.datasets}
         />
       </div>
-      <div className="mt-4 text-xs text-(--text-secondary)">
+      <div className="text-xs text-(--text-secondary)">
         * Prediction assumes constant APY and recurring transactions.
       </div>
     </div>

@@ -37,13 +37,13 @@ export function AssetValueChart({ labels, datasets }: AssetValueChartProps) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "top" as const,
+        position: "right" as const,
         labels: {
           color: theme === "dark" ? "#fff" : "#000",
         },
       },
       title: {
-        display: true,
+        display: false,
         text: "Asset Value Prediction",
         color: theme === "dark" ? "#fff" : "#000",
       },
