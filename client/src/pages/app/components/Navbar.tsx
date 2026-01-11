@@ -1,11 +1,12 @@
 import { useWallet } from "../../../contexts/WalletContext/WalletContextHook";
 import { useTheme } from "../../../contexts/ThemeContext/ThemeContextHook";
-import { FaSun, FaMoon, FaBars } from "react-icons/fa";
+import { FaSun, FaMoon, FaBars, FaSync, FaCheckCircle } from "react-icons/fa";
 import { useState, type JSX } from "react";
 import { NavbarMenu } from "./Navbar/NavbarMenu";
 import { NavbarMobileMenu } from "./Navbar/NavbarMobileMenu";
 import { NavbarDropdown, NavbarDropdownItem } from "./Navbar/NavbarDropdown";
 import { UserDropdown } from "./Navbar/UserDropdown";
+import { useBatch } from "../../../contexts/BatchContext/BatchContextHook";
 
 import type { WindowLayoutItem } from "./Windows/WindowManager/WindowManager";
 import logo from "../../../assets/logo.png";
@@ -30,7 +31,10 @@ export function NavBar({
 }) {
   const { wallet, walletList, getWallet } = useWallet();
   const { theme, toggleTheme } = useTheme();
+  const { queue, isFlushing } = useBatch();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const isSyncing = queue.length > 0 || isFlushing;
 
   if (!walletList || !wallet) return null;
 
@@ -72,6 +76,16 @@ export function NavBar({
         />
         {/* Right Side */}
         <div className="hidden md:flex items-center gap-4">
+          <div
+            className="flex items-center justify-center w-8 h-8"
+            title={isSyncing ? "Syncing..." : "Synced"}
+          >
+            {isSyncing ? (
+              <FaSync className="animate-spin text-blue-500" />
+            ) : (
+              <FaCheckCircle className="text-green-500" />
+            )}
+          </div>
           <NavbarDropdown title={wallet.wallet.title}>
             {walletList.map((w) => (
               <NavbarDropdownItem

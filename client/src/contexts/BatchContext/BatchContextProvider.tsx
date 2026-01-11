@@ -285,6 +285,7 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
     <BatchContext.Provider
       value={{
         queue,
+        isFlushing,
         flush,
         addTransaction,
         updateTransaction,

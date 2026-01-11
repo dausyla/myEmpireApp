@@ -3,6 +3,7 @@ import type { BatchContextType } from "./BatchContextTypes";
 
 export const BatchContext = createContext<BatchContextType>({
   queue: [],
+  isFlushing: false,
   flush: async () => {},
 
   // Transactions
