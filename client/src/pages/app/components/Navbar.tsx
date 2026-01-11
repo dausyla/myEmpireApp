@@ -8,6 +8,7 @@ import { NavbarDropdown, NavbarDropdownItem } from "./Navbar/NavbarDropdown";
 import { UserDropdown } from "./Navbar/UserDropdown";
 
 import type { WindowLayoutItem } from "./Windows/WindowManager/WindowManager";
+import logo from "../../../assets/logo.png";
 
 export function NavBar({
   openWindow,
@@ -46,15 +47,15 @@ export function NavBar({
         borderBottom: "1px solid var(--border-color)",
       }}
     >
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="mx-2 px-4 h-16 flex items-center justify-between">
         {/* Brand */}
         <div
-          className="text-xl font-bold"
+          className="text-xl font-bold flex items-center gap-2"
           style={{ color: "var(--text-primary)" }}
         >
+          <img src={logo} alt="MyEmpireApp Logo" className="h-16 w-16" />
           MyEmpireApp
         </div>
-
         {/* Mobile Toggle */}
         <button
           className="md:hidden p-2 btn btn-ghost"
@@ -63,14 +64,12 @@ export function NavBar({
         >
           <FaBars />
         </button>
-
         {/* Desktop Menu */}
         <NavbarMenu
           openWindow={openWindow}
           getLayout={getLayout}
           closeAll={closeAll}
         />
-
         {/* Right Side */}
         <div className="hidden md:flex items-center gap-4">
           <NavbarDropdown title={wallet.wallet.title}>
