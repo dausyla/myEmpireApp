@@ -5,14 +5,13 @@ import { useWallet } from "../../../../contexts/WalletContext/WalletContextHook"
 import { useApp } from "../../../../contexts/AppContext/AppContextHook";
 import { AssetValueChart } from "./AssetValueChart";
 import {
-  calculatePredictionAsset,
-  calculatePredictionDirectory,
+  calculatePredictionRecursive,
 } from "./PredictionLogic";
 import { PredictionHeader } from "./PredictionHeader";
 
 export function AssetValuePrediction() {
   const { wallet } = useWallet();
-  const { currentItem } = useApp();
+  const { currentItem, openedDirs } = useApp();
   const {
     getAssetPerformancePerDates,
     getSortedDates,
@@ -37,38 +36,25 @@ export function AssetValuePrediction() {
     return <div className="p-4">Please select an item.</div>;
 
   const chartData = useMemo(() => {
-    if (currentItem.type === "asset") {
-      const currentAsset = wallet.assets.find((a) => a.id === currentItem.id);
-      if (!currentAsset) return null;
-      return calculatePredictionAsset(
-        currentAsset,
-        years,
-        isDetailed,
-        getAssetPerformancePerDates(currentAsset.id),
-        wallet.recurring_transactions,
-        getSortedDates(),
-      );
-    } else {
-      // Directory
-      const assets = getAllAssetsInDirectory(currentItem.id);
-      return calculatePredictionDirectory(
-        assets,
-        years,
-        isDetailed,
-        getAssetPerformancePerDates,
-        wallet.recurring_transactions,
-        getSortedDates(),
-      );
-    }
+    return calculatePredictionRecursive(
+      currentItem,
+      openedDirs,
+      wallet,
+      years,
+      isDetailed,
+      getAssetPerformancePerDates,
+      getSortedDates(),
+      getAllAssetsInDirectory,
+    );
   }, [
     currentItem,
+    openedDirs,
+    wallet,
     years,
     isDetailed,
     getAssetPerformancePerDates,
-    wallet.recurring_transactions,
     getSortedDates,
     getAllAssetsInDirectory,
-    wallet.assets,
   ]);
 
   if (!chartData) return <div className="p-4">Please select an item.</div>;

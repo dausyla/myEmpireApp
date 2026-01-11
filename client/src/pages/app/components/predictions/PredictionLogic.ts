@@ -1,4 +1,4 @@
-import type { Asset, RecurringTransaction } from "@shared/WalletTypes";
+import type { Asset, RecurringTransaction, Directory } from "@shared/WalletTypes";
 import type { AssetPerformancePerDate } from "../../../../types/DataTypes";
 
 export interface PredictionDataset {
@@ -66,6 +66,95 @@ export const calculatePredictionAsset = (
       fadedColor,
     );
   }
+
+  return { labels, datasets };
+};
+
+export const calculatePredictionRecursive = (
+  item: { type: "asset"; id: number } | { type: "directory"; id: number },
+  openedDirs: Record<number, boolean>,
+  wallet: { assets: Asset[]; dirs: Directory[]; recurring_transactions: RecurringTransaction[] },
+  years: number,
+  isDetailed: boolean,
+  getAssetPerformancePerDates: (
+    assetId: number,
+  ) => Record<number, AssetPerformancePerDate>,
+  sortedDates: any[],
+  getAllAssetsInDirectory: (dirId: number) => Asset[],
+): PredictionResult => {
+  const historicalLabels = sortedDates.map((d) => d.date);
+  const futureLabels = Array.from({ length: years }, (_, i) => `Year ${i + 1}`);
+  const labels = [...historicalLabels, ...futureLabels];
+
+  if (item.type === "asset") {
+    const asset = wallet.assets.find((a) => a.id === item.id);
+    if (!asset) return { labels, datasets: [] };
+    return calculatePredictionAsset(
+      asset,
+      years,
+      isDetailed,
+      getAssetPerformancePerDates(asset.id),
+      wallet.recurring_transactions,
+      sortedDates,
+    );
+  }
+
+  // It's a directory
+  const dirId = item.id;
+  const isOpened = openedDirs[dirId];
+
+  if (!isOpened) {
+    // Closed: Sum up everything inside
+    const assets = getAllAssetsInDirectory(dirId);
+    const res = calculatePredictionDirectory(
+      assets,
+      years,
+      isDetailed,
+      getAssetPerformancePerDates,
+      wallet.recurring_transactions,
+      sortedDates,
+    );
+    // Rename the dataset to the directory name
+    const dir = wallet.dirs.find((d) => d.id === dirId);
+    if (dir && res.datasets.length > 0) {
+      res.datasets[0].label = dir.name;
+    }
+    return res;
+  }
+
+  // Opened: Recursive call for children
+  const subDirs = wallet.dirs.filter((d) => d.parent_dir_id === dirId);
+  const subAssets = wallet.assets.filter((a) => a.dir_id === dirId);
+
+  let datasets: PredictionDataset[] = [];
+
+  // 1. Assets
+  subAssets.forEach((asset) => {
+    const res = calculatePredictionAsset(
+      asset,
+      years,
+      isDetailed,
+      getAssetPerformancePerDates(asset.id),
+      wallet.recurring_transactions,
+      sortedDates,
+    );
+    datasets.push(...res.datasets);
+  });
+
+  // 2. Dirs (Recursive)
+  subDirs.forEach((dir) => {
+    const res = calculatePredictionRecursive(
+      { type: "directory", id: dir.id },
+      openedDirs,
+      wallet,
+      years,
+      isDetailed,
+      getAssetPerformancePerDates,
+      sortedDates,
+      getAllAssetsInDirectory,
+    );
+    datasets.push(...res.datasets);
+  });
 
   return { labels, datasets };
 };

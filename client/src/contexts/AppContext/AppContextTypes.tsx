@@ -4,6 +4,8 @@ export type AppContextType = {
   currentItem: CurrentItem;
   currentItemId: CurrentItemId;
   setCurrentItemId: (id: CurrentItemId) => void;
+  openedDirs: Record<number, boolean>;
+  toggleDir: (id: number) => void;
 };
 
 export type CurrentItemId =

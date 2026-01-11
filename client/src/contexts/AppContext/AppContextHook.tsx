@@ -5,6 +5,8 @@ export const AppContext = createContext<AppContextType>({
   currentItem: null,
   currentItemId: null,
   setCurrentItemId: () => {},
+  openedDirs: {},
+  toggleDir: () => {},
 });
 
 export function useApp() {

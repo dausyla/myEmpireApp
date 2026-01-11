@@ -45,9 +45,24 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [resolvedIds, currentItemId]);
 
+  const [openedDirs, setOpenedDirs] = useState<Record<number, boolean>>({});
+
+  const toggleDir = (id: number) => {
+    setOpenedDirs((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   return (
     <AppContext.Provider
-      value={{ currentItem, currentItemId, setCurrentItemId }}
+      value={{
+        currentItem,
+        currentItemId,
+        setCurrentItemId,
+        openedDirs,
+        toggleDir,
+      }}
     >
       {children}
     </AppContext.Provider>

@@ -21,8 +21,8 @@ interface DirectoryItemProps {
 
 export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
   const { wallet } = useWallet();
-  const { currentItemId, setCurrentItemId } = useApp();
-  const [isOpened, setIsOpened] = useState(false);
+  const { currentItemId, setCurrentItemId, openedDirs, toggleDir } = useApp();
+  const isOpened = openedDirs[dir.id] || false;
   const [, setHovered] = useState(false);
   const { addDir, addAsset, deleteDir } = useBatch();
 
@@ -61,7 +61,7 @@ export function DirectoryItem({ dir, depth = 0 }: DirectoryItemProps) {
 
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsOpened(!isOpened);
+    toggleDir(dir.id);
   };
 
   const subDirs = wallet.dirs
