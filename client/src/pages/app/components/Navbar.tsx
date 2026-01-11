@@ -94,9 +94,9 @@ export function NavBar({
                   : "Synced"
             }
           >
-            {isFlushing && <FaSync className="animate-spin text-blue-500" />}
+            {isFlushing && <FaSync className="animate-spin text-gray-500" />}
             {isEditing && <FaPen className="text-gray-500" />}
-            {isSynced && <FaCheckCircle className="text-green-500" />}
+            {isSynced && <FaCheckCircle className="text-blue-500" />}
           </div>
           <NavbarDropdown title={wallet.wallet.title}>
             {walletList.map((w) => (

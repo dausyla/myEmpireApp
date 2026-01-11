@@ -10,6 +10,7 @@ export const UserDropdown = () => {
 
   return (
     <NavbarDropdown
+      align="right"
       title={
         <div className="flex items-center gap-2">
           <FaUserCircle size={20} />

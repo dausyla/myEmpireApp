@@ -6,10 +6,12 @@ export const NavbarDropdown = ({
   title,
   children,
   className = "",
+  align = "left",
 }: {
   title: React.ReactNode;
   children: React.ReactNode;
   className?: string;
+  align?: "left" | "right";
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -36,7 +38,14 @@ export const NavbarDropdown = ({
           {title}
           <span className="text-xs opacity-50">▼</span>
         </div>
-        {isOpen && <div className="dropdown-menu">{children}</div>}
+        {isOpen && (
+          <div
+            className="dropdown-menu"
+            style={align === "right" ? { right: 0, left: "auto" } : {}}
+          >
+            {children}
+          </div>
+        )}
       </div>
     </DropdownContext.Provider>
   );
