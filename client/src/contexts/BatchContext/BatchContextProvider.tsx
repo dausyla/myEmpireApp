@@ -23,6 +23,7 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
   const { wallet, setWallet } = useWallet();
   const [queue, setQueue] = useState<BatchOp[]>([]);
   const [isFlushing, setIsFlushing] = useState(false);
+  const [resolvedIds, setResolvedIds] = useState<Record<number, number>>({});
 
   // Auto-flush every 3s
   useEffect(() => {
@@ -39,9 +40,78 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
     tempId: -Date.now(),
   });
 
-  const addToQueue = (op: BatchOp) => {
-    setQueue((q) => [...q, op]);
-    applyOptimistic([op]);
+  const addToQueue = (newOp: BatchOp) => {
+    setQueue((currentQueue) => {
+      // We look for an existing operation on the same object
+      // For inserts, we check tempId. For others, we check id.
+      // But wait, if we have an insert in the queue, it has a tempId.
+      // Subsequent updates/deletes will refer to that tempId if they happen before flush.
+      // So we should check if newOp.id matches any existing op.id or op.tempId.
+
+      const targetId =
+        newOp.op === "insert" ? newOp.tempId : (newOp as any).id;
+
+      const existingOpIndex = currentQueue.findIndex((q) => {
+        const qId = q.op === "insert" ? q.tempId : (q as any).id;
+        return q.table === newOp.table && qId === targetId;
+      });
+
+      if (existingOpIndex === -1) {
+        return [...currentQueue, newOp];
+      }
+
+      const existingOp = currentQueue[existingOpIndex];
+      const newQueue = [...currentQueue];
+
+      // Case 1: Insert + Update
+      if (existingOp.op === "insert" && newOp.op === "update") {
+        // Merge updates into the insert data
+        existingOp.data = { ...existingOp.data, ...(newOp.data as any) };
+        // We modify existingOp in place (in the copy), so no need to push newOp
+        newQueue[existingOpIndex] = existingOp;
+        return newQueue;
+      }
+
+      // Case 2: Insert + Delete
+      if (existingOp.op === "insert" && newOp.op === "delete") {
+        // The object was never sent, so we just remove the insert operation
+        newQueue.splice(existingOpIndex, 1);
+        return newQueue;
+      }
+
+      // Case 3: Update + Update
+      if (existingOp.op === "update" && newOp.op === "update") {
+        // Merge new updates into existing updates
+        existingOp.data = { ...existingOp.data, ...(newOp.data as any) };
+        newQueue[existingOpIndex] = existingOp;
+        return newQueue;
+      }
+
+      // Case 4: Update + Delete
+      if (existingOp.op === "update" && newOp.op === "delete") {
+        // We replace the update with the delete, because the object needs to be deleted anyway
+        // and previous updates are irrelevant.
+        newQueue[existingOpIndex] = newOp;
+        return newQueue;
+      }
+
+      // Default: just append (shouldn't happen with above logic covering common cases, but for safety)
+      return [...currentQueue, newOp];
+    });
+
+    // We still apply optimistic updates to the local state
+    // Note: If we coalesced, we might be applying redundant optimistic updates,
+    // but applyOptimistic handles "update" by finding the object.
+    // If we did Insert+Delete, we need to make sure applyOptimistic handles it correctly.
+    // Actually, applyOptimistic is "dumb" and just applies what we pass.
+    // If we coalesced "Insert+Delete" into "Nothing", we shouldn't call applyOptimistic with "Delete".
+    // BUT, addToQueue is called with `newOp`.
+    // If we want the local state to reflect the queue state, we should probably
+    // apply the `newOp` optimistically.
+    // Example: Insert (applied). Update (applied).
+    // Example: Insert (applied). Delete (applied).
+    // So yes, we always apply the new op optimistically.
+    applyOptimistic([newOp]);
   };
 
   const applyOptimistic = (ops: BatchOp[]) => {
@@ -71,16 +141,7 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteTransaction = (id: number) => {
-    const pending = queue.find(
-      (q) => q.op === "insert" && q.table === "transactions" && q.tempId === id,
-    );
-    if (pending) {
-      // Operation not sent yet, we can remove it from the queue as we delete it
-      setQueue((q) => q.filter((x) => x !== pending));
-      applyOptimistic([{ op: "delete", table: "transactions", id }]);
-    } else {
-      addToQueue({ op: "delete", table: "transactions", id });
-    }
+    addToQueue({ op: "delete", table: "transactions", id });
   };
 
   // === Asset Values ===
@@ -92,16 +153,7 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
     addToQueue({ op: "update", table: "asset_values", id, data: updates });
   };
   const deleteAssetValue = (id: number) => {
-    const pending = queue.find(
-      (q) => q.op === "insert" && q.table === "asset_values" && q.tempId === id,
-    );
-    if (pending) {
-      // Operation not sent yet, we can remove it from the queue as we delete it
-      setQueue((q) => q.filter((x) => x !== pending));
-      applyOptimistic([{ op: "delete", table: "asset_values", id }]);
-    } else {
-      addToQueue({ op: "delete", table: "asset_values", id });
-    }
+    addToQueue({ op: "delete", table: "asset_values", id });
   };
 
   // === Dates ===
@@ -115,16 +167,7 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteDate = (id: number) => {
-    const pending = queue.find(
-      (q) => q.op === "insert" && q.table === "wallet_dates" && q.tempId === id,
-    );
-    if (pending) {
-      // Operation not sent yet, we can remove it from the queue as we delete it
-      setQueue((q) => q.filter((x) => x !== pending));
-      applyOptimistic([{ op: "delete", table: "wallet_dates", id }]);
-    } else {
-      addToQueue({ op: "delete", table: "wallet_dates", id });
-    }
+    addToQueue({ op: "delete", table: "wallet_dates", id });
   };
 
   // === Assets ===
@@ -143,16 +186,7 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteAsset = (id: number) => {
-    const pending = queue.find(
-      (q) => q.op === "insert" && q.table === "assets" && q.tempId === id,
-    );
-    if (pending) {
-      // Operation not sent yet, we can remove it from the queue as we delete it
-      setQueue((q) => q.filter((x) => x !== pending));
-      applyOptimistic([{ op: "delete", table: "assets", id }]);
-    } else {
-      addToQueue({ op: "delete", table: "assets", id });
-    }
+    addToQueue({ op: "delete", table: "assets", id });
   };
 
   // === Dirs ===
@@ -166,16 +200,7 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteDir = (id: number) => {
-    const pending = queue.find(
-      // Operation not sent yet, we can remove it from the queue as we delete it
-      (q) => q.op === "insert" && q.table === "dirs" && q.tempId === id,
-    );
-    if (pending) {
-      setQueue((q) => q.filter((x) => x !== pending));
-      applyOptimistic([{ op: "delete", table: "dirs", id }]);
-    } else {
-      addToQueue({ op: "delete", table: "dirs", id });
-    }
+    addToQueue({ op: "delete", table: "dirs", id });
   };
 
   // === Recurring ===
@@ -203,19 +228,7 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteRecurring = (id: number) => {
-    const pending = queue.find(
-      (q) =>
-        q.op === "insert" &&
-        q.table === "recurring_transactions" &&
-        q.tempId === id,
-    );
-    if (pending) {
-      // Operation not sent yet, we can remove it from the queue as we delete it
-      setQueue((q) => q.filter((x) => x !== pending));
-      applyOptimistic([{ op: "delete", table: "recurring_transactions", id }]);
-    } else {
-      addToQueue({ op: "delete", table: "recurring_transactions", id });
-    }
+    addToQueue({ op: "delete", table: "recurring_transactions", id });
   };
 
   const flush = async () => {
@@ -237,11 +250,14 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
         if (!prev) return prev;
         const draft = { ...prev };
         let idx = 0;
+        const newResolvedIds: Record<number, number> = {};
 
         currentQueue.forEach((op) => {
           if (op.op === "insert" && op.tempId) {
             const real = results[idx++];
             if (!real) return;
+
+            newResolvedIds[op.tempId] = real.id;
 
             if (op.table === "recurring_transactions") {
               const temp = draft.recurring_transactions.find(
@@ -269,6 +285,8 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
           }
         });
 
+        setResolvedIds((prev) => ({ ...prev, ...newResolvedIds }));
+
         return draft;
       });
 
@@ -286,6 +304,7 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
       value={{
         queue,
         isFlushing,
+        resolvedIds,
         flush,
         addTransaction,
         updateTransaction,

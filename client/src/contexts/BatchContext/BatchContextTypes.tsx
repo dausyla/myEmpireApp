@@ -11,6 +11,7 @@ import type {
 export type BatchContextType = {
   queue: BatchOp[];
   isFlushing: boolean;
+  resolvedIds: Record<number, number>;
   flush: () => Promise<void>;
 
   // Transactions
