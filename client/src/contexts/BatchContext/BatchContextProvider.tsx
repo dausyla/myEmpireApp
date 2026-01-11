@@ -293,8 +293,6 @@ export const BatchContextProvider = ({ children }: { children: ReactNode }) => {
 
         return draft;
       });
-
-      toast.success("Saved!");
     } catch (err) {
       toast.error("Sync failed – retrying...");
       setQueue((q) => [...q, ...currentQueue]);

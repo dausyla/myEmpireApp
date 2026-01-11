@@ -65,6 +65,7 @@ export function EditItem() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               onBlur={handleSave}
+              onKeyDown={(e) => e.key === "Enter" && handleSave()}
               placeholder="Enter name"
             />
           </div>
@@ -83,6 +84,7 @@ export function EditItem() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 onBlur={handleSave}
+                onKeyDown={(e) => e.key === "Enter" && e.ctrlKey && handleSave()}
                 placeholder="Enter description"
               />
             </div>
@@ -111,6 +113,7 @@ export function EditItem() {
                     value={color.toUpperCase()}
                     onChange={(e) => setColor(e.target.value)}
                     onBlur={handleSave}
+                    onKeyDown={(e) => e.key === "Enter" && handleSave()}
                     placeholder="#000000"
                   />
                 </div>
@@ -131,6 +134,7 @@ export function EditItem() {
                     value={apy}
                     onChange={(e) => setApy(e.target.value)}
                     onBlur={handleSave}
+                    onKeyDown={(e) => e.key === "Enter" && handleSave()}
                     placeholder="0.00"
                   />
                 </div>
